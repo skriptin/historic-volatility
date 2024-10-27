@@ -13,6 +13,25 @@ def get_user_input(prompt):
     """
     return input(prompt)
 
+def calc_weekly_vol(df):
+    """
+    Calculates the anual volatility based on week price movements, a trading 
+    week is defined as 5 days and there are 52 tradings weeks in a year
+    :param df: A dataframe containg the daily stock price movements
+    :return Annualized volatility calculated on a weekly basis
+    """
+for index in range(0, len(df)):
+    for index in range(i, i+5):
+        median = median + df.iloc[index]['Open']
+    median = median / 5
+    for index in range(i, i+5):
+        weekly_vol = (df.iloc[index]['Open'] - median)
+        
+
+    i = i + 5
+
+        
+
 def validate_date(date_str):
     """
     Validates if the input string is a correct date format (YYYY-MM-DD).
