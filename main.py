@@ -45,7 +45,7 @@ def calc_intra_day_vol(df):
 
     return daily_volatility
 
-
+def calc_forward_price(starting_price, num_days, expected_yearly_return):
 
 def calc_vol_daily(df):
     """
@@ -96,7 +96,6 @@ def main():
     print("End Date:", end_date)
 
     df = yf.download(ticker, start=start_date, end=end_date)
-    #print(df)
 
     daily_volatility = calc_vol_daily(df)
     intra_day_volatility = calc_intra_day_vol(df)
