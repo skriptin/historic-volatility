@@ -15,37 +15,39 @@ def get_user_input(prompt):
 
 def calc_weekly_vol(df):
     """
-    Calculates the anual volatility based on week price movements, a trading 
-    week is defined as 5 days and there are 52 tradings weeks in a year
+    Calculates the anual volatility based on the daily price movements in a trading week
     :param df: A dataframe containg the daily stock price movements
     :return Dictionary containing annualized volatility calculated on a weekly basis
     """
     print("DataFrame columns(Weekly_vol):", df.columns)
-    TRADING_WEEKS = 52
+    TRADING_WEEKS = 252
     weekly_volatility = {df['Date'].iloc[0].date(): 0}    
     median = 0
     squared_differences = 0
+    daily_returns = [0]*5
+
     i = 5
 
-    for index in range(0, 4):
+    for index in range(0, 5):
         weekly_volatility[df.iloc[index]['Date']] = 0
 
-    while i <= len(df):
+    while i < len(df):
         median = 0
         squared_differences = 0
 
         for index in range(i-5, i):
-            median = median + df.iloc[index]['Open']
+            median = median + math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
+            daily_returns[(index+1) % 5] = math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
         median = median / 5
 
         for index in range(i-5, i):
-            squared_differences = squared_differences + (df.iloc[index]['Open'] - median) ** 2
+            squared_differences = squared_differences + (daily_returns[(index+1) % 5] - median) ** 2
 
-        weekly_vol = math.sqrt(1/5*squared_differences) * math.sqrt(TRADING_WEEKS)
+        weekly_vol = math.sqrt(1/4*squared_differences * 252)*100
         weekly_vol = round(weekly_vol,2)
 
-        weekly_volatility[df.iloc[i-1]['Date']] = weekly_vol
-        print("Vol at index  ",i-1,weekly_vol)
+        weekly_volatility[df.iloc[i]['Date']] = weekly_vol
+        print("Vol at index  ",i,weekly_vol)
 
 
         i += 1
@@ -104,9 +106,10 @@ def calc_vol_daily(df):
         if index == 0:
             daily_volatility = {df['Date'].iloc[0].date(): 0}
         else:
-            today_open = df.iloc[index]['Open']
-            yesterday_open = df.iloc[index-1]['Open']
-            volatility = abs((yesterday_open-today_open) / today_open) * math.sqrt(TRADING_DAYS) * 100
+            today_close = df.iloc[index]['Close']
+            yesterday_close = df.iloc[index-1]['Close']
+            volatility = abs(math.log(today_close/yesterday_close))
+            volatility = math.sqrt(volatility*TRADING_DAYS)*100 #we assume population statistic for n=1
             volatility = round(volatility, 2)
 
             daily_volatility[df.iloc[index]['Date']] = volatility
