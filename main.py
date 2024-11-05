@@ -18,36 +18,37 @@ def calc_weekly_vol(df):
     Calculates the anual volatility based on week price movements, a trading 
     week is defined as 5 days and there are 52 tradings weeks in a year
     :param df: A dataframe containg the daily stock price movements
-    :return Annualized volatility calculated on a weekly basis
+    :return Dictionary containing annualized volatility calculated on a weekly basis
     """
     print("DataFrame columns(Weekly_vol):", df.columns)
     TRADING_WEEKS = 52
-    weekly_volatility = {df['Date'].iloc[0].date(): 0}
-    i = 0
-    while i + 5 <= len(df):
+    weekly_volatility = {df['Date'].iloc[0].date(): 0}    
+    median = 0
+    squared_differences = 0
+    i = 5
+
+    for index in range(0, 4):
+        weekly_volatility[df.iloc[index]['Date']] = 0
+
+    while i <= len(df):
         median = 0
         squared_differences = 0
 
-        for index in range(i, i+5):
+        for index in range(i-5, i):
             median = median + df.iloc[index]['Open']
-            #print("rawdata:",index,df.iloc[index]['Open'])
-            #print("median at i",index,median)
-
         median = median / 5
-        #print("median:",median)
 
-        for index in range(i, i+5):
+        for index in range(i-5, i):
             squared_differences = squared_differences + (df.iloc[index]['Open'] - median) ** 2
-            #print("Inside:",index,squared_differences)
 
         weekly_vol = math.sqrt(1/5*squared_differences) * math.sqrt(TRADING_WEEKS)
         weekly_vol = round(weekly_vol,2)
 
-        for index in range(i,i+5):
-            weekly_volatility[df.iloc[index]['Date']] = weekly_vol
+        weekly_volatility[df.iloc[i-1]['Date']] = weekly_vol
+        print("Vol at index  ",i-1,weekly_vol)
 
-        i += 5
-        print("Vol at %d:",i,weekly_vol)
+
+        i += 1
     return weekly_volatility
 
         
@@ -69,7 +70,6 @@ def calc_intra_day_vol(df):
     print("DataFrame columns(Intra_vol):", df.columns)
 
     TRADING_DAYS = 252
-    #df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
     daily_volatility = {df['Date'].iloc[0].date(): 0}
 
     for index in range(0, len(df)):
@@ -151,9 +151,6 @@ def main():
 
     dates3 =list(weekly_vol.keys())
     volatility3 = list(weekly_vol.values())
-
-    for x in dates:
-        print("Date",x)
 
     filtered_dates = [date for date, vol in zip(dates2, volatility2) if vol is not None]  # Only include if vol is not None
     filtered_volatility = [vol for vol in volatility2 if vol is not None]  # Corresponding volatilities
