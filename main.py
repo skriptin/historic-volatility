@@ -11,49 +11,7 @@ def get_user_input(prompt):
     :param prompt: The message to display when asking for input.
     :return: The input string entered by the user.
     """
-    return input(prompt)
-
-def calc_weekly_vol(df):
-    """
-    Calculates the anual volatility based on the daily price movements in a trading week
-    :param df: A dataframe containg the daily stock price movements
-    :return Dictionary containing annualized volatility calculated on a weekly basis
-    """
-    print("DataFrame columns(Weekly_vol):", df.columns)
-    TRADING_WEEKS = 252
-    weekly_volatility = {df['Date'].iloc[0].date(): 0}    
-    median = 0
-    squared_differences = 0
-    daily_returns = [0]*5
-
-    i = 5
-
-    for index in range(0, 5):
-        weekly_volatility[df.iloc[index]['Date']] = 0
-
-    while i < len(df):
-        median = 0
-        squared_differences = 0
-
-        for index in range(i-5, i):
-            median = median + math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
-            daily_returns[(index+1) % 5] = math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
-        median = median / 5
-
-        for index in range(i-5, i):
-            squared_differences = squared_differences + (daily_returns[(index+1) % 5] - median) ** 2
-
-        weekly_vol = math.sqrt(1/4*squared_differences * 252)*100
-        weekly_vol = round(weekly_vol,2)
-
-        weekly_volatility[df.iloc[i]['Date']] = weekly_vol
-        print("Vol at index  ",i,weekly_vol)
-
-
-        i += 1
-    return weekly_volatility
-
-        
+    return input(prompt)        
 
 def validate_date(date_str):
     """
@@ -66,55 +24,6 @@ def validate_date(date_str):
         return True
     except ValueError:
         return False
-    
-def calc_intra_day_vol(df):
-
-    print("DataFrame columns(Intra_vol):", df.columns)
-
-    TRADING_DAYS = 252
-    daily_volatility = {df['Date'].iloc[0].date(): 0}
-
-    for index in range(0, len(df)):
-
-        daily_high = df.iloc[index]['High']
-        daily_low = df.iloc[index]['Low']
-        volatility = abs((daily_high-daily_low) / daily_low) * math.sqrt(TRADING_DAYS) * 100
-        volatility = round(volatility, 2)
-
-        daily_volatility[df.iloc[index]['Date']] = volatility
-
-    return daily_volatility
-
-def calc_forward_price(starting_price, num_days, expected_yearly_return):
-    x = 5
-
-
-def calc_vol_daily(df):
-    """
-    Calculated the anualized volatility of a ticker based on the price difference
-    between the close of one day and the close of the other day
-    """
-    print("DataFrame columns (vol_daily):", df.columns)
-
-    daily_volatility = {df['Date'].iloc[0].date(): 0}
-    TRADING_DAYS = 252
-    #df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-
-
-    for index in range(0, len(df)):
-
-        if index == 0:
-            daily_volatility = {df['Date'].iloc[0].date(): 0}
-        else:
-            today_close = df.iloc[index]['Close']
-            yesterday_close = df.iloc[index-1]['Close']
-            volatility = abs(math.log(today_close/yesterday_close))
-            volatility = math.sqrt(volatility)*100*math.sqrt(TRADING_DAYS) #we assume population statistic for n=1
-            volatility = round(volatility, 2)
-
-            daily_volatility[df.iloc[index]['Date']] = volatility
-
-    return daily_volatility
 
 def calc_vol_EWMA(df, window_length: int, lam_bda: float):
     #Initalizations
@@ -141,7 +50,6 @@ def calc_vol_EWMA(df, window_length: int, lam_bda: float):
         exp_ma[df.iloc[i]['Date']] = math.sqrt(volatility*252) * 100
         i += 1
     return exp_ma
-
 
 
 def calc_vol_windowed(df, window_length: int):
