@@ -116,6 +116,36 @@ def calc_vol_daily(df):
 
     return daily_volatility
 
+def calc_vol_EWMA(df, window_length: int, lam_bda: float):
+    #Initalizations
+    exp_ma = {df['Date'].iloc[0].date(): 0}
+    TRADING_DAYS = 252
+    last_var = 0
+    squared_return = 0
+    alpha = 1- lam_bda
+
+    # Theese days will be without data
+    exp_ma[df.iloc[0]['Date']] = 0
+    for index in range(1,window_length+1):
+        exp_ma[df.iloc[index]['Date']] = 0
+        squared_return = math.log(df.iloc[index]['Close']/df.iloc[index-1]['Close']) ** 2
+        last_var = last_var + ((squared_return * alpha) * (lam_bda ** window_length - index))
+
+    exp_ma[df.iloc[window_length+1]['Date']] = math.root(inital_var)*100
+    i = window_length+2
+    while i <= len(df):
+
+
+        volatility = lam_bda*last_var + (math.log(df.iloc[i-1]['Close']/df.iloc[i-2]['Close']) ** 2)
+        last_var = volatility 
+        exp_ma[df.iloc[i]['Date']] = math.sqrt(volatility)
+
+
+
+    return exp_ma
+
+
+
 def calc_vol_windowed(df, window_length: int):
     #Initalizations
     windowed_volatility = {df['Date'].iloc[0].date(): 0}
@@ -133,11 +163,11 @@ def calc_vol_windowed(df, window_length: int):
 
         for index in range(i-window_length, i):
             median = median + math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
-            daily_returns[(index+1) % 5] = math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
+            daily_returns[(index+1) % window_length] = math.log(df.iloc[index+1]['Close']/df.iloc[index]['Close'])
         median = median / window_length
 
         for index in range(i-window_length, i):
-            squared_differences = squared_differences + (daily_returns[(index+1) % 5] - median) ** 2
+            squared_differences = squared_differences + (daily_returns[(index+1) % window_length] - median) ** 2
 
         windowed_vol = math.sqrt( (1/(window_length-1)) * squared_differences * 252 )*100
         windowed_vol = round(windowed_vol,4)
@@ -151,8 +181,8 @@ def calc_vol_windowed(df, window_length: int):
 def main():
     # Get user input
     ticker = get_user_input("Enter the ticker symbol: ").upper()
-    window_length = get_user_input("Please enter the window length used for the volatility calculations: ")
-
+    window_length = get_user_input("Please enter the window length used for the volatility calculation: ")
+    lam_bda = get_user_input("Please enter lambda for the weight of the EWMA volatility calculation: ")
     # Validate start date
     while True:
         start_date = get_user_input("Enter the starting date (YYYY-MM-DD): ")
@@ -181,6 +211,9 @@ def main():
     #intra_day_volatility = calc_intra_day_vol(df)
     #weekly_vol = calc_weekly_vol(df)
     windowed_vol = calc_vol_windowed(df,int(window_length))
+    EWMA_vol = calc_vol_EWMA(df, int(window_length), float(lam_bda))
+
+
 
     dates_w = list(windowed_vol.keys())
     volatility_w = list(windowed_vol.values())
