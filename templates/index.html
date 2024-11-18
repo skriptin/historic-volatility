@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skeleton Website</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Run Python Script</h1>
+    <form id="script-form">
+        <h1>Enter Stock Information</h1>
+        <form id="script-form">
+            <label for="ticker">Ticker Symbol:</label>
+            <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" required><br>
+    
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date" required><br>
+    
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date" required><br>
+    
+            <button type="submit">Run Script</button>    </form>
+    <p id="response"></p>
+    <script>
+        document.getElementById('script-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/run-script', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('response').textContent = 
+                `Response: ${result.message}, Parameters: ${result.param1}, ${result.param2}`;
+        });
+    </script>
+</body>
+</html>

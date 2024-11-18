@@ -25,38 +25,43 @@ def validate_date(date_str):
     except ValueError:
         return False
 
-def calc_GARCH_vol(df, window_length: int):
-    x=5
+def calc_GARCH_vol(df, window_length: int) -> dict:
+
+    # sigma^2(t) = omega + a*U^2(t-1) + B*sigma^2(t-1) 
+    alpha = 0.1
+    beta = 0.9
+    zeta = 1 - alpha - beta
+    long_run_var = math.sqrt(0.125) #12.5% average return of smp 500 for last 10 years, imput accordingly to stock
+    omega = long_run_var*zeta
 
 
-def calc_vol_EWMA(df, window_length: int, lam_bda: float):
+def calc_vol_EWMA(daily_rets, window_length: int, lam_bda: float) -> dict:
     #Initalizations
-    exp_ma = {df['Date'].iloc[0].date(): 0}
+    exp_ma = dict()
     TRADING_DAYS = 252
     last_var = 0
-    squared_return = 0
     alpha = 1- lam_bda
-
+    daily_rets_items = list(daily_rets.items())
     # Theese days will be without data
-    exp_ma[df.iloc[0]['Date']] = 0
-    for index in range(1,window_length+1):
-        exp_ma[df.iloc[index]['Date']] = 0
-        squared_return = math.log(df.iloc[index]['Close']/df.iloc[index-1]['Close']) ** 2
-        last_var = last_var + ((squared_return * alpha) * (lam_bda ** (window_length - index)))
+    for index in range(0,window_length):
+        date, value = daily_rets_items[index]
+        exp_ma[date] = 0
+        last_var = last_var + (((value ** 2) * alpha) * (lam_bda ** (window_length - index)))
 
-    print("Volatility for the 6th point ",math.sqrt(last_var*252)*100)
-    exp_ma[df.iloc[window_length+1]['Date']] = math.sqrt(last_var)*100
-    i = window_length+2
-    while i < len(df):
-        squared_return = math.log(df.iloc[i-1]['Close']/df.iloc[i-2]['Close']) ** 2
-        volatility = (lam_bda*last_var) + (squared_return*alpha) 
+    date, _ = daily_rets_items[window_length]
+    exp_ma[date] = math.sqrt(last_var*252)*100
+    i = window_length+1
+    while i < len(daily_rets):
+        date, _ = daily_rets_items[i]
+        _, value = daily_rets_items[i-1]
+        volatility = (last_var*lam_bda) + (alpha * (value ** 2))
         last_var = volatility 
-        exp_ma[df.iloc[i]['Date']] = math.sqrt(volatility*252) * 100
+        exp_ma[date] = math.sqrt(volatility*252) * 100
         i += 1
     return exp_ma
 
 
-def calc_vol_windowed(df, window_length: int):
+def calc_vol_windowed(df, window_length: int) -> dict:
     #Initalizations
     windowed_volatility = dict()
     TRADING_DAYS = 252
@@ -83,8 +88,6 @@ def calc_vol_windowed(df, window_length: int):
         windowed_vol = round(windowed_vol,4)
 
         windowed_volatility[df.iloc[i+1]['Date']] = windowed_vol
-        #print("Vol at index  ",i+1,windowed_vol)
-
         i += 1
     return windowed_volatility
 
@@ -93,10 +96,6 @@ def calc_series_of_daily_log_returns(df) -> dict:
     log_returns = dict()
     for index in range(1,len(df)):
         log_returns[df.iloc[index]['Date']] = math.log(df.iloc[index]['Close']/df.iloc[index-1]['Close'])
-        print('Date',df.iloc[index]['Date'])
-        print("close of day  ",df.iloc[index]['Close'])
-        print("close of yesterday ",df.iloc[index-1]['Close'])
-        print("std derived",log_returns[df.iloc[index]['Date']])
     return log_returns
 
 
@@ -121,10 +120,10 @@ def main():
     #    print("Invalid date format. Please use YYYY-MM-DD.")
 
     ticker = "SPY"
-    window_length = 50
-    start_date = "2024-09-01"
+    window_length = 200
+    start_date = "2010-01-01"
     end_date = "2024-10-01"
-    lam_bda = 0.9
+    lam_bda = 0.95
 
     print("Ticker:", ticker)
     print("Window Length:",window_length)
@@ -135,21 +134,26 @@ def main():
     df.reset_index(inplace=True)
     df.to_csv('rawdata.csv')
 
-    #windowed_vol = calc_vol_windowed(df,int(window_length))
-    window_length = 10
-    #EWMA_vol = calc_vol_EWMA(df, int(window_length), float(lam_bda))
     daily_rets = calc_series_of_daily_log_returns(df)
+    windowed_vol = calc_vol_windowed(df,int(window_length))
+    print('DONE')
+    EWMA_vol = calc_vol_EWMA(daily_rets, int(window_length), float(lam_bda))
 
-    #dates_w = list(windowed_vol.keys())
-    #volatility_w = list(windowed_vol.values())
-
-    #dates_e = list(EWMA_vol.keys())
-    #volatility_e = list(EWMA_vol.values())
+    dates_ret = list(daily_rets.keys())
+    dates_std = list(daily_rets.values())
+    dates_std = [value * 100 * math.sqrt(252) for value in dates_std]
 
 
-    #plt.plot(dates_w, volatility_w, label='f" Annualized {window_length} Volatility of {ticker} "', color='blue', linestyle='-', marker='o')
-    #plt.plot(dates_e, volatility_e, label='f" Annualized {window_length} Volatility of {ticker} WITH EMA "', color='red', linestyle='-', marker='x')
+    dates_e = list(EWMA_vol.keys())
+    volatility_e = list(EWMA_vol.values())
 
+    dates_w = list(windowed_vol.keys())
+    volatility_w = list(windowed_vol.values())
+
+
+    plt.plot(dates_w, volatility_w, label='f" Annualized {Winowed} Volatility of {ticker} "', color='blue', linestyle='-', marker='o')
+    plt.plot(dates_e, volatility_e, label='f" Annualized Volatility of {ticker} WITH EMA "', color='red', linestyle='-', marker='x')
+    plt.plot(dates_ret, dates_std, label='f"Daily annualized return"', color='Green', linestyle='-', marker='x')
     # Add titles and labels
     plt.title(ticker)
     plt.xlabel('Dates')
