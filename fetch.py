@@ -30,7 +30,6 @@ def main():
 
     with open(output_path, 'w', newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["DateTime", "Lognormally Adjusted Daily Return"])
         for date, log_return in daily_rets.items():
             writer.writerow([date, log_return])
 

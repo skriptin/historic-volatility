@@ -10,33 +10,72 @@
     </style>
 </head>
 <body>
-    <h1>Run Python Script</h1>
     <form id="script-form">
         <h1>Enter Stock Information</h1>
-        <form id="script-form">
             <label for="ticker">Ticker Symbol:</label>
-            <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" required><br>
-    
-            <label for="start-date">Start Date:</label>
-            <input type="date" id="start-date" name="start-date" required><br>
-    
-            <label for="end-date">End Date:</label>
-            <input type="date" id="end-date" name="end-date" required><br>
-    
-            <button type="submit">Run Script</button>    </form>
-    <p id="response"></p>
+            <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" value="SPY" required><br>
+
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" value="2024-01-01" required><br>
+
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" value="2024-11-01" required><br>
+
+            <button type="submit">Get Data</button>
+        </form>
+    <p  id="response"></p>
     <script>
         document.getElementById('script-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(event.target);
-            const response = await fetch('/run-script', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
+            const data = {
+                ticker: formData.get('ticker'),
+                start_date: formData.get('start_date'),
+                end_date: formData.get('end_date')
+            };
+
+            const responseElement = document.getElementById('response');
+            responseElement.textContent = '';
+
+            let errorMessage = '';
+
+            const startDate = new Date(data.start_date);
+            const endDate = new Date(data.end_date);
+
+            if (startDate.getTime() > endDate.getTime()) {
+            errorMessage = 'End Date cannot be earlier than Start Date.';
+            }
+
+            if (errorMessage) {
+                responseElement.textContent = errorMessage;
+                responseElement.style.color = 'red';
+                return;
+            }
+
             document.getElementById('response').textContent = 
-                `Response: ${result.message}, Parameters: ${result.param1}, ${result.param2}`;
+                `you eneted: ${data.ticker}, ${data.start_date}, ${data.end_date}`;
+        
         });
     </script>
+        <form id="SMA-volatility">
+            <h1>Windowed Volatility</h1>
+            <label for="window">Ticker Symbol:</label>
+            <input type="number" id="window" name="window" placeholder="Enter Window Length" required><br>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        <form id="EWMA-volatility">
+        <h1>EWMA Volatility</h1>
+        <label for="window">Window Length:</label>
+        <input type="number" id="window" name="window" placeholder="Enter Window Length" required><br>
+
+        <label for="lambda">Ticker Symbol:</label>
+        <input type="number" id="lambda" name="lambda" placeholder="Enter lambda" required><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    
 </body>
 </html>
