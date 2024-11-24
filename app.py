@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
+from scripts import fetch, sma
 
 app = Flask(__name__)
 
@@ -6,12 +7,19 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-def get_daily_rets():
-    x=5
-def get_SMA()
-    x=5
-def get_EWMA()
-    x=5
+@app.route("/get_data", methods=["POST"])
+def get_data():
+    ticker = request.form.get("ticker")
+    start_date = request.form.get("start_date")
+    end_date = request.form.get("end_date")
+
+    response = fetch.fetch_returns(ticker, start_date, end_date)
+
+    if "error" in response:
+        return jsonify({"error": response["error"]}), 400
+
+    return jsonify(response), 200
+
 
 
 if __name__ == '__main__':
