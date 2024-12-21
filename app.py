@@ -20,7 +20,14 @@ def get_data():
 
     return jsonify(response), 200
 
-
+@app.route("/calc_sma", methods=["POST"])
+def calc_sma():
+    window = request.form.get("window")
+    response = sma.sma_vol(window)
+    print("properly routing sma")
+    if "error" in response:
+        return jsonify({"error": response["error"]}), 400
+    return jsonify(response),  200
 
 if __name__ == '__main__':
     print("Starting Flask app")

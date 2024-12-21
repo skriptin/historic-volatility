@@ -10,6 +10,7 @@
     </style>
 </head>
 <body>
+
     <form id="script-form">
         <h1>Enter Stock Information</h1>
             <label for="ticker">Ticker Symbol:</label>
@@ -22,61 +23,10 @@
             <input type="date" id="end_date" name="end_date" value="2024-11-01" required><br>
 
             <button type="submit">Get Data</button>
-        </form>
+    </form>
     <p  id="response"></p>
-    <script>
-        let jsonResponse = null;
-        document.getElementById('script-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = {
-                ticker: formData.get('ticker'),
-                start_date: formData.get('start_date'),
-                end_date: formData.get('end_date')
-            };
+    <script src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
 
-            const responseElement = document.getElementById('response');
-            responseElement.textContent = '';
-            let errorMessage = '';
-            const startDate = new Date(data.start_date);
-            const endDate = new Date(data.end_date);
-
-            if (startDate.getTime() > endDate.getTime()) {
-                errorMessage = 'End Date cannot be earlier than Start Date.';
-            }
-
-            if (errorMessage) {
-                responseElement.textContent = errorMessage;
-                responseElement.style.color = 'red';
-                return;
-            }
-
-            try {
-                const response = await fetch('/get_data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(data)
-                });
-
-                if (response.ok) {
-                    jsonResponse = await response.json();
-                    console.log(jsonResponse)
-                    responseElement.textContent = `Success`;
-                    responseElement.style.color = 'green';
-                } else {
-                    const errorText = await response.text();
-                    responseElement.textContent = 'Error occurred: make sure the ticker and dates are valid';
-                    responseElement.style.color = 'red';
-                }
-            } 
-            catch (error) {
-                responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
-                responseElement.style.color = 'red';
-            }
-        });
-    </script>
         <form id="SMA-volatility">
             <h1>Windowed Volatility</h1>
             <label for="window"></label>
@@ -84,61 +34,13 @@
             <button type="submit">Plot</button>
         </form>
         <p  id="response"></p>
-        <script>
-            document.getElementById('SMA-volatility').addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-
-                const formData = new FormData(event.target);
-                const data = {
-                    window_length: formData.get('window')
-                };
-    
-                const responseElement = document.getElementById('response');
-                responseElement.textContent = '';
-                let errorMessage = '';
-    
-                if(!jsonResponse){
-                    errorMessage = 'Enter stock information first';
-                }
-                if (errorMessage) {
-                    responseElement.textContent = errorMessage;
-                    responseElement.style.color = 'red';
-                    return;
-                }
-
-                try {
-                    const response = await fetch('/calc_sma', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams(data)
-                    });
-    
-                    if (response.ok) {
-                        const jsonResponse = await response.json();
-                        console.log(jsonResponse)
-                        responseElement.textContent = `Success`;
-                        responseElement.style.color = 'green';
-                    } else {
-                        const errorText = await response.text();
-                        responseElement.textContent = 'Error occurred: make sure the ticker and dates are valid';
-                        responseElement.style.color = 'red';
-                    }
-                } 
-                catch (error) {
-                    responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
-                    responseElement.style.color = 'red';
-                }
-            });
-        </script>
+        <script src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
     
 
         <form id="EWMA-volatility">
         <h1>EWMA Volatility</h1>
         <label for="window">Window Length:</label>
-        <input type="number" id="window" name="window" placeholder="Enter Window Length" required><br>
+        <input type="number" id="window_ema" name="window" placeholder="Enter Window Length" required><br>
 
         <label for="lambda">Ticker Symbol:</label>
         <input type="number" id="lambda" name="lambda" placeholder="Enter lambda" required><br>
