@@ -24,7 +24,7 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
 
         if (response.ok) {
             jsonResponse_sma = await response.json();
-            responseElement_sma .textContent = `Success getting returns`;
+            responseElement_sma .textContent = `Success getting sma`;
             responseElement_sma .style.color = 'green';
         } else {
             const errorText = await response.text();
