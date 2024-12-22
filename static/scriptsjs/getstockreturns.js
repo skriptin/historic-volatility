@@ -8,7 +8,7 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
         start_date: formData.get('start_date'),
         end_date: formData.get('end_date')
     };
-
+    console.log("stock data forum submitted")
     const responseElement = document.getElementById('response');
     responseElement.textContent = '';
     let errorMessage = '';
@@ -35,7 +35,6 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
 
         if (response.ok) {
             jsonResponse = await response.json();
-            console.log("hello world")
             console.log(jsonResponse)
             responseElement.textContent = `Success getting returns`;
             responseElement.style.color = 'green';

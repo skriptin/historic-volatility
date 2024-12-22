@@ -1,14 +1,16 @@
 import math
 import os
 import csv
-import datetime
+from datetime import datetime
+
 def sma_vol(window_length: int) -> dict:
     #Initalizations
+    window_length = int(window_length)
     windowed_volatility = dict()
-    daily_rets = {}
-    TRADING_DAYS = 252
+    daily_rets = dict()
+    TRADING_DAYS_ROOT = 252 ** 0.5
     i = window_length
-
+    current_value = 0
     #Get the daily returns for windowed vol calculation
     imput_path = os.getcwd() + '/data/returns.csv'
     with open(imput_path, 'r') as f:
@@ -21,16 +23,23 @@ def sma_vol(window_length: int) -> dict:
     dates = list(daily_rets.keys())
     returns = list(daily_rets.values())
 
-    print("the window legnth if outputted below")
-    print(window_length)
-    #if int(window_length) > len(dates):
-    #    return "Failure window length greater than daterange"
+    if int(window_length) > len(dates):
+        return "Failure window length greater than date-range"
+    # The first dates up to window length will be zero
+    for index in range(0, window_length):
+        date = dates[index]
+        current_return = abs(returns[index] * TRADING_DAYS_ROOT * 100) 
+        print(current_return, date)
+        current_value = current_return + current_value
+        windowed_volatility[index] = 0
+    current_value = current_value/window_length
+    windowed_volatility[dates[window_length]] = current_value
 
-    #print(dates)
-    #print(returns)
+    for index in range(window_length+1, len(dates)):
+        current_value = current_return - (returns[index - window_length-1]/window_length)
+        current_value = current_value + (returns[index]/window_length)
+        windowed_volatility[dates[index]] = current_value
     # Theese days will be without data
-    #for index in range(0, window_length):
-    #    windowed_volatility[dates[index]] = 0
-    #print (windowed_volatility)
+
 
     return windowed_volatility

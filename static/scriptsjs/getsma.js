@@ -1,18 +1,17 @@
 
-
+let jsonResponse_sma = null;
 document.getElementById('SMA-volatility').addEventListener('submit', async (event) => {
     event.preventDefault();
-
     const formData = new FormData(event.target);
     const data = {
-        window_length: formData.get('window')
+        window: formData.get('window'),
     };
 
-    const responseElement = document.getElementById('response-sma');
-    responseElement.textContent = '';
-    let errorMessage = '';
-    console.log("hello world")
+    console.log("Submitted sma forum")
+    console.log(data.window)
 
+
+    const responseElement_sma = document.getElementById('response-sma');
 
     try {
         const response = await fetch('/calc_sma', {
@@ -24,19 +23,18 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
         });
 
         if (response.ok) {
-            const jsonResponse = await response.json();
-            console.log("hello world");
-            console.log(jsonResponse);
-            responseElement.textContent = `Success`;
-            responseElement.style.color = 'green';
+            jsonResponse_sma = await response.json();
+            responseElement_sma .textContent = `Success getting returns`;
+            responseElement_sma .style.color = 'green';
         } else {
             const errorText = await response.text();
-            responseElement.textContent = 'Error occurred: make sure the window length is valid';
-            responseElement.style.color = 'red';
+            responseElement_sma .textContent = 'Error occurred: make sure the window length is valid';
+            responseElement_sma .style.color = 'red';
         }
     } 
     catch (error) {
-        responseElement.textContent = `Error occurred while getting sma data: ${error.message}`;
-        responseElement.style.color = 'red';
+        responseElement_sma .textContent = `Error occurred while fetching data: ${error.message}`;
+        responseElement_sma .style.color = 'red';
     }
+
 });

@@ -1,13 +1,24 @@
 import yfinance as yf
+import pandas as pd
 import csv
 import os
 import math
+from datetime import datetime
+from pandas import Timestamp
+
 
 def calc_series_of_daily_log_returns(df) -> dict:
     log_returns = dict()
-    for index in range(1,len(df)):
-        date = df.iloc[index]['Date'].strftime('%Y-%m-%d')
-        log_returns[date] = math.log(df.iloc[index]['Close']/df.iloc[index-1]['Close'])
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Calculate log returns
+    for index in range(1, len(df)):
+        #This was extremely annoying to do
+        date = df.iloc[index]['Date']
+        date = date.iloc[0].to_pydatetime().date()
+        date = date.strftime('%Y-%m-%d')
+
+        log_returns[date] = math.log(df.iloc[index]['Close'] / df.iloc[index - 1]['Close'])
     return log_returns
 
 def fetch_returns(ticker, start_date, end_date):
