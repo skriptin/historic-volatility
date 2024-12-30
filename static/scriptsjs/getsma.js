@@ -7,8 +7,8 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
         window: formData.get('window'),
     };
 
-    console.log("Submitted sma forum")
-    console.log(data.window)
+    console.log("User has submitted sma forum with parameters:")
+    console.log(`Window Length: ${data.window}`)
 
 
     const responseElement_sma = document.getElementById('response-sma');
@@ -24,6 +24,7 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
 
         if (response.ok) {
             jsonResponse_sma = await response.json();
+            console.log(jsonResponse_sma)
             responseElement_sma .textContent = `Success getting sma`;
             responseElement_sma .style.color = 'green';
         } else {

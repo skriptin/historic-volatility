@@ -120,7 +120,7 @@ def main():
     #    print("Invalid date format. Please use YYYY-MM-DD.")
 
     ticker = "SPY"
-    window_length = 200
+    window_length = 20
     start_date = "2010-01-01"
     end_date = "2024-10-01"
     lam_bda = 0.95

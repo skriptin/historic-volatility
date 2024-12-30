@@ -8,18 +8,16 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
         start_date: formData.get('start_date'),
         end_date: formData.get('end_date')
     };
-    console.log("stock data forum submitted")
+    
+    console.log("User has submitted get data forum with parameters:")
+    console.log(`Start date: ${data.start_date} End Date: ${data.end_date} Ticker: ${data.ticker}`)
+
     const responseElement = document.getElementById('response');
-    responseElement.textContent = '';
-    let errorMessage = '';
     const startDate = new Date(data.start_date);
     const endDate = new Date(data.end_date);
 
     if (startDate.getTime() > endDate.getTime()) {
-        errorMessage = 'End Date cannot be earlier than Start Date.';
-    }
-    if (errorMessage) {
-        responseElement.textContent = errorMessage;
+        responseElement.textContent = 'End Date cannot be earlier than Start Date.';
         responseElement.style.color = 'red';
         return;
     }
@@ -41,11 +39,13 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
         } else {
             const errorText = await response.text();
             responseElement.textContent = 'Error occurred: make sure the ticker and dates are valid';
+            console.log(jsonResponse)
             responseElement.style.color = 'red';
         }
     } 
     catch (error) {
         responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
+        console.log(jsonResponse)
         responseElement.style.color = 'red';
     }
 });
