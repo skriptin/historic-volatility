@@ -17,7 +17,7 @@ def calc_series_of_daily_log_returns(df) -> dict:
         date = df.iloc[index]['Date']
         date = date.iloc[0].to_pydatetime().date()
         date = date.strftime('%Y-%m-%d')
-        log_returns[date] = abs(math.log(df.iloc[index]['Close'] / df.iloc[index - 1]['Close']))
+        log_returns[date] = math.log(df.iloc[index]['Close'] / df.iloc[index - 1]['Close'])
     return log_returns
 
 def fetch_returns(ticker, start_date, end_date):

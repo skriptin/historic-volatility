@@ -46,5 +46,15 @@
     <p id="response-EWMA"></p>
     <script src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
     
+    <form id="fit-garch">
+        <h1>Fit Garch Model</h1>
+        <label for="garch">Submit button to fit a garph model to the data </label>
+        <button type="submit">fit</button>
+    </form>
+    <div>
+        <canvas id="vol_chart" aria-label="Historic_volatility_Chart" width="400" height="200"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='scriptsjs/chart.js') }}"></script>
 </body>
 </html>
