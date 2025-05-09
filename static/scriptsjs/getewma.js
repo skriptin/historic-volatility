@@ -1,5 +1,7 @@
+import { update_chart } from './vol_chart.js';
+import { jsonResponse } from './getstockreturns.js';
 
-let jsonResponse_ewma = null
+
 document.getElementById('EWMA-volatility').addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -17,30 +19,49 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
     }
     const responseElement_ewma = document.getElementById("response-EWMA")
 
+    if (!jsonResponse){
+        console.warn("No stock data available in jsonResponse. Please fetch data first.");
+        responseElement_ewma.textContent = "Please fetch stock data first using the form above.";
+        responseElement_ewma.style.color = 'orange';
+        return;
+    }
+
+
+    const requestData = {
+        alpha: data.alpha,
+        stock_returns: jsonResponse
+    };
 
     try {
-        const response = await fetch('/calc_ewma', {
+        const response = await fetch('/calc_sma', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: new URLSearchParams(data)
+            body: JSON.stringify(requestData)
         });
 
         if (response.ok) {
-            jsonResponse_sma = await response.json();
-            console.log(jsonResponse_sma)
+            const jsonResponse_ewma = await response.json();
+            console.log("EWMA data", jsonResponse_ewma);
             responseElement_ewma .textContent = `Success getting EWMA`;
             responseElement_ewma .style.color = 'green';
+            //plot chart
+            update_chart(jsonResponse_ewma);
+
         } else {
-            const errorText = await response.text();
-            responseElement_ewma .textContent = 'Error occurred: make sure alpha is valid';
-            responseElement_ewma .style.color = 'red';
+            const errorText = await response.json();
+            const errorData = await response.json(); 
+            const errorMessage = errorData.error || 'Unknown error occurred.';
+            console.error("Error fetching SMA data:", response.status, errorData);
+            responseElement_ewma.textContent = `Error occurred: ${errorMessage}`;
+            responseElement_ewma.style.color = 'red';
         }
     } 
     catch (error) {
-        responseElement_ewma .textContent = `Error occurred while fetching data: ${error.message}`;
-        responseElement_ewma .style.color = 'red';
+        console.error("Fetch error for SMA:", error);
+        responseElement_sma.textContent = `Error occurred while fetching data: ${error.message}`;
+        responseElement_sma.style.color = 'red';
     }
 
 

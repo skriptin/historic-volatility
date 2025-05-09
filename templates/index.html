@@ -25,7 +25,6 @@
             <button type="submit">Get Data</button>
     </form>
     <p  id="response"></p>
-    <script src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
 
         <form id="SMA-volatility">
             <h1>Windowed Volatility</h1>
@@ -33,9 +32,7 @@
             <input type="number" id="window" name="window" placeholder="20" value="20" required><br>
             <button type="submit">Plot</button>
         </form>
-        <p  id="response-sma"></p>
-        <script src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
-    
+    <p  id="response-sma"></p>
 
     <form id="EWMA-volatility">
         <h1>EWMA Volatility</h1>
@@ -44,17 +41,22 @@
         <button type="submit">Calculate</button>
     </form>
     <p id="response-EWMA"></p>
-    <script src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
     
     <form id="fit-garch">
         <h1>Fit Garch Model</h1>
         <label for="garch">Submit button to fit a garph model to the data </label>
         <button type="submit">fit</button>
     </form>
+    <p id="garch_response"></p>
+
     <div>
         <canvas id="vol_chart" aria-label="Historic_volatility_Chart" width="400" height="200"></canvas>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ url_for('static', filename='scriptsjs/chart.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-colors@0.2.0"></script> <script type="module" src="{{ url_for('static', filename='scriptsjs/vol_chart.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
 </body>
 </html>

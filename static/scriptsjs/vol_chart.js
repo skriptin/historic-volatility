@@ -1,13 +1,11 @@
-import { Colors } from 'chart.js';
-Chart.register(Colors);
+//import { Colors } from 'chart.js';
+//Chart.register(Colors);
 
 let volChart = null; // Global chart instance
 
 
 function initializeChart() {
     const ctx = document.getElementById('vol_chart').getContext('2d');
-
-    // Predefined labels (x-axis) and datasets (y-axis)
 
     volChart = new Chart(ctx, {
         type: 'line',
@@ -50,17 +48,23 @@ function initializeChart() {
 
         }
     });
+    console.log("Chart initialized!"); 
 }
 
-function formatjson(data){
-    labels = list(data.keys)
-    values = list(data.values)
+function update_chart(newDataObject, datasetLabel){
+    if (!volChart){
+        console.log('Vol chart not initalized');
+        return;
+    }
+
+    const labels = Object.keys(newDataObject);
+    const values = Object.values(newDataObject);
+
 }
 
-function updatechart(labels, values, volChart){
-    
-}
+
 
 // Call initializeChart when the page loads
 document.addEventListener('DOMContentLoaded', initializeChart);
+export {update_chart}
 

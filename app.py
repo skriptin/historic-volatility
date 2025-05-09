@@ -25,8 +25,22 @@ def get_data():
 @app.route("/calc_sma", methods=["POST"])
 def calc_sma():
     print("Routing to script /calc_sma")
-    window = request.form.get("window")
-    response = sma.sma_vol(window)
+
+    request_data = request.get_json()
+
+    if not request_data:
+        print("No JSON recieved for sma")
+        return jsonify({"error": "Invalid request: No JSON recieved"}), 400
+
+    window = int(request_data.get("window"))
+    returns = request_data.get("stock_returns")
+
+    if returns is None or not isinstance(returns, dict):
+        print("Invalid stock returns")
+        return jsonify({"error": "Stock returns data is missing or invalid"}), 400
+
+    response = sma.sma_vol(window, returns)
+
     if "error" in response:
         print(response)
         return jsonify({"error": response["error"]}), 400
@@ -35,8 +49,22 @@ def calc_sma():
 @app.route("/calc_ewma", methods=["POST"])
 def calc_ewma():
     print("Routing to script /calc_ewma")
-    alpha = request.form.get("alpha")
-    response = ewma.ewma_vol(alpha)
+
+    request_data = request.get_json()
+    if not request_data:
+        print("No JSON recieved for sma")
+        return jsonify({"error": "Invalid request: No JSON recieved"}), 400
+
+
+    alpha = request_data.get("alpha")
+    returns = request_data.get("stock_returns")
+
+    if returns is None or not isinstance(returns, dict):
+        print("Invalid stock returns")
+        return jsonify({"error": "Stock returns data is missing or invalid"}), 400
+
+    response = ewma.ewma_vol(alpha, returns)
+    
     if "error" in response:
         print(response)
         return jsonify({"error": response["error"]}), 400

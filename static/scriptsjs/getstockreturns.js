@@ -49,3 +49,5 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
         responseElement.style.color = 'red';
     }
 });
+
+export { jsonResponse };
