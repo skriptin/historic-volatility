@@ -33,7 +33,7 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
     };
 
     try {
-        const response = await fetch('/calc_sma', {
+        const response = await fetch('/calc_ewma', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
             responseElement_ewma .textContent = `Success getting EWMA`;
             responseElement_ewma .style.color = 'green';
             //plot chart
-            update_chart(jsonResponse_ewma, `SMA(${data.alpha})`);
+            update_chart(jsonResponse_ewma, `EWMA(${data.alpha})`);
 
         } else {
             const errorText = await response.json();

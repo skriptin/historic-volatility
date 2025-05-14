@@ -15,7 +15,7 @@ def ewma_vol(alpha: float, daily_rets: dict) -> dict:
     returns = list(daily_rets.values())
 
     if(len(dates) != len(returns)):
-        return "Error in the list of dates and returns "
+        return {"error": "Error in the list of dates and returns"}
 
     # Base case of the EWMA function we use the first varience as the first value for the time series
     last_var = returns[0] ** 2
