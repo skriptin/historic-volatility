@@ -1,5 +1,3 @@
-//import { Colors } from 'chart.js';
-//Chart.register(Colors);
 
 let volChart = null; // Global chart instance
 
@@ -18,6 +16,7 @@ function initializeChart() {
         options: {
             responsive: true,
             animaion: true,
+            maintainAspectRatio: true,
             scales: {
                 x: {
                     title: {
@@ -37,36 +36,161 @@ function initializeChart() {
                         }
                     },
                     beginAtZero: true, // Start y-axis from 0
-                    suggestedMax: 200 // Scale y-axis up to 200
+                    min: 0,
+                    max: 200 
                 }
             },
             plugins: {
-                colors: {
-                    forceOverride: true
+               legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                // --- ZOOM PLUGIN CONFIGURATION ---
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',       
+                        threshold: 5,
+
+                    },
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                            speed: 0.1,
+                        },
+                        pinch: {
+                            enabled: true,
+                        },
+                        drag: {
+                            enabled: false, 
+                        },
+                        mode: 'xy',      
+                    },
+                    limits: {
+                        y: {
+                            min: 0,        // Minimum value the y-axis can be panned/zoomed to
+                            max: 200,      // Maximum value the y-axis can be panned/zoomed to
+                            minRange: 30   // Minimum difference between y.min and y.max after zoom
+                        }
+                    }
                 }
-            }
+    // --- END ZOOM PLUGIN CONFIGURATION ---
+
+            },
+            
 
         }
     });
     console.log("Chart initialized!"); 
 }
 
-function update_chart(newDataObject, datasetLabel){
-    if (!volChart){
-        console.log('Vol chart not initalized');
-        return;
-    }
-
-    const labels = Object.keys(newDataObject);
-    const values = Object.values(newDataObject);
-    console.log("Updating chart with labels: " + labels)
-    console.log("Updating chart with dataset: " + values)
-
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 200); 
+    const g = Math.floor(Math.random() * 200);
+    const b = Math.floor(Math.random() * 200);
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 
+/**
+ * Adds a new line (dataset) to the chart or updates an existing one.
+ * - Manages a master list of X-axis labels (e.g., dates), adding any new ones and sorting them.
+ * - Ensures all datasets (old and new) align to this master list of X-axis labels.
+ *
+ * @param {Object} newDataObject - The data for the single line to be added/updated.
+ *                                 Format: { "xLabel1": value1, "xLabel2": value2, ... }
+ *                                 Example: { "2023-01-01": 10, "2023-01-02": 12 }
+ * @param {string} datasetLabel - A unique name for this line (e.g., "SMA 10").
+ *                                This is used to identify the line for updates or removal.
+ */
+function update_chart(newDataObject, datasetLabel) {
+    if (!volChart) {
+        console.error('Chart not initialized. Call initializeChart() first.');
+        return;
+    }
+    if (typeof newDataObject !== 'object' || newDataObject === null || Object.keys(newDataObject).length === 0) {
+        console.error('newDataObject must be a non-empty object containing {label: value} pairs.');
+        return;
+    }
+    if (typeof datasetLabel !== 'string' || datasetLabel.trim() === '') {
+        console.error('datasetLabel must be a non-empty string to name the dataset.');
+        return;
+    }
 
-// Call initializeChart when the page loads
+    // The chart maintains one set of X-axis labels that all datasets will use.
+    const labelsFromNewData = Object.keys(newDataObject);
+    const existingChartLabels = volChart.data.labels || [];
+
+    // Combine current chart labels with labels from the new data, ensuring no duplicates.
+    let masterXLabels = Array.from(new Set([...existingChartLabels, ...labelsFromNewData]));
+
+    // Sort these master labels (e.g., chronologically for dates).
+    masterXLabels.sort((a, b) => {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        if (!isNaN(dateA) && !isNaN(dateB)) { // If both are valid dates
+            return dateA - dateB; // Sort by date
+        }
+        return String(a).localeCompare(String(b)); // Otherwise, sort as strings
+    });
+
+    // Assign the definitive, sorted labels to the chart.
+    volChart.data.labels = masterXLabels;
+
+    // --- 2. Re-align Data for ALL Previously Existing Datasets ---
+    volChart.data.datasets.forEach(dataset => {
+        // Only re-align datasets that have their original raw data stored.
+        if (dataset.originalData && dataset.label !== datasetLabel) { // Don't re-align the one we're currently processing yet
+            const realignedData = masterXLabels.map(label => {
+                return dataset.originalData[label] !== undefined ? dataset.originalData[label] : null;
+            });
+            dataset.data = realignedData;
+        }
+    });
+
+    // --- 3. Prepare Data for the Incoming (New or to-be-Updated) Dataset ---
+    // The incoming `newDataObject` also needs its data points aligned with the `masterXLabels`.
+    const alignedDataForIncoming = masterXLabels.map(label => {
+        return newDataObject[label] !== undefined ? newDataObject[label] : null;
+    });
+
+    // --- 4. Find, Update, or Add the Dataset ---
+    const existingDatasetIndex = volChart.data.datasets.findIndex(ds => ds.label === datasetLabel);
+
+    if (existingDatasetIndex > -1) {
+        // An existing dataset with the same label was found
+        console.log(`Updating existing dataset: "${datasetLabel}"`);
+        const datasetToUpdate = volChart.data.datasets[existingDatasetIndex];
+        datasetToUpdate.data = alignedDataForIncoming;
+        datasetToUpdate.originalData = { ...newDataObject };
+    } else {
+        // No dataset with this label exists
+        console.log(`Adding new dataset: "${datasetLabel}"`);
+        const newDataset = {
+            label: datasetLabel,                 // Name of the line, shown in legend/tooltips
+            data: alignedDataForIncoming,        // The actual Y-values for the chart
+            originalData: { ...newDataObject },  // Store the raw input for future re-alignments
+            borderColor: getRandomColor(),       // Line color
+            backgroundColor: 'transparent',      // Usually transparent for line charts
+            fill: false,                         // Don't fill area under the line
+            tension: 0.1,                        // Adds smoothing to the line
+            pointRadius: 0,                      // Size of the point (default is often 3 or 4)
+            pointHoverRadius: 5,                 // Size of the point when hovered
+            pointHitRadius: 10,                  // Larger "hit" area for easier tooltip activation
+            pointBorderWidth: 1,                 // Makes lines slightly curved (0 for straight)
+        };
+        volChart.data.datasets.push(newDataset);
+    }
+
+    // --- 5. Update the chart
+    volChart.update(); 
+    console.log(`Chart updated. Total X-Labels: ${masterXLabels.length}, Total Datasets: ${volChart.data.datasets.length}`);
+}
+
 document.addEventListener('DOMContentLoaded', initializeChart);
 export {update_chart}
 

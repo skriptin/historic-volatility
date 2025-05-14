@@ -47,7 +47,7 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
             responseElement_ewma .textContent = `Success getting EWMA`;
             responseElement_ewma .style.color = 'green';
             //plot chart
-            update_chart(jsonResponse_ewma);
+            update_chart(jsonResponse_ewma, `SMA(${data.alpha})`);
 
         } else {
             const errorText = await response.json();
@@ -60,8 +60,8 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
     } 
     catch (error) {
         console.error("Fetch error for SMA:", error);
-        responseElement_sma.textContent = `Error occurred while fetching data: ${error.message}`;
-        responseElement_sma.style.color = 'red';
+        responseElement_ewma.textContent = `Error occurred while fetching data: ${error.message}`;
+        responseElement_ewma.style.color = 'red';
     }
 
 

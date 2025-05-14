@@ -40,7 +40,7 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
 
             // Plot on chart
             console.log("Sending SMA data to update chart");
-            update_chart(jsonResponse_sma, `SMA(${window}) Volatility`);
+            update_chart(jsonResponse_sma, `SMA(${window})`);
 
         } else {
             const errorText = await response.json();
