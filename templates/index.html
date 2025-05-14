@@ -3,13 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skeleton Website</title>
+    <title>Volatility Analysis</title> <!-- Changed title to match header -->
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        input, button { margin: 5px 0; }
+        /* === Styles for the new Site Header === */
+
+        /* Adjust body margin to allow header to be at the very top */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; /* Remove margin so header can be flush with top */
+            /* The 20px margin can be added to your first form or a content wrapper div
+               if you want space between the header and your forms.
+               Example: #script-form { margin-top: 20px; margin-left: 20px; margin-right: 20px; } */
+        }
+
+        .site-header {
+            background-color: #e9e9e9; /* Light gray background for the header */
+            color: #333; /* Dark gray text color for contrast */
+            border-bottom: 2px solid #b0b0b0; /* Darker gray border at the bottom */
+            padding: 10px 15px; /* Padding inside the header */
+            display: flex;
+            align-items: center;
+            min-height: 50px; /* Ensure a minimum height */
+        }
+
+        /* Menu Button and Dropdown Styling */
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background-color: #555; /* Darker button for contrast on light gray header */
+            color: white;
+            border: 1px solid #333;
+            padding: 8px 12px;
+            font-size: 16px; /* You can use a text or icon like ☰ */
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #333;
+        }
+
+        .dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #f9f9f9; /* Light background for dropdown */
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px; /* Small space between button and dropdown */
+        }
+
+        .dropdown-content p { /* Style for placeholder text */
+            padding: 12px 16px;
+            margin: 0;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Show dropdown on hover over menu-container */
+        .menu-container:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header Title Styling */
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0 10px; /* Give it some space from potential elements on either side */
+            font-size: 1.7em; /* Adjust as needed */
+            font-weight: bold;
+            color: #333; /* Ensure it's readable on light gray */
+        }
+
+        /* === End of Styles for Site Header === */
+
+        /* Your existing input, button style (can be combined or kept separate) */
+        input, button { margin: 5px 0; } /* This is your original rule */
+
+        /* If you want the 20px margin around your forms as before: */
+        #script-form {
+            margin: 20px; /* Apply margin to the first form */
+        }
+        /* Or wrap all your forms and canvas in a div with this margin */
+        .content-wrapper {
+            margin: 20px;
+        }
+
     </style>
 </head>
 <body>
+
+ <header class="site-header">
+        <div class="menu-container">
+            <button class="menu-button" aria-haspopup="true" aria-expanded="false" title="Navigation Menu">
+                ☰
+            </button>
+            <div class="dropdown-content">
+                <p>Navigation links (not yet implemented)</p>
+                <!-- When implemented, links would look like:
+                <a href="/page1">Page 1</a>
+                <a href="/page2">Page 2</a>
+                -->
+            </div>
+        </div>
+        <h1 class="header-title">Volatility Analysis</h1>
+    </header>
 
     <form id="script-form">
         <h1>Enter Stock Information</h1>
@@ -42,7 +146,7 @@
     </form>
     <p id="response-EWMA"></p>
     
-    <form id="fit-garch">
+    <form id="find-PACF">
         <h1>Fit Garch Model</h1>
         <label for="garch">Submit button to fit a garph model to the data </label>
         <button type="submit">fit</button>
