@@ -95,6 +95,103 @@
             margin: 20px;
         }
 
+        .form-box-container#stock-info-form-area {
+            border: 1px solid #a0a0a0; /* Border for the main box */
+            padding: 25px;              /* Inner spacing for the box */
+            margin: 20px;               /* 20px margin from header and page edges */
+            background-color: #ffffff;  /* White background for the box content area */
+            max-width: 550px;           /* Control maximum width, adjust as needed */
+            /* If you want it centered on the page, uncomment the next line and adjust top/bottom margin */
+            /* margin: 20px auto; */
+            border-radius: 5px;         /* Slightly rounded corners for the box */
+        }
+
+        .form-box-container#stock-info-form-area #script-form h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.6em; /* Or as desired */
+            color: #333;
+        }
+
+        .form-box-container#stock-info-form-area .form-row {
+            display: flex;
+            align-items: center; /* Vertically aligns label and input */
+            margin-bottom: 15px; /* Space between rows */
+        }
+
+        .form-box-container#stock-info-form-area .form-row label {
+            flex-basis: 100px; /* Fixed width for labels, adjust as needed */
+            flex-shrink: 0;   /* Prevent label from shrinking */
+            margin-right: 15px; /* Space between label and input */
+            font-weight: normal; /* As it appears in the image (not bold) */
+            color: #333;
+            text-align: left; /* Align label text to the left */
+        }
+
+        .form-box-container#stock-info-form-area .form-row input[type="text"],
+        .form-box-container#stock-info-form-area .form-row input[type="date"] {
+            flex-grow: 1; /* Input takes remaining space */
+            padding: 10px;
+            border: 1px solid #8c9db0; /* A slightly darker, desaturated blue border */
+            background-color: #e6f0f7; /* Light blue fill as in image */
+            border-radius: 4px;
+            box-sizing: border-box; /* Ensures padding and border are inside the element's width/height */
+        }
+
+        .form-box-container#stock-info-form-area #script-form button[type="submit"] {
+            display: block; /* Make button take full width of its container */
+            width: 100%;
+            padding: 12px;
+            background-color: #e0f2e0; /* Light green fill as in image */
+            border: 1px solid #a0c0a0; /* A slightly darker green border */
+            color: #333;
+            font-size: 1.1em;
+            font-weight: normal; /* As it appears in the image */
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 25px; /* Space above the button */
+            transition: background-color 0.2s ease;
+        }
+
+        .form-box-container#stock-info-form-area #script-form button[type="submit"]:hover {
+            background-color: #cfe8cf; /* Slightly darker green on hover */
+        }
+
+        /* Styling for the response paragraph to look like a small box */
+        .form-box-container#stock-info-form-area #response {
+            margin-top: 20px; /* Space below the form/button */
+            padding: 10px 15px;
+            border: 1px solid #d0d0d0; /* Border for the response box */
+            background-color: #f8f8f8; /* Slightly off-white background */
+            min-height: 24px;          /* Ensures it has some height even if empty */
+            text-align: center;
+            font-size: 0.9em;
+            border-radius: 4px;
+            line-height: 1.4;
+            color: #c00; /* Default to red for errors */
+        }
+
+        /* Optional: Style for when the response box is empty */
+        .form-box-container#stock-info-form-area #response:empty {
+            /* You could hide it, or make it less prominent */
+            /* display: none; */
+            border-style: dashed;
+            border-color: #e0e0e0;
+            color: #999;
+            /* content: "Status messages will appear here..."; remove if JS populates it */
+        }
+        /* To dynamically change response style (e.g., for success messages) */
+        .form-box-container#stock-info-form-area #response.success {
+            color: #080; /* Green text for success */
+            background-color: #e8f8e8;
+            border-color: #b0d0b0;
+        }
+        .form-box-container#stock-info-form-area #response.error {
+            color: #c00; /* Red text for error */
+            background-color: #f8e8e8;
+            border-color: #d0b0b0;
+        }
     </style>
 </head>
 <body>
@@ -115,29 +212,30 @@
         <h1 class="header-title">Volatility Analysis</h1>
     </header>
 
-    <form id="script-form">
-        <h1>Enter Stock Information</h1>
-            <label for="ticker">Ticker Symbol:</label>
-            <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" value="SPY" required><br>
 
-            <label for="start_date">Start Date:</label>
-            <input type="date" id="start_date" name="start_date" value="2024-01-01" required><br>
+    <div class="form-box-container" id="stock-info-form-area">
+        <form id="script-form">
+            <h1>Stock Information</h1> <!-- Text changed as per image -->
 
-            <label for="end_date">End Date:</label>
-            <input type="date" id="end_date" name="end_date" value="2024-11-01" required><br>
+            <div class="form-row">
+                <label for="ticker">Ticker</label> <!-- Text changed -->
+                <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" value="SPY" required>
+            </div>
 
-            <button type="submit">Get Data</button>
-    </form>
-    <p  id="response"></p>
+            <div class="form-row">
+                <label for="start_date">Start Date</label> <!-- Text changed -->
+                <input type="date" id="start_date" name="start_date" value="2024-01-01" required>
+            </div>
 
-        <form id="SMA-volatility">
-            <h1>Windowed Volatility</h1>
-            <label for="window"></label>
-            <input type="number" id="window" name="window" placeholder="20" value="20" required><br>
-            <button type="submit">Plot</button>
+            <div class="form-row">
+                <label for="end_date">End Date</label> <!-- Text changed -->
+                <input type="date" id="end_date" name="end_date" value="2024-11-01" required>
+            </div>
+
+            <button type="submit">Submit</button> <!-- Text changed -->
         </form>
-    <p  id="response-sma"></p>
-
+        <p id="response"></p> <!-- This will be styled as the small box at the bottom -->
+    </div>
     <form id="EWMA-volatility">
         <h1>EWMA Volatility</h1>
         <label for="alpha">Ticker Symbol:</label>
