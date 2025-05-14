@@ -59,6 +59,8 @@ function update_chart(newDataObject, datasetLabel){
 
     const labels = Object.keys(newDataObject);
     const values = Object.values(newDataObject);
+    console.log("Updating chart with labels: " + labels)
+    console.log("Updating chart with dataset: " + values)
 
 }
 
