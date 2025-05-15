@@ -3,41 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volatility Analysis</title> <!-- Changed title to match header -->
+    <title>Volatility Analysis</title>
     <style>
-        /* === Styles for the new Site Header === */
 
         /* Adjust body margin to allow header to be at the very top */
         body {
             font-family: Arial, sans-serif;
-            margin: 0; /* Remove margin so header can be flush with top */
-            /* The 20px margin can be added to your first form or a content wrapper div
-               if you want space between the header and your forms.
-               Example: #script-form { margin-top: 20px; margin-left: 20px; margin-right: 20px; } */
+            margin: 0;
         }
-
         .site-header {
-            background-color: #e9e9e9; /* Light gray background for the header */
+            background-color: #e9e9e9; 
             color: #333; /* Dark gray text color for contrast */
             border-bottom: 2px solid #b0b0b0; /* Darker gray border at the bottom */
             padding: 10px 15px; /* Padding inside the header */
             display: flex;
             align-items: center;
-            min-height: 50px; /* Ensure a minimum height */
+            min-height: 50px; 
         }
 
-        /* Menu Button and Dropdown Styling */
         .menu-container {
             position: relative;
             display: inline-block;
         }
 
         .menu-button {
-            background-color: #555; /* Darker button for contrast on light gray header */
+            background-color: #555; 
             color: white;
             border: 1px solid #333;
             padding: 8px 12px;
-            font-size: 16px; /* You can use a text or icon like ☰ */
+            font-size: 16px; 
             cursor: pointer;
             border-radius: 4px;
             transition: background-color 0.3s ease;
@@ -48,9 +42,9 @@
         }
 
         .dropdown-content {
-            display: none; /* Hidden by default */
+            display: none; 
             position: absolute;
-            background-color: #f9f9f9; /* Light background for dropdown */
+            background-color: #f9f9f9; 
             min-width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
@@ -81,16 +75,12 @@
             color: #333; /* Ensure it's readable on light gray */
         }
 
-        /* === End of Styles for Site Header === */
+        input, button { margin: 5px 0; }
 
-        /* Your existing input, button style (can be combined or kept separate) */
-        input, button { margin: 5px 0; } /* This is your original rule */
-
-        /* If you want the 20px margin around your forms as before: */
         #script-form {
             margin: 20px; /* Apply margin to the first form */
         }
-        /* Or wrap all your forms and canvas in a div with this margin */
+
         .content-wrapper {
             margin: 20px;
         }
@@ -218,24 +208,34 @@
             <h1>Stock Information</h1> <!-- Text changed as per image -->
 
             <div class="form-row">
-                <label for="ticker">Ticker</label> <!-- Text changed -->
+                <label for="ticker">Ticker</label> 
                 <input type="text" id="ticker" name="ticker" placeholder="Enter ticker symbol" value="SPY" required>
             </div>
 
             <div class="form-row">
-                <label for="start_date">Start Date</label> <!-- Text changed -->
+                <label for="start_date">Start Date</label> 
                 <input type="date" id="start_date" name="start_date" value="2024-01-01" required>
             </div>
 
             <div class="form-row">
-                <label for="end_date">End Date</label> <!-- Text changed -->
+                <label for="end_date">End Date</label> 
                 <input type="date" id="end_date" name="end_date" value="2024-11-01" required>
             </div>
 
-            <button type="submit">Submit</button> <!-- Text changed -->
+            <button type="submit">Submit</button> 
         </form>
-        <p id="response"></p> <!-- This will be styled as the small box at the bottom -->
+        <p id="response"></p> 
     </div>
+
+    <form id="SMA-volatility">
+        <h1>SMA Volatility</h1>
+        <label for="window">Enter Window Length:</label>
+        <input type="number" id="window" name="window" required>
+        <button type="submit">Calculate</button>
+    </form>
+    <p id="'reponse-SMA"></p>
+
+
     <form id="EWMA-volatility">
         <h1>EWMA Volatility</h1>
         <label for="alpha">Ticker Symbol:</label>
@@ -245,11 +245,10 @@
     <p id="response-EWMA"></p>
     
     <form id="find-PACF">
-        <h1>Fit Garch Model</h1>
-        <label for="garch">Submit button to fit a garph model to the data </label>
+        <h1>Get PACF</h1>
+        <label for="garch-PACF">Submit button to fit a garph model to the data</label>
         <button type="submit">fit</button>
     </form>
-    <p id="garch_response"></p>
 
     <div>
         <canvas id="vol_chart" aria-label="Historic_volatility_Chart" width="400" height="200"></canvas>

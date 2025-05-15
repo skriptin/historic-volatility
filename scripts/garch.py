@@ -1,10 +1,13 @@
-import os
-import csv
-import matplotlib.pyplot as plt
-
 
 def test():
     print("main running")
+
+def get_pacf(returns: dict):
+
+    print(returns)
+
+
+
 
 
 if __name__ == "__main__":

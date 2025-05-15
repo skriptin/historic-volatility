@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from scripts import fetch, sma, ewma
+from scripts import fetch, sma, ewma, garch
 
 app = Flask(__name__)
 
@@ -69,6 +69,23 @@ def calc_ewma():
         print(response)
         return jsonify({"error": response["error"]}), 400
     return jsonify(response), 200
+
+@app.route("/get_pacf", methods=["POST"])
+def calc_garch():
+    print("Routing to script to fetch_pacf()")
+
+    request_data = request.get_json()
+    returns = request_data.get('stock_returns')
+        
+    if not request_data:
+        print("No JSON recieved for sma")
+        return jsonify({"error": "Invalid request: No JSON recieved"}), 400
+
+    if returns is null or not instance (returns, dict):
+        print("Returns are null or invalid in form")
+        return jsonify({"error": "Invalid request: No stock returns recieved"}, 400)
+
+    response = garch.get_pacf(returns)
 
 if __name__ == '__main__':
     print("Starting Flask app")
