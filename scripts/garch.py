@@ -5,6 +5,8 @@ def test():
 def get_pacf(returns: dict):
 
     print(returns)
+    
+    return returns
 
 
 

@@ -81,11 +81,16 @@ def calc_garch():
         print("No JSON recieved for sma")
         return jsonify({"error": "Invalid request: No JSON recieved"}), 400
 
-    if returns is null or not instance (returns, dict):
+    if returns is None or not isinstance(returns, dict):
         print("Returns are null or invalid in form")
         return jsonify({"error": "Invalid request: No stock returns recieved"}, 400)
 
     response = garch.get_pacf(returns)
+
+    if "error" in response:
+        print(response)
+        return jsonify({"error": response["error"]}), 400
+    return jsonify(response), 200
 
 if __name__ == '__main__':
     print("Starting Flask app")

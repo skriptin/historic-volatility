@@ -1,8 +1,10 @@
-import { jsonResponse } from "./getstockreturns";
+import { jsonResponse } from './getstockreturns.js';
 let PACF = null;
 
-document.getElementById("garch-PACF").addEventListener('submit', async(event) => {
+document.getElementById("find-PACF").addEventListener('submit', async(event) => {
     event.preventDefault();
+
+    console.log("User has submitted to pacf forum");
 
     if (!jsonResponse){
         console.warn("No stock data available in jsonResponse. Please fetch data first.");
@@ -22,10 +24,15 @@ document.getElementById("garch-PACF").addEventListener('submit', async(event) =>
             body: JSON.stringify(requestData)
         });
 
+
+        if(response.ok){
+            const jsonResponse_ewma = await response.json();
+            console.log("Partial Autocorrelation Coefficents:", jsonResponse_ewma)
+        }
+
     }
     catch (error) {
-        responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
-        console.log(error);
+        console.log("An unknown error has occured" + error);
     }
 
 

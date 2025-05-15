@@ -233,7 +233,7 @@
         <input type="number" id="window" name="window" required>
         <button type="submit">Calculate</button>
     </form>
-    <p id="'reponse-SMA"></p>
+    <p id='response-sma'></p>
 
 
     <form id="EWMA-volatility">
@@ -261,5 +261,6 @@
     <script type="module" src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
 </body>
 </html>

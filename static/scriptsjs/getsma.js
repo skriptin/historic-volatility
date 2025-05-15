@@ -35,8 +35,8 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
         if (response.ok) {
             const jsonResponse_sma = await response.json();
             console.log("SMA data", jsonResponse_sma);
-            responseElement_sma .textContent = `Success getting sma`;
-            responseElement_sma .style.color = 'green';
+            responseElement_sma.textContent = `Success getting sma`;
+            responseElement_sma.style.color = 'green';
 
             // Plot on chart
             console.log("Sending SMA data to update chart");
