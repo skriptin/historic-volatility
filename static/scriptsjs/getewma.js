@@ -17,7 +17,7 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
         alert("Alpha must be between 0 and 1")
         return;
     }
-    const responseElement_ewma = document.getElementById("response-EWMA")
+    const responseElement_ewma = document.getElementById("response-ewma")
 
     if (!jsonResponse){
         console.warn("No stock data available in jsonResponse. Please fetch data first.");
