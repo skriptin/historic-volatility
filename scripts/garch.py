@@ -8,23 +8,44 @@ def test():
 
 def get_pacf(returns: dict):
 
-    #print(returns)
     returns_list = list(returns.values())
     returns_list_np = np.array(returns_list)
 
+    pacf_values_arr, conf_int_arr = pacf(
+        returns_list_np**2,
+        nlags=5,
+        method='yw',  
+        alpha=0.05
+    )
 
-    pacf_output = pacf(returns_list_np**2, alpha=0.05, method='yw', nlags=5)
+    lower_bound = conf_int_arr[:,0].tolist()
+    upper_bound = conf_int_arr[:, 1].tolist()
+    lower_bound =[round(float(x),3) for x in lower_bound]
+    upper_bound = [round(float(x),3) for x in upper_bound]
+    pacf_values_arr = [(round(float(value), 3)) for value in pacf_values_arr]
 
-    pacf_dict = dict()
-    for lag_key, data_tuple in pacf_output.items():
-        pacf_val = data_tuple[0]
-        ci_val = data_tuple[1]
-        is_sig = data_tuple[2]
-        print(f"{lag_key}: (Value: {pacf_val:+.4f}, CI: [{ci_val[0]:+.4f}, {ci_val[1]:+.4f}], Significant: {is_sig})")
-    print(pacf_dict)
+    print(lower_bound)
+    print(upper_bound)
+    print(pacf_values_arr)
 
+    output_dict = {}
 
+    for i in range(len(pacf_values_arr)):
+        lag_number = i 
+        value = pacf_values_arr[i]
+        ci_lower = lower_bound[i]
+        ci_upper = upper_bound[i]
 
+        is_significant = False
+        if lag_number >= 0:
+            if not (ci_lower <= 0 <= ci_upper):
+                is_significant = True
+        
+        lag_key = f"Lag {lag_number}"
+        output_dict[lag_key] = (value, (ci_lower, ci_upper), is_significant)
+
+    for key, value in output_dict.items():
+        print(f'{key}: {value}')
 
     plot_pacf(returns_list_np**2)
     plt.show()
