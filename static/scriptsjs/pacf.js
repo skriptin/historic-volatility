@@ -1,40 +1,123 @@
 import { jsonResponse } from './getstockreturns.js';
-let PACF = null;
 
-document.getElementById("find-PACF").addEventListener('submit', async(event) => {
-    event.preventDefault();
+// Get reference to the output area
+const pacfResponseOutput = document.getElementById('response-pacf'); // Ensure ID matches HTML
+const pacfForm = document.getElementById('find-PACF'); // Get the form itself
 
-    console.log("User has submitted to pacf forum");
+async function fetchAndDisplayPacf() {
+    // The dataType is now implicitly 'squared_returns' because there's only one button/trigger
+    const dataType = 'squared_returns';
+    const titleText = "PACF of Squared Returns";
 
-    if (!jsonResponse){
-        console.warn("No stock data available in jsonResponse. Please fetch data first.");
+    if (!pacfResponseOutput) {
+        console.error("PACF response output element (#response-pacf) not found.");
         return;
     }
 
-    const requestData = {
-        stock_returns: jsonResponse
-    };
+    pacfResponseOutput.innerHTML = '<p style="text-align:center; color:#555;">Calculating PACF...</p>';
+    pacfResponseOutput.className = 'data-output-area'; // Reset classes
 
-    try{
-        const response = await fetch('/get_pacf', {
+    if (!jsonResponse || !jsonResponse.returns || Object.keys(jsonResponse.returns).length === 0) {
+        console.warn("No stock return data available. Please fetch data first.");
+        pacfResponseOutput.innerHTML = '<p style="color:orange; text-align:center;">Please fetch stock data first.</p>';
+        pacfResponseOutput.classList.add('warning-state');
+        return;
+    }
+
+    const squaredReturns = {};
+    for (const date in jsonResponse.returns) {
+        if (Object.hasOwnProperty.call(jsonResponse.returns, date)) {
+            const ret = jsonResponse.returns[date];
+            squaredReturns[date] = ret * ret;
+        }
+    }
+    const dataToSend = { stock_returns: squaredReturns };
+
+    console.log(`Requesting PACF for: ${dataType}`);
+
+    try {
+        const response = await fetch('/get_pacf', { // Ensure your backend endpoint is correct
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataToSend)
         });
 
+        pacfResponseOutput.innerHTML = ''; // Clear "Calculating..."
 
-        if(response.ok){
-            const jsonResponse_ewma = await response.json();
-            console.log("Partial Autocorrelation Coefficents:", jsonResponse_ewma)
+        if (response.ok) {
+            const structuredPacfData = await response.json();
+            console.log(`PACF Data received for ${dataType}:`, structuredPacfData);
+
+            if (Object.keys(structuredPacfData).length === 0) {
+                pacfResponseOutput.innerHTML = '<p style="text-align:center; color:orange;">Not enough data or no PACF results returned.</p>';
+                pacfResponseOutput.classList.add('warning-state');
+                return;
+            }
+
+            const titleElement = document.createElement('h4');
+            titleElement.textContent = titleText;
+            pacfResponseOutput.appendChild(titleElement);
+
+            const lagKeys = Object.keys(structuredPacfData).sort((a, b) => {
+                const numA = parseInt(a.split(' ')[1]);
+                const numB = parseInt(b.split(' ')[1]);
+                return numA - numB;
+            });
+
+            for (const lagKey of lagKeys) {
+                if (Object.hasOwnProperty.call(structuredPacfData, lagKey)) {
+                    const dataTuple = structuredPacfData[lagKey];
+                    const pacfValue = dataTuple[0];
+                    const ciTuple = dataTuple[1];
+                    const isSignificant = dataTuple[2];
+                    const lagNumber = parseInt(lagKey.split(' ')[1]);
+
+                    const lagDiv = document.createElement('div');
+                    lagDiv.classList.add('pacf-lag-row');
+
+                    if (lagNumber === 0) {
+                        lagDiv.classList.add('lag-zero');
+                    } else if (isSignificant) {
+                        lagDiv.classList.add('significant');
+                    } else {
+                        lagDiv.classList.add('not-significant');
+                    }
+
+                    lagDiv.textContent =
+                        `${lagKey}: Value: ${pacfValue.toFixed(4)}, ` +
+                        `CI: [${ciTuple[0].toFixed(4)}, ${ciTuple[1].toFixed(4)}], ` +
+                        `Significant: ${isSignificant}`;
+
+                    pacfResponseOutput.appendChild(lagDiv);
+                }
+            }
+        } else {
+            let errorMessage = `Error: ${response.status} ${response.statusText}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = `Error: ${errorData.error || response.statusText}`;
+            } catch (e) {
+                const textError = await response.text();
+                console.error("Server non-JSON error:", textError.substring(0, 500));
+            }
+            console.error("Error fetching PACF:", errorMessage);
+            pacfResponseOutput.innerHTML = `<p class="error-message-text">${errorMessage}</p>`;
+            pacfResponseOutput.classList.add('error-state');
         }
-
+    } catch (error) {
+        console.error(`Network or script error fetching PACF:`, error);
+        pacfResponseOutput.innerHTML = `<p class="error-message-text">Request failed: ${error.message}</p>`;
+        pacfResponseOutput.classList.add('error-state');
     }
-    catch (error) {
-        console.log("An unknown error has occured" + error);
-    }
+}
 
-
-});
-
+// Event listener for the PACF form submission
+if (pacfForm) {
+    pacfForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent default form submission
+        console.log("PACF form submitted (for squared returns).");
+        fetchAndDisplayPacf(); // Call the main function
+    });
+} else {
+    console.warn("Form with ID 'find-PACF' not found. PACF functionality will not be triggered.");
+}

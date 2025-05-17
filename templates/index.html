@@ -310,19 +310,73 @@
         }
 
         #response-pacf.data-output-area {
-            margin-top: 15px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             padding: 10px;
-            border: 1px dashed #ccc;
-            background-color: #f8f9fa; /* Very light gray for code/data blocks */
-            min-height: 50px;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            font-size: 0.85em;
-            overflow-x: auto;
-            max-height: 200px; /* Add scroll if data is very long */
-            overflow-y: auto;
+            background-color: #fff;
+
+            max-height: 350px;  
+            min-height: 100px; 
+            overflow-y: auto;  
+            overflow-x: hidden; 
+
+            text-align: center; 
         }
-        #response-pacf.data-output-area:empty { display: none; }
+
+        #response-pacf.data-output-area:empty::before {
+            content: "PACF data will appear here.";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%; 
+            color: #777;
+        }
+
+        #response-pacf.data-output-area:not(:empty)::before {
+            content: none;
+        }
+
+        .pacf-lag-row {
+            padding: 4px 8px; 
+            margin-bottom: 2px;
+            border-radius: 3px;
+            line-height: 1.4;
+            white-space: nowrap; 
+            overflow-x: auto;
+
+        }
+
+        .pacf-lag-row.significant {
+            background-color: lightgreen;
+            color: #006400;
+        }
+        .pacf-lag-row.not-significant {
+            background-color: lightcoral;
+            color: #8B0000;
+        }
+        .pacf-lag-row.lag-zero {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        #response-pacf.data-output-area h4 { 
+            text-align: center;
+            margin-top: 0; 
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        #response-pacf.data-output-area .error-message-text { 
+            color: #a94442;
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            padding: 8px;
+            border-radius: 3px;
+            text-align: left; 
+        }
     </style>
 </head>
 <body>
@@ -400,8 +454,7 @@
             <h3>PACF Data</h3>
             <form id="find-PACF">
                 <p class="description">Get PACF data to help determine GARCH model parameters (p, q). This will output the raw PACF values.</p>
-                <button type="button" id="plot-pacf-returns">Get PACF (Returns)</button> <!-- Renamed for clarity: it gets data, plotting is separate -->
-                <button type="button" id="plot-pacf-sq-returns">Get PACF (Squared Returns)</button>
+                <button type="submit" id="plot-pacf-sq-returns">Get PACF (Squared Returns)</button>
             </form>
             <div id="response-pacf" class="data-output-area">
                 <!-- PACF data/residuals will be displayed here as text -->

@@ -13,7 +13,6 @@ def get_pacf(returns: dict):
 
     pacf_values_arr, conf_int_arr = pacf(
         returns_list_np**2,
-        nlags=5,
         method='yw',  
         alpha=0.05
     )
@@ -24,13 +23,10 @@ def get_pacf(returns: dict):
     upper_bound = [round(float(x),3) for x in upper_bound]
     pacf_values_arr = [(round(float(value), 3)) for value in pacf_values_arr]
 
-    print(lower_bound)
-    print(upper_bound)
-    print(pacf_values_arr)
-
     output_dict = {}
 
-    for i in range(len(pacf_values_arr)):
+    # Formatting output for json response
+    for i in range(1, len(pacf_values_arr)):
         lag_number = i 
         value = pacf_values_arr[i]
         ci_lower = lower_bound[i]
@@ -44,14 +40,9 @@ def get_pacf(returns: dict):
         lag_key = f"Lag {lag_number}"
         output_dict[lag_key] = (value, (ci_lower, ci_upper), is_significant)
 
-    for key, value in output_dict.items():
-        print(f'{key}: {value}')
 
-    plot_pacf(returns_list_np**2)
-    plt.show()
-
-    print(return_data)
-    return returns
+    print(output_dict)
+    return output_dict
 
 
 
