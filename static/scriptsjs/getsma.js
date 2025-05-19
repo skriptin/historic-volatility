@@ -53,7 +53,7 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
         } else {
             const errorData = await response.json(); 
             const errorMessage = errorData.error || 'Unknown error occurred.';
-            console.error("Error fetching SMA data:", response.status, jsonResponse, errorMessage);
+            console.error("Error fetching SMA data:", response.status, errorMessage);
             responseElement_sma.textContent = `An unknown server error has occured`;
             responseElement_sma.class = 'response-message error';
         }

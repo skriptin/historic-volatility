@@ -1,30 +1,25 @@
 import { stock_returns } from './getstockreturns.js';
 
-// Get reference to the output area
-const pacfResponseOutput = document.getElementById('response-pacf'); // Ensure ID matches HTML
-const pacfForm = document.getElementById('find-PACF'); // Get the form itself
+const pacfResponseOutput = document.getElementById('response-pacf');
+const pacfForm = document.getElementById('find-PACF'); 
 
 async function fetchAndDisplayPacf() {
-    // The dataType is now implicitly 'squared_returns' because there's only one button/trigger
     const dataType = 'squared_returns';
     const titleText = "PACF of Squared Returns";
 
-    if (!pacfResponseOutput) {
-        console.error("PACF response output element (#response-pacf) not found.");
-        return;
-    }
+
 
     pacfResponseOutput.innerHTML = '<p style="text-align:center; color:#555;">Calculating PACF...</p>';
     pacfResponseOutput.className = 'data-output-area'; // Reset classes
 
-    if (!jsonResponse || !jsonResponse.returns || Object.keys(jsonResponse.returns).length === 0) {
+    if ( !stock_returns.returns ) {
         console.warn("No stock return data available. Please fetch data first.");
-        pacfResponseOutput.innerHTML = '<p style="color:orange; text-align:center;">Please fetch stock data first.</p>';
-        pacfResponseOutput.classList.add('warning-state');
+        pacfResponseOutput.innerHTML = '<p text-align:center;">Please fetch stock data first.</p>';
+        pacfResponseOutput.class = 'response-message warning'
         return;
     }
 
-    const dataToSend = { stock_returns: jsonResponse };
+    const dataToSend = { stock_returns: stock_returns.returns };
 
     console.log(`Requesting PACF for: ${dataType}`);
 

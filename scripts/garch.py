@@ -40,6 +40,8 @@ def get_pacf(returns: dict):
         lag_key = f"Lag {lag_number}"
         output_dict[lag_key] = (value, (ci_lower, ci_upper), is_significant)
 
+    #plot_pacf(returns_list_np**2)
+    #plt.show()
 
     print(output_dict)
     return output_dict
