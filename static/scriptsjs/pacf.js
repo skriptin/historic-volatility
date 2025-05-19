@@ -10,7 +10,7 @@ async function fetchAndDisplayPacf() {
 
 
     pacfResponseOutput.innerHTML = '<p style="text-align:center; color:#555;">Calculating PACF...</p>';
-    pacfResponseOutput.className = 'data-output-area'; // Reset classes
+    pacfResponseOutput.className = 'data-output-area'; 
 
     if ( !stock_returns.returns ) {
         console.warn("No stock return data available. Please fetch data first.");
