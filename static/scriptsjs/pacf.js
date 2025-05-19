@@ -1,4 +1,4 @@
-import { jsonResponse } from './getstockreturns.js';
+import { stock_returns } from './getstockreturns.js';
 
 // Get reference to the output area
 const pacfResponseOutput = document.getElementById('response-pacf'); // Ensure ID matches HTML
@@ -24,25 +24,18 @@ async function fetchAndDisplayPacf() {
         return;
     }
 
-    const squaredReturns = {};
-    for (const date in jsonResponse.returns) {
-        if (Object.hasOwnProperty.call(jsonResponse.returns, date)) {
-            const ret = jsonResponse.returns[date];
-            squaredReturns[date] = ret * ret;
-        }
-    }
-    const dataToSend = { stock_returns: squaredReturns };
+    const dataToSend = { stock_returns: jsonResponse };
 
     console.log(`Requesting PACF for: ${dataType}`);
 
     try {
-        const response = await fetch('/get_pacf', { // Ensure your backend endpoint is correct
+        const response = await fetch('/get_pacf', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataToSend)
         });
 
-        pacfResponseOutput.innerHTML = ''; // Clear "Calculating..."
+        pacfResponseOutput.innerHTML = ''; 
 
         if (response.ok) {
             const structuredPacfData = await response.json();

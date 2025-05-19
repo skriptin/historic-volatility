@@ -1,5 +1,13 @@
 
 let jsonResponse = null;
+
+const stock_returns = {
+    returns: null,
+    ticker: null,
+    start_date: null,
+    end_date: null
+};
+
 document.getElementById('script-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -18,9 +26,17 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
 
     if (startDate.getTime() > endDate.getTime()) {
         responseElement.textContent = 'End Date cannot be earlier than Start Date.';
-        responseElement.style.color = 'red';
+        responseElement.className = 'response-message error';
         return;
     }
+
+    for(const field in stock_returns){
+        if (Object.hasOwnProperty.call(stock_returns, field)){
+            stock_returns[field] = null;
+        }
+    }
+    responseElement.textContent = 'Fetching data..'
+    responseElement.className = 'response-message';
 
     try {
         const response = await fetch('/get_data', {
@@ -33,21 +49,27 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
 
         if (response.ok) {
             jsonResponse = await response.json();
-            console.log(jsonResponse)
+            console.log(jsonResponse);
+
+            stock_returns.returns = jsonResponse;
+            stock_returns.ticker = ticker;
+            stock_returns.start_date = startDate;
+            stock_returns.end_date = endDate;
+
             responseElement.textContent = `Success getting returns`;
-            responseElement.style.color = 'green';
+            responseElement.className = 'response-message success';
         } else {
             const errorText = await response.text();
             responseElement.textContent = 'Error occurred: make sure the ticker and dates are valid';
             console.log(jsonResponse)
-            responseElement.style.color = 'red';
+            responseElement.className = 'response-message error';
         }
     } 
     catch (error) {
         responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
         console.log(jsonResponse)
-        responseElement.style.color = 'red';
+        responseElement.className = 'response-message error';
     }
 });
 
-export { jsonResponse };
+export { stock_returns };

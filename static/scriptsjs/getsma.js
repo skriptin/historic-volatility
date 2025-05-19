@@ -1,5 +1,5 @@
 import { update_chart } from './vol_chart.js';
-import { jsonResponse } from './getstockreturns.js';
+import { stock_returns } from './getstockreturns.js';
 
 document.getElementById('SMA-volatility').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -10,18 +10,26 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
     console.log(`Window Length: ${window}`)
 
     const responseElement_sma = document.getElementById('response-sma');
-    if (!jsonResponse){
-        console.warn("No stock data available in jsonResponse. Please fetch data first.");
+
+    if (!stock_returns.returns){
+        console.warn("No stock data available in stock_returns.returns. Please fetch data first.");
         responseElement_sma.textContent = "Please fetch stock data first using the form above.";
-        responseElement_sma.style.color = 'orange';
+        responseElement_sma.class = 'response-message warning';
         return;
     }
-
+    if (window <= 0){
+        console.warn("Invalid window length entered")
+        responseElement_sma.textContent = 'Invalid window length enter, make sure window > 0'
+        responseElement_sma.class = 'response-message warning'
+    }
 
     const requestData = {
         window: window,
-        stock_returns: jsonResponse
+        stock_returns: stock_returns.returns
     };
+
+    responseElement_sma.textContent = `Calculating sma ${window}`
+    responseElement_sma.class = 'response-message'
 
     try {
         const response = await fetch('/calc_sma', {
@@ -33,28 +41,27 @@ document.getElementById('SMA-volatility').addEventListener('submit', async (even
         });
 
         if (response.ok) {
-            const jsonResponse_sma = await response.json();
-            console.log("SMA data", jsonResponse_sma);
+            const jsonResponse = await response.json();
+            console.log("SMA data", jsonResponse);
             responseElement_sma.textContent = `Success getting sma`;
-            responseElement_sma.style.color = 'green';
+            responseElement_sma.class = 'response-message success'
 
             // Plot on chart
             console.log("Sending SMA data to update chart");
-            update_chart(jsonResponse_sma, `SMA(${window})`);
+            update_chart(jsonResponse, `SMA(${window})`);
 
         } else {
-            const errorText = await response.json();
             const errorData = await response.json(); 
             const errorMessage = errorData.error || 'Unknown error occurred.';
-            console.error("Error fetching SMA data:", response.status, errorData);
-            responseElement_sma.textContent = `Error occurred: ${errorMessage}`;
-            responseElement_sma.style.color = 'red';
+            console.error("Error fetching SMA data:", response.status, jsonResponse, errorMessage);
+            responseElement_sma.textContent = `An unknown server error has occured`;
+            responseElement_sma.class = 'response-message error';
         }
     } 
     catch (error) {
         console.error("Fetch error for SMA:", error);
-        responseElement_sma.textContent = `Error occurred while fetching data: ${error.message}`;
-        responseElement_sma.style.color = 'red';
+        responseElement_sma.textContent = `An unknown fetch error has occured`;
+        responseElement_sma.class = 'response-message error';
     }
 
 });
