@@ -5,6 +5,9 @@
         <title>Volatility Analysis</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stockbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/maincontent.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}">
     </head>
 
     <body>
@@ -37,9 +40,13 @@
             <div class="chart-and-toolbars-wrapper">
                 <!-- Left Toolbar -->
                 <aside class="chart-toolbar chart-left-toolbar">
-                    <div class="app-left-toolbar-buttons">
-                        <button type="button" class="left-toolbar-consol-button" id="toggle-consol-window" title="toggle consol"> Console</button>
-                    </div>
+                        <p>Chart</p>
+                        <button type="button" class="toolbar-button consol" id="toggle-consol-window" title="toggle consol"> Console</button>
+                        <button type="button" class="toolbar-button studies" id="open-studies-tab" title="view studies"> Studies</button>
+                        <button type="button" class="toolbar-button series" id="open-series-tab" title="view series"> Series</button>
+                                            <button type="button" class="toolbar-button pacf" id="calculate-pacf" title="calculate-pacf"> PACF</button>
+                    <button type="button" class="toolbar-button model_builder" id="model-builder-view" title="build models"> Model Builder</button>
+                    <button type="button" class="toolbar-button info" id="right-toolbox-info-tab" title="info"> Info</button>
                 </aside>
 
                 <!-- Chart Display Area -->
@@ -49,10 +56,7 @@
                 </div>
 
                 <!-- Right Toolbar -->
-                <aside class="chart-toolbar chart-right-toolbar">
-                    <p>Right Toolbar</p>
-                    <!-- Buttons like PACF, Model Builder will go here -->
-                </aside>
+
             </div>
         </main>
 
