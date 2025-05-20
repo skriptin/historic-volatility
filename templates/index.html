@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Volatility Analysis</title>
 
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 
     <body>
@@ -20,24 +20,38 @@
         </header>
 
         <!--Container for the user to fetch the period and instrument to perform the voltaility analysis-->
-        <div class="sticky-stock-info-panel">
-            <form id="script-form">
-                <label for="ticker">Ticker:</label>
-                <input type="text" id="ticker" name="ticker" placeholder="e.g. SPY" value="SPY" required>
-                <label for="start_date">Start:</label>
-                <input type="date" id="start_date" name="start_date" value="2024-01-01" required>
-                <label for="end_date">End:</label>
-                <input type="date" id="end_date" name="end_date" value="2024-11-01" required>
-                <button type="submit">Get Data</button>
-            </form>
+        <div class="stock-info-input-panel">
+                <form id="script-form">
+                    <label for="ticker">Ticker:</label>
+                    <input type="text" id="ticker" name="ticker" placeholder="e.g. SPY" value="SPY" required>
+                    <label for="start_date">Date range, from:</label>
+                    <input type="date" id="start_date" name="start_date" value="2024-01-01" required>
+                    <label for="end_date">to:</label>
+                    <input type="date" id="end_date" name="end_date" value="2024-11-01" required>
+                    <button type="submit" id="get_returns">Fetch</button>
+                </form>
         </div>
 
         <!--Main app container-->
         <main class="app-main-content">
-            <p style="text-align:center; padding-top: 50px;">Chart and toolbars will go here...</p>
-            <!---Chart display area-->
-            <div class="chart-display-area">
-                <canvas id="vol_chart" aria-label="Historic_volatility_Chart"></canvas>
+            <div class="chart-and-toolbars-wrapper">
+                <!-- Left Toolbar -->
+                <aside class="chart-toolbar chart-left-toolbar">
+                    <p>Left Toolbar</p>
+                    <!-- Buttons like Console, Studies, Indices, Series will go here -->
+                </aside>
+
+                <!-- Chart Display Area -->
+                <div class="chart-display-area">
+                    <canvas id="vol_chart" aria-label="Historic Volatility Chart"></canvas>
+                    <!-- Clear Chart button can be positioned absolutely within this later -->
+                </div>
+
+                <!-- Right Toolbar -->
+                <aside class="chart-toolbar chart-right-toolbar">
+                    <p>Right Toolbar</p>
+                    <!-- Buttons like PACF, Model Builder will go here -->
+                </aside>
             </div>
         </main>
 
