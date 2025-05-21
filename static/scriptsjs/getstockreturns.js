@@ -20,13 +20,12 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
     console.log("User has submitted get data forum with parameters:")
     console.log(`Start date: ${data.start_date} End Date: ${data.end_date} Ticker: ${data.ticker}`)
 
-    const responseElement = document.getElementById('response');
     const startDate = new Date(data.start_date);
     const endDate = new Date(data.end_date);
 
     if (startDate.getTime() > endDate.getTime()) {
-        responseElement.textContent = 'End Date cannot be earlier than Start Date.';
-        responseElement.className = 'response-message error';
+
+        /** Print Response to consol */
         return;
     }
 
@@ -35,8 +34,7 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
             stock_returns[field] = null;
         }
     }
-    responseElement.textContent = 'Fetching data..'
-    responseElement.className = 'response-message';
+
 
     try {
         const response = await fetch('/get_data', {
@@ -56,19 +54,17 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
             stock_returns.start_date = startDate;
             stock_returns.end_date = endDate;
 
-            responseElement.textContent = `Success getting returns`;
-            responseElement.className = 'response-message success';
+          /** Print Response to consol */
+
         } else {
             const errorText = await response.text();
-            responseElement.textContent = 'Error occurred: make sure the ticker and dates are valid';
             console.log(jsonResponse)
-            responseElement.className = 'response-message error';
+          /** Print Error Response to consol */
         }
     } 
     catch (error) {
-        responseElement.textContent = `Error occurred while fetching data: ${error.message}`;
         console.log(jsonResponse)
-        responseElement.className = 'response-message error';
+        /** Print Fetch error to consol */
     }
 });
 
