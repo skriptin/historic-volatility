@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/stockbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/maincontent.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/buttons.css') }}">
     </head>
 
     <body>
@@ -40,11 +41,13 @@
             <div class="chart-and-toolbars-wrapper">
                 <!-- Left Toolbar -->
                 <aside class="chart-toolbar chart-left-toolbar">
-                        <p>Chart</p>
-                        <button type="button" class="toolbar-button consol" id="toggle-consol-window" title="toggle consol"> Console</button>
-                        <button type="button" class="toolbar-button studies" id="open-studies-tab" title="view studies"> Studies</button>
-                        <button type="button" class="toolbar-button series" id="open-series-tab" title="view series"> Series</button>
-                                            <button type="button" class="toolbar-button pacf" id="calculate-pacf" title="calculate-pacf"> PACF</button>
+                    <p>Chart</p>
+                    <button type="button" class="toolbar-button consol" id="toggle-consol-window" title="toggle consol"> Console</button>
+                    <button type="button" class="toolbar-button studies" id="open-studies-tab" title="view studies"> Studies</button>
+
+                    <!-- Open the sub menu when user clicks button-->
+                    <button type="button" class="toolbar-button series" id="open-series-tab" title="view series"> Series</button>
+                    <button type="button" class="toolbar-button pacf" id="calculate-pacf" title="calculate-pacf"> PACF</button>
                     <button type="button" class="toolbar-button model_builder" id="model-builder-view" title="build models"> Model Builder</button>
                     <button type="button" class="toolbar-button info" id="right-toolbox-info-tab" title="info"> Info</button>
                 </aside>
@@ -54,10 +57,27 @@
                     <canvas id="vol_chart" aria-label="Historic Volatility Chart"></canvas>
                     <!-- Clear Chart button can be positioned absolutely within this later -->
                 </div>
-
-                <!-- Right Toolbar -->
-
             </div>
+
+                <!--Button pop up menu div's-->
+            <div id="studies-popup" class="popup-menu">
+                <h4>Studies Options</h4>
+                <p>SMA and EWMA controls will go here.</p>
+                <button type="button" class="close-popup-button" data-target-popup="studies-popup">×</button>
+            </div>
+
+            <div id="series-popup" class="popup-menu">
+                <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
+            </div>
+
+            <div id="pacf-popup" class="popup-menu">
+                <button type="button" class="close-popup-button" data-target-popup="pacf-popup">x</button>
+            </div>
+
+            <div id="info-popup" class="popup-menu">
+                <button type="button" class="close-popup-button" data-target-popup="info-popup">x</button>
+            </div>
+
         </main>
 
 
@@ -71,5 +91,7 @@
         <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
+        <script type="module" src="{{ url_for('static', filename='scriptsjs/ui_interactions.js')}}"></script>
+
     </body>
 </html>

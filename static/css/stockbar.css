@@ -1,0 +1,19 @@
+.stock-info-input-panel {
+    background-color: #e7f0f7; padding: 0 15px;
+    border-bottom: 1px solid #9ca2a3; 
+    display: flex; justify-content: flex-start; align-items: center;
+    box-sizing: border-box; height: 48px; 
+    z-index: 999;
+    flex-shrink: 0; 
+}
+.stock-info-input-panel form#script-form { display: flex; align-items: center; gap: 8px; padding: 3px 0; padding-top: 18px; }
+.stock-info-input-panel form#script-form label { margin-bottom: 0; font-size: 0.8em; color: #334155; white-space: nowrap; margin-right: 2px; line-height: 20px; }
+.stock-info-input-panel form#script-form input[type="date"] { padding: 1px 4px; font-size: 1.0em; border: 1px solid #6c757d;
+    border-radius: 2px; margin: 0; background-color: #fff; height: 20px; box-sizing: border-box; width: 110px; }
+.stock-info-input-panel form#script-form input#ticker { width: 110px; }
+.stock-info-input-panel form#script-form button#get_returns {
+    padding: 0 8px; font-size: 0.8em; background-color: #28a745; border: 1px solid #1e7e34;
+    color: white; margin: 0; margin-left: 5px; border-radius: 2px; height: 20px;
+    box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.stock-info-input-panel form#script-form button#get_returns:hover { background-color: #218838; border-color: #1c7430;}

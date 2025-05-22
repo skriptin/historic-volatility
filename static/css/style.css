@@ -63,5 +63,3 @@ body {
 }
 .stock-info-input-panel form#script-form button#get_returns:hover { background-color: #218838; border-color: #1c7430;}
 
-/* Placeholder styles for future diagnostics area if it's outside chart-and-toolbars-wrapper */
-/* .garch-model-fitting-container { ... } */

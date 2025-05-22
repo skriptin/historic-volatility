@@ -1,0 +1,37 @@
+/* Minimal styles for the pop-up menu */
+.popup-menu {
+    display: none;
+    position: absolute; 
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    padding: 15px;
+    width: 250px; 
+    z-index: 100; 
+    border-radius: 4px;
+}
+
+.popup-menu.active { 
+    display: block;
+}
+
+.popup-menu h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.close-popup-button { 
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+    padding: 0;
+    color: #888;
+}
+.close-popup-button:hover {
+    color: #000;
+}

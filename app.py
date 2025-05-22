@@ -71,8 +71,8 @@ def calc_ewma():
     return jsonify(response), 200
 
 @app.route("/get_pacf", methods=["POST"])
-def calc_garch():
-    print("Routing to script to fetch_pacf()")
+def get_pacf():
+    print("Routing to script fetch_pacf()")
 
     request_data = request.get_json()
     returns = request_data.get('stock_returns')
@@ -90,6 +90,7 @@ def calc_garch():
     if "error" in response:
         print(response)
         return jsonify({"error": response["error"]}), 400
+
     return jsonify(response), 200
 
 if __name__ == '__main__':
