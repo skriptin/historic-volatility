@@ -1,42 +1,92 @@
-// ui_interactions.js (or your relevant script)
+
+import { initalizeSMAForm } from './getsma.js';
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    const studiesButton = document.getElementById('open-studies-tab'); // Correct button ID
-    const studiesPopup = document.getElementById('studies-popup');   // Correct popup ID
+    // Getting buttons and their popup mappings
+    const buttonPopupMappings = [
+        { buttonId: 'toggle-consol-window', popupId: 'consol-popup' /*, initFunction: initializeConsole */ },
+        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: initalizeSMAForm }, // Assuming initializeSmaForm also handles EWMA or you'll add another
+        { buttonId: 'open-series-tab',      popupId: 'series-popup'  /*, initFunction: initializeSeriesList */ },
+        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    /*, initFunction: initializePacfForm */ }, // This might be for options before calculation
+        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' /*, initFunction: initializeModelBuilder */ },
+        { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' }
+    ];
 
-    if (studiesButton && studiesPopup) {
-        // Event listener for the "Studies" button
-        studiesButton.addEventListener('click', function(event) {
-            event.stopPropagation(); 
 
-            const isVisible = studiesPopup.classList.contains('active');
-            console.log("studies button clicked");
-            // Basic positioning (adjust as needed)
-            const buttonRect = studiesButton.getBoundingClientRect();
-            studiesPopup.style.top = `${buttonRect.top + window.scrollY}px`; 
-            studiesPopup.style.left = `${buttonRect.right + 5 + window.scrollX}px`; 
-
-            studiesPopup.classList.toggle('active'); // This toggles display via CSS
-        });
-
-        // Close button within the "Studies" popup
-        const closeButton = studiesPopup.querySelector('.close-popup-button');
-        if (closeButton) {
-            closeButton.addEventListener('click', function() {
-                studiesPopup.classList.remove('active');
-            });
-        }
-
-        // Optional: Close when clicking outside
-        document.addEventListener('click', function(event) {
-            if (studiesPopup.classList.contains('active') && 
-                !studiesPopup.contains(event.target) && 
-                event.target !== studiesButton) {
-                studiesPopup.classList.remove('active');
+    function closeAllActivePopups(exceptionPopupId = null) {
+        const activePopups = document.querySelectorAll('.popup-menu.active');
+        activePopups.forEach(activePopup => {
+            if (activePopup.id !== exceptionPopupId) {
+                activePopup.classList.remove('active');
+                buttonPopupMappings.forEach(map => {
+                    if (map.popupId === activePopup.id) {
+                        const btn = document.getElementById(map.buttonId);
+                        if (btn) btn.classList.remove('active');
+                    }
+                });
             }
         });
-    } else {
-        if (!studiesButton) console.warn("Studies button ('open-studies-tab') not found.");
-        if (!studiesPopup) console.warn("Studies popup ('studies-popup') not found.");
     }
+
+                                                                                console.log("About to poll for button clicks");
+    buttonPopupMappings.forEach(mapping => {
+        const buttonElement = document.getElementById(mapping.buttonId);
+        const popupElement = document.getElementById(mapping.popupId);
+                                                                                console.log(`${buttonElement.id} loaded ${popupElement.id} loaded`);
+        if(buttonElement && popupElement){
+
+            buttonElement.addEventListener('click', function(event) {
+                event.stopPropagation();
+                const isAlreadyActive = popupElement.classList.contains('active');
+                                                                                console.log(`${buttonElement.id} clicked, Active: ${isAlreadyActive}`);
+
+                // Close other buttons
+                closeAllActivePopups(popupElement.id);
+
+                if(isAlreadyActive){
+                    popupElement.classList.remove('active');
+                    buttonElement.classList.remove('active');
+                }else {
+                    const buttonRect = buttonElement.getBoundingClientRect();
+
+                    let topPosition = buttonRect.top + window.scrollY;
+                    let leftPosition = buttonRect.right + 5 + window.scrollX;
+
+                    if(leftPosition + popupElement.offsetWidth > window.innerWidth - 10){
+                        leftPosition = buttonRect.left = popupElement.offsetWidth -5;
+                    }
+                    if(leftPosition < 10) leftPosition = 10;
+                    if(topPosition + popupElement.offsetHeight > window.innerHeight - 10){
+                        topPosition = window.innerHeight - popupElement.offsetHeight - 10;
+                    }
+                    if(topPosition < 10) topPosition = 10;
+
+                    popupElement.style.top = '${topPosition}px';
+                    popupElement.style.left = '${leftPosition}px';
+
+                    popupElement.classList.add('active');
+                    buttonElement.classList.add('active');
+
+                    if(mapping.initFunction && mapping.initFunction == 'Function'){
+                        console.log(`Calling ${mapping.function} for ${mapping.popupId}`);
+                        mapping.initFunction();
+                    }
+                }
+            });
+
+            const closeButton = popupElement.querySelector(`.close-popup-button`);
+            if(closeButton){
+                closeButton.addEventListener('click', function() {
+                    popupElement.classList.remove('active');
+                    buttonElement.classList.remove('active');
+                });
+            }
+        } else {
+            if(!buttonElement) console.warn(`Button ${mapping.buttonId} not found`);
+            if(!popupElement) console.warn(`Popup with Id ${mapping.popupId} not found`);
+        }
+    });
+
 });

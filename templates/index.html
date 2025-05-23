@@ -60,18 +60,29 @@
             </div>
 
                 <!--Button pop up menu div's-->
-            <div id="studies-popup" class="popup-menu">
-                <h4>Studies Options</h4>
-                <p>SMA and EWMA controls will go here.</p>
+
+            <div id="consol-popup" class="popup-menu consol">
+                <button type="button" class="close-popup-button" data-target-popup="consol-popup">×</button>
+            </div>
+
+            <div id="studies-popup" class="popup-menu studies">
+                <forum id="SMA-volatility">
+                    <input type="number" id="window" class = "studies-input-field" value="20" title="Enter window length " required>
+                    <button type="submit" id="get_returns" class = "studies-button">Fetch</button>
+                </forum>
                 <button type="button" class="close-popup-button" data-target-popup="studies-popup">×</button>
             </div>
 
-            <div id="series-popup" class="popup-menu">
+            <div id="series-popup" class="popup-menu series">
                 <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
             </div>
 
-            <div id="pacf-popup" class="popup-menu">
+            <div id="pacf-popup" class="popup-menu pacf">
                 <button type="button" class="close-popup-button" data-target-popup="pacf-popup">x</button>
+            </div>
+
+            <div id="model-builder-popup" class="popup-menu model-builder">
+                <button type="button" class="close-popup-button" data-target-popup="model-builder-popup">x</button>
             </div>
 
             <div id="info-popup" class="popup-menu">
