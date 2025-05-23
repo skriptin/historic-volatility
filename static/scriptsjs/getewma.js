@@ -67,3 +67,14 @@ document.getElementById('EWMA-volatility').addEventListener('submit', async (eve
 
 
 });
+
+
+
+export function initalizeEwmaForm(){
+    const ewma_form = document.getElementById('EWMA-volatility').addEventListener('submit');
+
+
+
+
+
+}
