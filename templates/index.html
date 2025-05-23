@@ -66,10 +66,14 @@
             </div>
 
             <div id="studies-popup" class="popup-menu studies">
-                <forum id="SMA-volatility">
-                    <input type="number" id="window" class = "studies-input-field" value="20" title="Enter window length " required>
-                    <button type="submit" id="get_returns" class = "studies-button">Fetch</button>
-                </forum>
+                <form id="SMA-volatility">
+                    <input
+                        type="number" id="window" name="window" class ="studies-input-field" 
+                        value="20" title="Enter window length" required 
+                    >
+
+                    <button type="submit" id="get_returns" class ="studies-button">Fetch</button>
+                </form>
                 <button type="button" class="close-popup-button" data-target-popup="studies-popup">×</button>
             </div>
 

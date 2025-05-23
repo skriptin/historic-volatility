@@ -1,5 +1,5 @@
 
-import { initalizeSMAForm } from './getsma.js';
+import { initializeSmaForm } from './getsma.js';
 
 
 
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Getting buttons and their popup mappings
     const buttonPopupMappings = [
         { buttonId: 'toggle-consol-window', popupId: 'consol-popup' /*, initFunction: initializeConsole */ },
-        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: initalizeSMAForm }, // Assuming initializeSmaForm also handles EWMA or you'll add another
+        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: initializeSmaForm }, 
         { buttonId: 'open-series-tab',      popupId: 'series-popup'  /*, initFunction: initializeSeriesList */ },
         { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    /*, initFunction: initializePacfForm */ }, // This might be for options before calculation
         { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' /*, initFunction: initializeModelBuilder */ },
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupElement.classList.add('active');
                     buttonElement.classList.add('active');
 
-                    if(mapping.initFunction && mapping.initFunction == 'Function'){
+                    if(mapping.initFunction){
                         console.log(`Calling ${mapping.function} for ${mapping.popupId}`);
                         mapping.initFunction();
                     }
@@ -86,6 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             if(!buttonElement) console.warn(`Button ${mapping.buttonId} not found`);
             if(!popupElement) console.warn(`Popup with Id ${mapping.popupId} not found`);
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const activePopup = document.querySelector('.popup-menu.active');
+        if (activePopup) {
+            let clickedOnTriggerButton = false;
+            buttonPopupMappings.forEach(mapping => {
+                const btn = document.getElementById(mapping.buttonId);
+                if (btn && (btn === event.target || btn.contains(event.target))) {
+                    clickedOnTriggerButton = true;
+                }
+            });
+
+            if (!activePopup.contains(event.target) && !clickedOnTriggerButton) {
+                closeAllActivePopups();
+            }
         }
     });
 
