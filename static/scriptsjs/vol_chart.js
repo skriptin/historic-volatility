@@ -21,7 +21,7 @@ function initializeChart() {
                 x: {
                     title: {
                         display: true,
-                        text: 'Date', // Label for x-axis
+                        text: 'Date',
                         font: {
                             size: 28
                         }
@@ -163,7 +163,7 @@ function update_chart(newDataObject, datasetLabel) {
 
     if (existingDatasetIndex > -1) {
         // An existing dataset with the same label was found
-        console.log(`Updating existing dataset: "${datasetLabel}"`);
+        console.log(`Updating existing dataset: ${datasetLabel}`);
         const datasetToUpdate = volChart.data.datasets[existingDatasetIndex];
         datasetToUpdate.data = alignedDataForIncoming;
         datasetToUpdate.originalData = { ...newDataObject };
@@ -191,14 +191,14 @@ function update_chart(newDataObject, datasetLabel) {
 }
 
 function removeDatasetFromChart(datasetLabelToRemove) {
-    if (window.volChart && window.volChart.data && window.volChart.data.datasets) {
-        const datasetIndex = window.volChart.data.datasets.findIndex(
+    if (volChart && volChart.data && volChart.data.datasets) {
+        const datasetIndex = volChart.data.datasets.findIndex(
             dataset => dataset.label === datasetLabelToRemove
         );
 
         if (datasetIndex > -1) {
-            window.volChart.data.datasets.splice(datasetIndex, 1); 
-            window.volChart.update(); 
+            volChart.data.datasets.splice(datasetIndex, 1); 
+            volChart.update(); 
             console.log(`Dataset "${datasetLabelToRemove}" removed from chart.`);
         } else {
             console.warn(`Dataset "${datasetLabelToRemove}" not found in chart to remove.`);

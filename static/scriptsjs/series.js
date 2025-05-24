@@ -1,7 +1,7 @@
 import { removeDatasetFromChart } from "./vol_chart.js";
 
 
-let plottedSeriesList = null;
+let plottedSeriesList = document.getElementById('plotted-series-list');
 let SeriesListInitalized = false;
 
 export function initalizeSeriesList(){
@@ -39,7 +39,9 @@ export function addSeriesToListUI(datasetLabel){
     removeButton.innerHTML = '×';
     
     //Remove from chart
-    removeButton.addEventListener('click', function() {
+    removeButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+
         console.log(`Attempting to remove series: ${datasetLabel}`);
         listItem.remove();
         removeDatasetFromChart(datasetLabel); 
