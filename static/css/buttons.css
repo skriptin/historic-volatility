@@ -44,10 +44,10 @@
 }
 
 .popup-menu .popup-content {
-    max-height: 200px; /* Or desired height for scrollable list */
+    max-height: 200px; 
     overflow-y: auto;
 }
-
+/* Specific to the active series List*/
 ul.series-list {
     list-style-type: none;
     padding: 0;
@@ -56,10 +56,10 @@ ul.series-list {
 
 ul.series-list li {
     display: flex;
-    justify-content: space-between; /* Puts label on left, button on right */
+    justify-content: space-between; 
     align-items: center;
     padding: 6px 8px;
-    background-color: #f8f9fa; /* Light background for list items */
+    background-color: #f8f9fa; 
     border: 1px solid #e9ecef;
     border-radius: 3px;
     margin-bottom: 5px;
@@ -67,26 +67,68 @@ ul.series-list li {
 }
 
 ul.series-list li span {
-    flex-grow: 1; /* Allows label to take available space */
-    margin-right: 10px; /* Space before the remove button */
+    flex-grow: 1; 
+    margin-right: 10px; 
 }
 
 .remove-series-button {
-    background-color: #dc3545; /* Red for remove/delete */
+    background-color: #dc3545; 
     color: white;
     border: none;
-    border-radius: 50%; /* Makes it round */
+    border-radius: 50%; 
     width: 20px;
     height: 20px;
-    font-size: 0.8em; /* Adjust for '×' size */
+    font-size: 0.8em; 
     font-weight: bold;
-    line-height: 18px; /* Helps center '×' in round button */
+    line-height: 18px; 
     text-align: center;
     cursor: pointer;
     padding: 0;
-    flex-shrink: 0; /* Prevent button from shrinking */
+    flex-shrink: 0; 
 }
 
 .remove-series-button:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333; 
+}
+
+/* === Submenu Trigger Button Styling === */
+.submenu-trigger {
+    display: flex;            
+    justify-content: space-between; 
+    align-items: center;       
+    
+    background-color: #f8f9fa; 
+    border: 1px solid #dee2e6;  
+    border-radius: 4px;        
+    padding: 10px 12px;        
+    
+    font-size: 0.95em;         
+    color: #343a40;            
+    
+    cursor: pointer;           
+    transition: background-color 0.2s ease;
+    margin-bottom: 8px; 
+}
+
+.submenu-trigger:hover {
+    background-color: #e9ecef; 
+}
+
+.submenu-trigger .trigger-arrow {
+    font-size: 0.8em; 
+    color: #495057;   
+}
+
+/* === Submenu Content (Basic - for when it's shown) === */
+.submenu-content {
+    display: none; 
+    padding: 10px;
+    margin-left: 15px; 
+    border-left: 2px solid #007bff; 
+    background-color: #fdfdfd;
+    font-size: 0.9em;
+}
+
+.submenu-content.active { 
+    display: block;
 }

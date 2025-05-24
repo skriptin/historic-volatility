@@ -4,6 +4,7 @@ import { removeDatasetFromChart } from "./vol_chart.js";
 let plottedSeriesList = document.getElementById('plotted-series-list');
 let SeriesListInitalized = false;
 
+
 export function initalizeSeriesList(){
     console.log("initalizing series list");
     if(!SeriesListInitalized){
@@ -54,3 +55,28 @@ export function addSeriesToListUI(datasetLabel){
     console.log(`Added ${datasetLabel} to series list`);
 }
 
+export function initializeVolatilityIndicesSubmenu() {
+                                                                                            console.log("Initalizing Volatility Indicies submenu");
+    const volatilityIndicesTrigger = document.getElementById('volatility-indicies-trigger'); 
+    const volatilityIndicesSubmenu = document.getElementById('volatility-indicies-submenu');
+
+    if (volatilityIndicesTrigger && volatilityIndicesSubmenu) {
+        if (!volatilityIndicesTrigger.dataset.listenerAttached) { 
+            volatilityIndicesTrigger.addEventListener('click', function(event) {
+                event.stopPropagation(); 
+
+                volatilityIndicesSubmenu.classList.toggle('active');
+                const arrow = volatilityIndicesTrigger.querySelector('.trigger-arrow');
+                if (arrow) {
+                    arrow.textContent = volatilityIndicesSubmenu.classList.contains('active') ? '▼' : '▶';
+                }
+                console.log("Volatility Indices submenu toggled.");
+            });
+            volatilityIndicesTrigger.dataset.listenerAttached = 'true';
+            console.log("Volatility Indices submenu listener attached.");
+        }
+    } else {
+        if (!volatilityIndicesTrigger) console.warn("Volatility Indices trigger not found.");
+        if (!volatilityIndicesSubmenu) console.warn("Volatility Indices submenu not found.");
+    }
+}

@@ -88,7 +88,17 @@
                 <div class="popup-header">
                     <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
                 </div>
+
                 <div class="popup-content">
+                    <div id="volatility-indicieis-trigger" class ="submenu-trigger">
+                        <span class="trigger-label">Volatility indicies</span>
+                        <span class="trigger-arrow">▶</span>
+                    </div>
+
+                    <div id="volatility-indicies-submenu" class="submenu-content " style="display: false;">
+                        <p>VIX, VXN, etc. will be listed here...</p>
+                    </div>
+
                     <ul id="plotted-series-list" class="series-list">
                     <!--Elements will be dynamically inserted and removed into this element ie:
                         <li data-dataset-label="EWMA(0.90)">

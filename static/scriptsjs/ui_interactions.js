@@ -1,20 +1,19 @@
 
 import { initializeSmaForm } from './getsma.js';
 import { initalizeEwmaForm } from './getewma.js';
-import { initalizeSeriesList } from './series.js';
+import { initalizeSeriesList, initializeVolatilityIndicesSubmenu } from './series.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Getting buttons and their popup mappings
+    // Getting buttons and their popup mappings and inititalization functions
     const buttonPopupMappings = [
-        { buttonId: 'toggle-consol-window', popupId: 'consol-popup' /*, initFunction: initializeConsole */ },
-        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: [initializeSmaForm, initalizeEwmaForm] }, 
-        { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunction: [initalizeSeriesList] },
-        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    /*, initFunction: initializePacfForm */ }, 
-        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' /*, initFunction: initializeModelBuilder */ },
-        { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' }
+        { buttonId: 'toggle-consol-window', popupId: 'consol-popup' , initFunctions: [] },
+        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunctions: [initializeSmaForm, initalizeEwmaForm] }, 
+        { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunctions: [initalizeSeriesList, initializeVolatilityIndicesSubmenu] },
+        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    , initFunctions: [] }, 
+        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [] },
+        { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' , initFunctions: [] }
     ];
-
 
     function closeAllActivePopups(exceptionPopupId = null) {
         const activePopups = document.querySelectorAll('.popup-menu.active');
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
                                                                                 console.log("About to poll for button clicks");
     buttonPopupMappings.forEach(mapping => {
         const buttonElement = document.getElementById(mapping.buttonId);
@@ -70,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupElement.classList.add('active');
                     buttonElement.classList.add('active');
 
-                    if (mapping.initFunction){
-                        console.log(`Calling Initfunction for popup: ${mapping.popupId}`);
-                        mapping.initFunction.forEach(initFunc => {
+                    if (mapping.initFunctions){
+                                                                    console.log(`Calling Initfunction for popup: ${mapping.popupId}`);
+                        mapping.initFunctions.forEach(initFunc => {
                             initFunc();
                         });
                     }
@@ -108,5 +106,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
 });
