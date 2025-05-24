@@ -1,15 +1,16 @@
 
 import { initializeSmaForm } from './getsma.js';
-
+import { initalizeEwmaForm } from './getewma.js';
+import { initalizeSeriesList } from './series.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
     // Getting buttons and their popup mappings
     const buttonPopupMappings = [
         { buttonId: 'toggle-consol-window', popupId: 'consol-popup' /*, initFunction: initializeConsole */ },
-        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: initializeSmaForm }, 
-        { buttonId: 'open-series-tab',      popupId: 'series-popup'  /*, initFunction: initializeSeriesList */ },
-        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    /*, initFunction: initializePacfForm */ }, // This might be for options before calculation
+        { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunction: [initializeSmaForm, initalizeEwmaForm] }, 
+        { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunction: [initalizeSeriesList] },
+        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    /*, initFunction: initializePacfForm */ }, 
         { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' /*, initFunction: initializeModelBuilder */ },
         { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' }
     ];
@@ -69,9 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupElement.classList.add('active');
                     buttonElement.classList.add('active');
 
-                    if(mapping.initFunction){
-                        console.log(`Calling ${mapping.function} for ${mapping.popupId}`);
-                        mapping.initFunction();
+                    if (mapping.initFunction){
+                        console.log(`Calling Initfunction for popup: ${mapping.popupId}`);
+                        mapping.initFunction.forEach(initFunc => {
+                            initFunc();
+                        });
                     }
                 }
             });

@@ -1,5 +1,7 @@
 import { update_chart } from './vol_chart.js';
 import { stock_returns } from './getstockreturns.js';
+import { addSeriesToListUI } from './series.js';
+
 
 let smaFormListenerAttached = false;
 
@@ -36,7 +38,9 @@ async function handleSmaFormSubmit(event) {
         if (response.ok) {
             const smaJsonResponse = await response.json();
             console.log("SMA data", smaJsonResponse);
+            //update chart and series list
             update_chart(smaJsonResponse, `SMA(${windowValue})`);
+            addSeriesToListUI(`SMA(${windowValue})`);
         } else {
             let errorMessage = 'Unknown error occurred.';
             try {

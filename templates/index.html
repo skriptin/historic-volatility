@@ -59,26 +59,46 @@
                 </div>
             </div>
 
-                <!--Button pop up menu div's-->
-
+            <!--Button pop up menu div's-->
             <div id="consol-popup" class="popup-menu consol">
                 <button type="button" class="close-popup-button" data-target-popup="consol-popup">×</button>
             </div>
 
+            <!--Studies popup buttons and forum elements-->
             <div id="studies-popup" class="popup-menu studies">
                 <form id="SMA-volatility">
                     <input
                         type="number" id="window" name="window" class ="studies-input-field" 
                         value="20" title="Enter window length" required 
                     >
-
-                    <button type="submit" id="get_returns" class ="studies-button">Fetch</button>
+                    <button type="submit" id="get_sma" class ="studies-button">Fetch</button>
+                </form>
+                <form id="EWMA-volatility">
+                    <input
+                        type="float" id="ewma-alpha" name="ewma-alpha" class ="studies-input-field" 
+                        value="0.2" title="Enter alpha, alpha between 0 and 1" required 
+                    >
+                    <button type="submit" id="get_ewma" class ="studies-button">Fetch</button>
                 </form>
                 <button type="button" class="close-popup-button" data-target-popup="studies-popup">×</button>
             </div>
 
+            <!--Seires button, this is where the user can remove currently plotted data sets and add similar volatility indicies such as the VIX-->
             <div id="series-popup" class="popup-menu series">
-                <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
+                <div class="popup-header">
+                    <h4>Series</h4>
+                    <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
+                </div>
+                <div class="popup-content">
+                    <ul id="plotted-series-list" class="series-list">
+                    <!--Elements will be dynamically inserted and removed into this element ie:
+                        <li data-dataset-label="EWMA(0.90)">
+                            <span>EWMA(0.90)</span>
+                            <button class="remove-series-button" title="Remove EWMA(0.90)">×</button>
+                        </li> 
+                    -->
+                    </ul>
+                </div>
             </div>
 
             <div id="pacf-popup" class="popup-menu pacf">
@@ -99,14 +119,16 @@
         <!--Script area, all javascrips imported here for neatness-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-colors@0.2.0"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/vol_chart.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+
+        <script type="module" src="{{ url_for('static', filename='scriptsjs/vol_chart.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/ui_interactions.js')}}"></script>
+        <script type="module" src="{{ url_for('static', filename='scriptsjs/series.js')}}"></script>
 
     </body>
 </html>

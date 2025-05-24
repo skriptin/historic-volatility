@@ -9,8 +9,8 @@ function initializeChart() {
         type: 'line',
 
         data: {
-            labels: [], // X-axis labels
-            datasets: [] // Initial dataset
+            labels: [], 
+            datasets: [] 
         },
 
         options: {
@@ -72,9 +72,9 @@ function initializeChart() {
                     },
                     limits: {
                         y: {
-                            min: 0,        // Minimum value the y-axis can be panned/zoomed to
-                            max: 200,      // Maximum value the y-axis can be panned/zoomed to
-                            minRange: 30   // Minimum difference between y.min and y.max after zoom
+                            min: 0,        
+                            max: 200,      
+                            minRange: 30   
                         }
                     }
                 }
@@ -171,26 +171,44 @@ function update_chart(newDataObject, datasetLabel) {
         // No dataset with this label exists
         console.log(`Adding new dataset: "${datasetLabel}"`);
         const newDataset = {
-            label: datasetLabel,                 // Name of the line, shown in legend/tooltips
-            data: alignedDataForIncoming,        // The actual Y-values for the chart
-            originalData: { ...newDataObject },  // Store the raw input for future re-alignments
-            borderColor: getRandomColor(),       // Line color
-            backgroundColor: 'transparent',      // Usually transparent for line charts
-            fill: false,                         // Don't fill area under the line
-            tension: 0.1,                        // Adds smoothing to the line
-            pointRadius: 0,                      // Size of the point (default is often 3 or 4)
-            pointHoverRadius: 5,                 // Size of the point when hovered
-            pointHitRadius: 10,                  // Larger "hit" area for easier tooltip activation
-            pointBorderWidth: 1,                 // Makes lines slightly curved (0 for straight)
+            label: datasetLabel,                 
+            data: alignedDataForIncoming,        
+            originalData: { ...newDataObject },  
+            borderColor: getRandomColor(),      
+            backgroundColor: 'transparent',      
+            fill: false,                         
+            tension: 0.1,                        
+            pointRadius: 0,                     
+            pointHoverRadius: 5,                
+            pointHitRadius: 10,                 
+            pointBorderWidth: 1,                 
         };
         volChart.data.datasets.push(newDataset);
     }
 
-    // --- 5. Update the chart
     volChart.update(); 
     console.log(`Chart updated. Total X-Labels: ${masterXLabels.length}, Total Datasets: ${volChart.data.datasets.length}`);
 }
 
+function removeDatasetFromChart(datasetLabelToRemove) {
+    if (window.volChart && window.volChart.data && window.volChart.data.datasets) {
+        const datasetIndex = window.volChart.data.datasets.findIndex(
+            dataset => dataset.label === datasetLabelToRemove
+        );
+
+        if (datasetIndex > -1) {
+            window.volChart.data.datasets.splice(datasetIndex, 1); 
+            window.volChart.update(); 
+            console.log(`Dataset "${datasetLabelToRemove}" removed from chart.`);
+        } else {
+            console.warn(`Dataset "${datasetLabelToRemove}" not found in chart to remove.`);
+        }
+    } else {
+        console.error("Chart instance not available for removing dataset.");
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', initializeChart);
-export {update_chart}
+export { update_chart, removeDatasetFromChart }
 
