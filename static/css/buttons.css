@@ -132,3 +132,37 @@ ul.series-list li span {
 .submenu-content.active { 
     display: block;
 }
+
+/*Submenu Items*/
+.submenu-item {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 6px 0; 
+    border-bottom: 1px solid #f0f0f0; 
+}
+.submenu-item:last-child {
+    border-bottom: none; 
+}
+
+.submenu-item .item-label {
+    font-size: 0.9em;
+    color: #333;
+    flex-grow: 1; 
+    margin-right: 10px; 
+}
+
+.submenu-item .add-item-button {
+    background-color: #28a745;
+    color: white;
+    border: 1px solid #1e7e34; 
+    border-radius: 3px;
+    padding: 4px 8px; 
+    font-size: 0.8em;
+    cursor: pointer;
+    flex-shrink: 0; 
+}
+
+.submenu-item .add-item-button:hover {
+    background-color: #218838;
+}

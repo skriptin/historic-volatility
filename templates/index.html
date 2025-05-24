@@ -85,21 +85,33 @@
 
             <!--Seires button, this is where the user can remove currently plotted data sets and add similar volatility indicies such as the VIX-->
             <div id="series-popup" class="popup-menu series">
-                <div class="popup-header">
                     <button type="button" class="close-popup-button" data-target-popup="series-popup">x</button>
-                </div>
 
                 <div class="popup-content">
-                    <div id="volatility-indicieis-trigger" class ="submenu-trigger">
+
+                    <div id="volatility-indicies-trigger" class ="submenu-trigger">
                         <span class="trigger-label">Volatility indicies</span>
                         <span class="trigger-arrow">▶</span>
                     </div>
 
-                    <div id="volatility-indicies-submenu" class="submenu-content " style="display: false;">
-                        <p>VIX, VXN, etc. will be listed here...</p>
-                    </div>
+                    <!-- Volatility Indices Submenu (THIS IS THE IMPORTANT PART) -->
+                    <div id="volatility-indicies-submenu" class="submenu-content"> 
+                        
+                        <!-- Item 1: CBOE Volatility Index -->
+                        <div class="submenu-item"> <!-- THIS DIV should be visible when submenu is active -->
+                            <span class="item-label">CBOE Volatility Index (VIX)</span>
+                            <button type="button" class="add-item-button" data-index-symbol="VIX">Add</button>
+                        </div>
 
-                    <ul id="plotted-series-list" class="series-list">
+                        <!-- Item 2: Example for another index -->
+                        <div class="submenu-item">  <!-- THIS DIV should be visible when submenu is active -->
+                            <span class="item-label">Nasdaq Volatility Index (VXN)</span>
+                            <button type="button" class="add-item-button" data-index-symbol="VXN">Add</button>
+                        </div>
+                        
+                        <p style="font-size: 0.8em; color: #777; margin-top: 10px;">More indices...</p>
+                    </div>
+                                <ul id="plotted-series-list" class="series-list">
                     <!--Elements will be dynamically inserted and removed into this element ie:
                         <li data-dataset-label="EWMA(0.90)">
                             <span>EWMA(0.90)</span>

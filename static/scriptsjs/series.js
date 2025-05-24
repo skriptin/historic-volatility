@@ -1,5 +1,5 @@
 import { removeDatasetFromChart } from "./vol_chart.js";
-
+import { stock_returns } from "./getstockreturns.js";
 
 let plottedSeriesList = document.getElementById('plotted-series-list');
 let SeriesListInitalized = false;
@@ -56,12 +56,12 @@ export function addSeriesToListUI(datasetLabel){
 }
 
 export function initializeVolatilityIndicesSubmenu() {
-                                                                                            console.log("Initalizing Volatility Indicies submenu");
-    const volatilityIndicesTrigger = document.getElementById('volatility-indicies-trigger'); 
+    console.log("Initializing Volatility Indices submenu");
+    const volatilityIndicesTrigger = document.getElementById('volatility-indicies-trigger');
     const volatilityIndicesSubmenu = document.getElementById('volatility-indicies-submenu');
 
     if (volatilityIndicesTrigger && volatilityIndicesSubmenu) {
-        if (!volatilityIndicesTrigger.dataset.listenerAttached) { 
+        if (!volatilityIndicesTrigger.dataset.listenerAttached) {
             volatilityIndicesTrigger.addEventListener('click', function(event) {
                 event.stopPropagation(); 
 
@@ -70,13 +70,65 @@ export function initializeVolatilityIndicesSubmenu() {
                 if (arrow) {
                     arrow.textContent = volatilityIndicesSubmenu.classList.contains('active') ? '▼' : '▶';
                 }
-                console.log("Volatility Indices submenu toggled.");
+
+                if (volatilityIndicesSubmenu.classList.contains('active')) {
+                    setupSubmenuItemAddListeners(volatilityIndicesSubmenu);
+                }
+                console.log("Volatility Indices submenu toggled. Active:", volatilityIndicesSubmenu.classList.contains('active'));
             });
             volatilityIndicesTrigger.dataset.listenerAttached = 'true';
-            console.log("Volatility Indices submenu listener attached.");
+            console.log("Listener attached to Volatility Indices trigger.");
         }
+
+        if (volatilityIndicesSubmenu.classList.contains('active')) {
+            setupSubmenuItemAddListeners(volatilityIndicesSubmenu);
+        }
+
     } else {
         if (!volatilityIndicesTrigger) console.warn("Volatility Indices trigger not found.");
         if (!volatilityIndicesSubmenu) console.warn("Volatility Indices submenu not found.");
     }
+}
+
+// Function to set up listerns is Volatility Indicies submenu
+function setupSubmenuItemAddListeners(submenuElement) {
+    if (!submenuElement) return;
+
+    const addButtons = submenuElement.querySelectorAll('.add-item-button');
+    addButtons.forEach(button => {
+        if (!button.dataset.addListenerAttached) {
+            button.addEventListener('click', async function(event) { 
+                event.stopPropagation(); 
+                const symbolToAdd = this.dataset.indexSymbol; 
+                console.log(`"Add" button clicked for index: ${symbolToAdd}`);
+
+                const requestData = {
+                    ticker: symbolToAdd,
+                    start_date: stock_returns.start_date,
+                    end_date: stock_returns.end_date
+                }
+
+                try {
+                    console.log("Fetching index data");
+                    const response = await fetch('/get_index', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(requestData)
+                    });
+
+                }
+                catch(error){
+                    console.warn("Fetch error occured");
+
+                }
+
+
+
+            });
+            button.dataset.addListenerAttached = 'true';
+            console.log(`"Add" listener attached for symbol: ${button.dataset.indexSymbol}`);
+        }
+    });
 }
