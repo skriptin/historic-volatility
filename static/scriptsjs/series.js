@@ -7,7 +7,8 @@ let SeriesListInitalized = false;
 export function initalizeSeriesList(){
     console.log("initalizing series list");
     if(!SeriesListInitalized){
-        plottedSeriesList = document.getElementById('plotted-series list');
+        plottedSeriesList = document.getElementById('plotted-series-list');
+        if(plottedSeriesList) console.log("Series list initalized succesfully");
         SeriesListInitalized = true;
     } else {
         console.log("series list already initalized");
