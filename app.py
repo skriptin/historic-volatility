@@ -93,6 +93,23 @@ def get_pacf():
 
     return jsonify(response), 200
 
+@app.route("/get_index", methods=["POST"])
+def get_index():
+    print("Routing script to fetch_index()")
+
+    ticker = request.form.get("ticker")
+    start_date = request.form.get("start_date")
+    end_date = request.form.get("end_date")
+
+    response = fetch.get_index(ticker, start_date, end_date)
+
+    if "error" in response:
+        print(response)
+        return jsonify({"error": response["error"]}), 400
+
+    return jsonify(response), 200
+
+
 if __name__ == '__main__':
     print("Starting Flask app")
     app.run(debug=True)

@@ -2,19 +2,21 @@ import yfinance as yf
 import math
 import pandas as pd 
 
+
+
+"""
+Calculates daily log returns from a dictionary of date-price pairs.
+
+Args:
+    date_price_dict (dict): A dictionary where keys are date strings ('YYYY-MM-DD')
+                            and values are the closing prices (floats).
+
+Returns:
+    dict: A dictionary where keys are date strings ('YYYY-MM-DD')
+            and values are the daily log returns (floats).
+            Returns an empty dictionary if less than 2 data points.
+"""
 def calc_log_returns_from_dict(date_price_dict: dict) -> dict:
-    """
-    Calculates daily log returns from a dictionary of date-price pairs.
-
-    Args:
-        date_price_dict (dict): A dictionary where keys are date strings ('YYYY-MM-DD')
-                                and values are the closing prices (floats).
-
-    Returns:
-        dict: A dictionary where keys are date strings ('YYYY-MM-DD')
-              and values are the daily log returns (floats).
-              Returns an empty dictionary if less than 2 data points.
-    """
     print("Calclulating log returns")
     log_returns = dict()
 
@@ -34,27 +36,27 @@ def calc_log_returns_from_dict(date_price_dict: dict) -> dict:
     #print(log_returns)
     return log_returns
 
-# Refactored fetch_returns to get data, convert to date-price dictionary,
-# and then calculate log returns using the dictionary function.
+
+"""
+Fetches stock data from yfinance, converts it to a date-price dictionary,
+and calculates daily log returns from the dictionary.
+
+Args:
+    ticker (str): Stock ticker symbol.
+    start_date (str): Start date in 'YYYY-MM-DD' format.
+    end_date (str): End date in 'YYYY-MM-DD' format.
+
+Returns:
+    dict: A dictionary where keys are date strings and values are
+            the daily log returns, or a dictionary with an 'error' key
+            if fetching or processing fails.
+"""
 def fetch_returns(ticker, start_date, end_date):
-    """
-    Fetches stock data from yfinance, converts it to a date-price dictionary,
-    and calculates daily log returns from the dictionary.
 
-    Args:
-        ticker (str): Stock ticker symbol.
-        start_date (str): Start date in 'YYYY-MM-DD' format.
-        end_date (str): End date in 'YYYY-MM-DD' format.
 
-    Returns:
-        dict: A dictionary where keys are date strings and values are
-              the daily log returns, or a dictionary with an 'error' key
-              if fetching or processing fails.
-    """
     print(f"Fetching {ticker} data from Yahoo Finance")
+    print(f"{start_date}, {end_date}")
     try:
-        # Fetch data into a pandas DataFrame
-        # progress=False hides the download progress bar
         df = yf.download(ticker, start=start_date, end=end_date, progress=False)
         print(df)
     except Exception as e: # Catch general Exception including YFRateLimitError
@@ -75,16 +77,39 @@ def fetch_returns(ticker, start_date, end_date):
         close_price = row[1]
         date_str = date.strftime('%Y-%m-%d')
         date_price_dict[date_str] = close_price
-    #print(date_price_dict)
 
     # --- Calculate Log Returns from the Date-Price Dictionary ---
     if not date_price_dict or len(date_price_dict) < 2:
-         # If not enough data after conversion, return error
          return {"error": "Not enough price data available to calculate returns."}
-
     daily_rets = calc_log_returns_from_dict(date_price_dict)
 
-    # Return the calculated returns dictionary
     return daily_rets
+
+def get_index(ticker, start_date, end_date):
+    
+    print(f"Fetching {ticker} data from Yahoo Finance")
+    try:
+        df = yf.download(ticker, start=start_date, end=end_date, progress=False)
+        print(df)
+    except Exception as e: # Catch general Exception including YFRateLimitError
+         print(f"Error fetching data for {ticker}: {e}")
+         return {"error": f"Error fetching data for {ticker}: {e}"}
+
+    if df.empty:
+         print(f"No data fetched for {ticker}")
+         return {"error": f"No data found for {ticker} in the specified date range."}
+
+    # --- Convert DataFrame to Dictionary ---
+    index_dict = dict()
+    df.reset_index(inplace=True)
+    list_df = df.values.tolist()
+    
+    for row in list_df:
+        date = row[0]
+        close_price = row[1]
+        date_str = date.strftime('%Y-%m-%d')
+        index_dict[date_str] = close_price
+
+    return index_dict
 
 

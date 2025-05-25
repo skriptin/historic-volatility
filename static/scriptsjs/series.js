@@ -1,4 +1,4 @@
-import { removeDatasetFromChart } from "./vol_chart.js";
+import { removeDatasetFromChart, update_chart } from "./vol_chart.js";
 import { stock_returns } from "./getstockreturns.js";
 
 let plottedSeriesList = document.getElementById('plotted-series-list');
@@ -100,7 +100,13 @@ function setupSubmenuItemAddListeners(submenuElement) {
             button.addEventListener('click', async function(event) { 
                 event.stopPropagation(); 
                 const symbolToAdd = this.dataset.indexSymbol; 
+                const indexName = this.dataset.indexName;
                 console.log(`"Add" button clicked for index: ${symbolToAdd}`);
+
+                if(!stock_returns.start_date || !stock_returns.end_date){
+                    console.warn("No stock returns, please fetch returns");
+                    return;
+                }
 
                 const requestData = {
                     ticker: symbolToAdd,
@@ -110,6 +116,7 @@ function setupSubmenuItemAddListeners(submenuElement) {
 
                 try {
                     console.log("Fetching index data");
+                    console.log(requestData);
                     const response = await fetch('/get_index', {
                         method: 'POST',
                         headers: {
@@ -117,6 +124,18 @@ function setupSubmenuItemAddListeners(submenuElement) {
                         },
                         body: new URLSearchParams(requestData)
                     });
+
+                    if(response.ok){
+                        const jsonResponse = await response.json();
+                        console.log(jsonResponse);
+                        update_chart(jsonResponse, `${indexName}`);
+                        addSeriesToListUI(`${indexName}`);
+
+                    } else{
+                        const jsonResponse = await response.json();
+                        console.log("Server error occured", jsonResponse);
+                        // Print to consol
+                    }
 
                 }
                 catch(error){

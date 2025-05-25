@@ -47,12 +47,12 @@ document.getElementById('script-form').addEventListener('submit', async (event) 
 
         if (response.ok) {
             jsonResponse = await response.json();
-            console.log(jsonResponse);
 
             stock_returns.returns = jsonResponse;
-            stock_returns.ticker = ticker;
-            stock_returns.start_date = startDate;
-            stock_returns.end_date = endDate;
+            stock_returns.ticker = data.ticker;
+            stock_returns.start_date = data.start_date;
+            stock_returns.end_date = data.end_date;
+            console.log(stock_returns);
 
           /** Print Response to consol */
 
