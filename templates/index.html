@@ -126,6 +126,22 @@
 
             <div id="pacf-popup" class="popup-menu pacf">
                 <button type="button" class="close-popup-button" data-target-popup="pacf-popup">x</button>
+
+                <div class="popup-content pacf">
+
+                    <div class="stock-info-input-panel">
+                            <form id="pacf-form">
+                                <label for="n-lags">n-Lags::</label>
+                                <input type="number" id="n-lags" name="n-lags" value="30" required>
+                                <label for="end_date">to:</label>
+                                <input type="number" id="pacf-alpha" name="pacf-alpha" value="0.05" required>
+                                <button type="submit" id="get_pacf">Fetch</button>
+                            </form>
+                    </div>
+
+
+                </div>
+
             </div>
 
             <div id="model-builder-popup" class="popup-menu model-builder">

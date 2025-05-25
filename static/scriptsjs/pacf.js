@@ -1,7 +1,20 @@
 import { stock_returns } from './getstockreturns.js';
 
+let pacfInitalized = false;
+
+export function initalizePacfListeners(){
+    console.log("Initalizing Pacf forum");
+    const pacfForm = document.getElementById('pacf-form');
+    const pacfDataOutput= document.getElementById('response-pacf');
+    const pacfImg = document.getElementById('pacf-img-plot');
+    if(!pacfForm || !pacfDataOutput || !pacfImg) {console.log("Failed to fetch pacf"); return;}
+
+
+}
+
+
+
 const pacfResponseOutput = document.getElementById('response-pacf');
-const pacfForm = document.getElementById('find-PACF'); 
 
 async function fetchAndDisplayPacf() {
     const dataType = 'squared_returns';
@@ -80,22 +93,13 @@ async function fetchAndDisplayPacf() {
                 }
             }
         } else {
-            let errorMessage = `Error: ${response.status} ${response.statusText}`;
-            try {
-                const errorData = await response.json();
-                errorMessage = `Error: ${errorData.error || response.statusText}`;
-            } catch (e) {
-                const textError = await response.text();
-                console.error("Server non-JSON error:", textError.substring(0, 500));
-            }
-            console.error("Error fetching PACF:", errorMessage);
-            pacfResponseOutput.innerHTML = `<p class="error-message-text">${errorMessage}</p>`;
-            pacfResponseOutput.classList.add('error-state');
+            const errorMessage = await response.json();
+            console.log("Server error occured:", errorMessageq);
         }
+
+
     } catch (error) {
         console.error(`Network or script error fetching PACF:`, error);
-        pacfResponseOutput.innerHTML = `<p class="error-message-text">Request failed: ${error.message}</p>`;
-        pacfResponseOutput.classList.add('error-state');
     }
 }
 
