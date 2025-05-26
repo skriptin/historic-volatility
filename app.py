@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from scripts import fetch, sma, ewma, garch
 
 app = Flask(__name__)
@@ -76,6 +76,8 @@ def get_pacf():
 
     request_data = request.get_json()
     returns = request_data.get('stock_returns')
+    alpha = request_data.get('pacf-alpha')
+    n_lags = request_data.get('n-lags')
         
     if not request_data:
         print("No JSON recieved for sma")
@@ -85,13 +87,13 @@ def get_pacf():
         print("Returns are null or invalid in form")
         return jsonify({"error": "Invalid request: No stock returns recieved"}, 400)
 
-    response = garch.get_pacf(returns)
+    try:
+        pacf_img = garch.get_pacf(returns, float(alpha), int(n_lags))
+        return send_file(pacf_img, mimetype='image/png'), 200
+    except Exception as e:
+        print(f"Error generating PACF flot {e}")
+        return jsonify({"Error": "Failed to get PACF plot"}), 500
 
-    if "error" in response:
-        print(response)
-        return jsonify({"error": response["error"]}), 400
-
-    return jsonify(response), 200
 
 @app.route("/get_index", methods=["POST"])
 def get_index():

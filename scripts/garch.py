@@ -2,49 +2,32 @@ import matplotlib.pyplot as plt
 from arch import arch_model
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf
 import numpy as np
+import io
 
 def test():
     print("main running")
 
-def get_pacf(returns: dict):
+def get_pacf(returns: dict, alpha: float, n_lags: int):
 
     returns_list = list(returns.values())
     returns_list_np = np.array(returns_list)
 
-    pacf_values_arr, conf_int_arr = pacf(
-        returns_list_np**2,
-        method='yw',  
-        alpha=0.05
-    )
+    buf = get_pacf_imgPlot(returns_list_np, n_lags, alpha)
 
-    lower_bound = conf_int_arr[:,0].tolist()
-    upper_bound = conf_int_arr[:, 1].tolist()
-    lower_bound =[round(float(x),3) for x in lower_bound]
-    upper_bound = [round(float(x),3) for x in upper_bound]
-    pacf_values_arr = [(round(float(value), 3)) for value in pacf_values_arr]
+    return pacf_img
 
-    output_dict = {}
+def get_pacf_imgPlot(returns, nlags, alpha):
 
-    # Formatting output for json response
-    for i in range(1, len(pacf_values_arr)):
-        lag_number = i 
-        value = pacf_values_arr[i]
-        ci_lower = lower_bound[i]
-        ci_upper = upper_bound[i]
+    
+    fig, ax = plt.subplots()
+    plot_pacf(returns**2, ax=ax, lags=nlags, alpha=alpha)
 
-        is_significant = False
-        if lag_number >= 0:
-            if not (ci_lower <= 0 <= ci_upper):
-                is_significant = True
-        
-        lag_key = f"Lag {lag_number}"
-        output_dict[lag_key] = (value, (ci_lower, ci_upper), is_significant)
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png', bbox_inches='tight')
+    plt.close(fig)
+    buf.seek(0)
 
-    #plot_pacf(returns_list_np**2)
-    #plt.show()
-
-    print(output_dict)
-    return output_dict
+    return buf
 
 
 
