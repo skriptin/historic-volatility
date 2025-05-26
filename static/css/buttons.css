@@ -47,12 +47,6 @@
 }
 
 .popup-menu .popup-content {
-    overflow-y: auto;
-    width: 100%;
-    display: block;
-}
-
-.popup-menu .popup-content{
     display: flex;
     flex-wrap: wrap;
     gap:10px;
@@ -139,7 +133,6 @@ ul.series-list li span {
     color: #495057;   
 }
 
-/* === Submenu Content (Basic - for when it's shown) === */
 .submenu-content {
     display: none; 
     padding: 10px;
@@ -153,7 +146,6 @@ ul.series-list li span {
     display: block;
 }
 
-/*Submenu Items*/
 .submenu-item {
     display: flex;
     justify-content: space-between; 
@@ -187,3 +179,65 @@ ul.series-list li span {
     background-color: #218838;
 }
 
+/*End of css for Series List*/
+/*PACF CSS*/
+.popup-menu .popup-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap:10px;
+    width: 100%;
+}
+
+.pacf-form-container h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.0em;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.pacf-form-container{
+     background-color: #f0f8ff; 
+    border: 1px solid #cce4f6;
+    border-radius: 4px;
+    padding: 2px 6px;
+    max-width: 180px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);   
+}
+
+#pacf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#pacf-form label {
+    font-weight: 500;
+    color: #333;
+}
+
+#pacf-form input[type="number"] {
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    font-size: 0.8em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+#pacf-form button[type="submit"] {
+    padding: 5px;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#pacf-form button[type="submit"]:hover {
+    background-color: #218838;
+}
