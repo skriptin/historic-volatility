@@ -1,14 +1,17 @@
 /* Minimal styles for the pop-up menu */
 .popup-menu {
     display: none;
-    position: absolute; 
+    position: absolute;
     background-color: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     padding: 15px;
-    width: 250px; 
-    z-index: 100; 
+    width: 200px;
+    max-height: 90vh;
+    overflow: auto;
+    z-index: 100;
     border-radius: 4px;
+
 }
 
 .popup-menu.active { 
@@ -44,9 +47,26 @@
 }
 
 .popup-menu .popup-content {
-    max-height: 200px; 
     overflow-y: auto;
+    width: 100%;
+    display: block;
 }
+
+.popup-menu .popup-content{
+    display: flex;
+    flex-wrap: wrap;
+    gap:10px;
+    width: 100%;
+}
+
+.popup-menu form label,
+.popup-menu form input,
+.popup-menu form button {
+    flex: 1 1 auto;
+    min-width: 100px;
+    box-sizing: border-box;
+}
+
 /* Specific to the active series List*/
 ul.series-list {
     list-style-type: none;
@@ -167,133 +187,3 @@ ul.series-list li span {
     background-color: #218838;
 }
 
-
-#pacf-popup.pacf {
-    /* display: none; /* Controlled by JS */
-    /* position: fixed; */
-    /* top: 50%; left: 50%; transform: translate(-50%, -50%); */
-    /* background-color: white; */
-    /* border: 1px solid #ccc; */
-    /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
-    /* border-radius: 8px; */
-
-    /* Key properties for internal content fitting: */
-    padding: 20px; /* Space between popup edge and its content */
-    min-width: 320px; /* Minimum width for the popup */
-    max-width: 90vw;  /* Max width relative to viewport */
-    box-sizing: border-box; /* Ensures padding is included in width/height */
-    overflow-y: auto; /* Allows scrolling if content exceeds popup height */
-}
-
-/* --- Close Button (Positioned relative to #pacf-popup) --- */
-#pacf-popup .close-popup-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    /* Add styling for the 'x' button (size, background, etc.) */
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #555;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1;
-    padding: 0;
-    z-index: 10; /* Above other content in this popup */
-}
-#pacf-popup .close-popup-button:hover {
-    background-color: #e0e0e0;
-}
-
-
-/* --- Content Wrapper within the Popup (.popup-content.pacf) --- */
-.popup-content.pacf {
-    display: flex;
-    flex-direction: column; /* Stack form panel and view button vertically */
-    gap: 18px; /* Space between the form panel and the "View" button */
-    width: 100%; /* Takes the full width available within #pacf-popup's padding */
-}
-
-/* --- Panel for Form Inputs (.stock-info-input-panel) --- */
-.stock-info-input-panel {
-    border: 1px solid #e0e0e0;
-    padding: 15px; /* Inner spacing for the form */
-    border-radius: 6px;
-    background-color: #f8f9fa; /* Light background for the form area */
-}
-
-/* --- The Form Itself (#pacf-form) --- */
-#pacf-form {
-    display: grid;
-    grid-template-columns: auto 1fr; /* Labels take needed width, inputs take the rest */
-    align-items: center; /* Vertically align labels and inputs */
-    gap: 10px 8px; /* Row gap, then column gap */
-}
-
-#pacf-form label {
-    font-weight: 500;
-    color: #333;
-    text-align: right; /* Align label text to the right, next to input */
-    padding-right: 5px; /* Small space for visual separation */
-}
-
-#pacf-form input[type="number"] {
-    width: 100%; /* Fill the available width in its grid cell */
-    padding: 8px 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    box-sizing: border-box; /* CRITICAL: includes padding/border in width calc */
-    font-size: 0.95em;
-}
-
-#pacf-form input[type="number"]:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-/* Submit Button within the Form */
-#pacf-form button[type="submit"] {
-    grid-column: 1 / -1; /* Span both columns */
-    padding: 10px 15px;
-    font-size: 1em;
-    font-weight: 500;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 8px; /* Space above the button */
-    transition: background-color 0.15s ease-in-out;
-}
-
-#pacf-form button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* --- "View" Button (Separate from the form) --- */
-#view-pacf-plot-button {
-    width: 100%; /* Make it full-width, similar to the submit button */
-    padding: 10px 15px;
-    font-size: 1em;
-    font-weight: 500;
-    color: #fff;
-    background-color: #28a745; /* Green for "view" or secondary action */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
-    transition: background-color 0.15s ease-in-out;
-}
-
-#view-pacf-plot-button:hover {
-    background-color: #1e7e34;
-}

@@ -67,6 +67,7 @@
             <!--Studies popup buttons and forum elements-->
             <div id="studies-popup" class="popup-menu studies">
                 <form id="SMA-volatility">
+                    <label for="window">SMA</label>
                     <input
                         type="number" id="window" name="window" class ="studies-input-field" 
                         value="20" title="Enter window length" required 
@@ -74,6 +75,7 @@
                     <button type="submit" id="get_sma" class ="studies-button">Fetch</button>
                 </form>
                 <form id="EWMA-volatility">
+                    <label for="ewma-alpha">EWMA</label>
                     <input
                         type="float" id="ewma-alpha" name="ewma-alpha" class ="studies-input-field" 
                         value="0.2" title="Enter alpha, alpha between 0 and 1" required 
@@ -128,18 +130,15 @@
                 <button type="button" class="close-popup-button" data-target-popup="pacf-popup">x</button>
             
                 <div class="popup-content pacf">
-                    <div class="stock-info-input-panel">
                         <form id="pacf-form">
-                            <label for="n-lags">n-Lags::</label>
+                            <label for="n-lags">n-Lags:</label>
                             <input type="number" id="n-lags" name="n-lags" value="30" required>
-                            <label for="end_date">to:</label>
+                            <label for="pacf-alpha">alpha:</label>
                             <input type="number" id="pacf-alpha" name="pacf-alpha" value="0.05" required>
                             <button type="submit" id="get_pacf">Submit</button>
                         </form>
-                    </div>
                     <button type="button" id="view-pacf-plot-button">View</button>
                 </div>
-
             </div>
 
         <!-- <div id="pacf-modal-popup" class="modal popup">

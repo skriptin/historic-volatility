@@ -48,26 +48,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupElement.classList.remove('active');
                     buttonElement.classList.remove('active');
                 }else {
-                    const buttonRect = buttonElement.getBoundingClientRect();
+    const buttonRect = buttonElement.getBoundingClientRect();
+    let topPosition = buttonRect.top + window.scrollY;
+    let leftPosition = buttonRect.right + 5 + window.scrollX;
 
-                    let topPosition = buttonRect.top + window.scrollY;
-                    let leftPosition = buttonRect.right + 5 + window.scrollX;
+    // --- TEMPORARILY MAKE IT VISIBLE BUT HIDDEN TO GET DIMENSIONS ---
+    // This helps ensure offsetWidth/offsetHeight are accurate if used for adjustment
+    popupElement.style.visibility = 'hidden'; // Keep it in layout flow but not visible
+    popupElement.style.display = 'block';     // So dimensions can be read
 
-                    if(leftPosition + popupElement.offsetWidth > window.innerWidth - 10){
-                        leftPosition = buttonRect.left = popupElement.offsetWidth -5;
-                    }
-                    if(leftPosition < 10) leftPosition = 10;
-                    if(topPosition + popupElement.offsetHeight > window.innerHeight - 10){
-                        topPosition = window.innerHeight - popupElement.offsetHeight - 10;
-                    }
-                    if(topPosition < 10) topPosition = 10;
+    const popupWidth = popupElement.offsetWidth;
+    const popupHeight = popupElement.offsetHeight;
 
-                    popupElement.style.top = '${topPosition}px';
-                    popupElement.style.left = '${leftPosition}px';
+    // Basic off-screen adjustments (using calculated dimensions)
+    if (leftPosition + popupWidth > window.innerWidth - 10) {
+        leftPosition = buttonRect.left - popupWidth - 5;
+    }
+    if (leftPosition < 10) leftPosition = 10;
 
-                    popupElement.classList.add('active');
-                    buttonElement.classList.add('active');
+    if (topPosition + popupHeight > window.innerHeight - 10) {
+        topPosition = window.innerHeight - popupHeight - 10;
+    }
+    if (topPosition < 10) topPosition = 10;
 
+    // Set the position FIRST
+    popupElement.style.top = `${topPosition}px`;
+    popupElement.style.left = `${leftPosition}px`;
+    
+    // Now make it truly visible by removing temporary styles and adding .active
+    popupElement.style.display = '';        // Reset display so .active class takes over
+    popupElement.style.visibility = '';   // Reset visibility
+    popupElement.classList.add('active'); // This will set display: block via CSS
+
+    buttonElement.classList.add('active');
                     if (mapping.initFunctions){
                                                                     console.log(`Calling Initfunction for popup: ${mapping.popupId}`);
                         mapping.initFunctions.forEach(initFunc => {
