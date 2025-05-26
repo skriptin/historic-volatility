@@ -2,7 +2,7 @@
 import { initializeSmaForm } from './getsma.js';
 import { initalizeEwmaForm } from './getewma.js';
 import { initalizeSeriesList, initializeVolatilityIndicesSubmenu } from './series.js';
-
+import { initalizePacfListeners } from "./pacf.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // Getting buttons and their popup mappings and inititalization functions
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { buttonId: 'toggle-consol-window', popupId: 'consol-popup' , initFunctions: [] },
         { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunctions: [initializeSmaForm, initalizeEwmaForm] }, 
         { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunctions: [initalizeSeriesList, initializeVolatilityIndicesSubmenu] },
-        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    , initFunctions: [] }, 
+        { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    , initFunctions: [initalizePacfListeners] }, 
         { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [] },
         { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' , initFunctions: [] }
     ];
