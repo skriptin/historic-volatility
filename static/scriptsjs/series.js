@@ -1,5 +1,5 @@
 import { removeDatasetFromChart, update_chart } from "./vol_chart.js";
-import { stock_returns } from "./getstockreturns.js";
+import { stock_returns } from './getstockreturns.js';
 
 let plottedSeriesList = document.getElementById('plotted-series-list');
 let SeriesListInitalized = false;

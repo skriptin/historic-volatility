@@ -25,7 +25,6 @@ async function handleEwmaFormSubmit(event){
         return;
     }
 
-
     const requestData = {
         alpha: data.alpha,
         stock_returns: stock_returns.returns

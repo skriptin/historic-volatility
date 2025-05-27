@@ -76,8 +76,8 @@ def get_pacf():
 
     request_data = request.get_json()
     returns = request_data.get('stock_returns')
-    alpha = request_data.get('pacf-alpha')
-    n_lags = request_data.get('n-lags')
+    alpha = request_data.get('alpha')
+    n_lags = request_data.get('nlags')
         
     if not request_data:
         print("No JSON recieved for sma")
@@ -85,7 +85,7 @@ def get_pacf():
 
     if returns is None or not isinstance(returns, dict):
         print("Returns are null or invalid in form")
-        return jsonify({"error": "Invalid request: No stock returns recieved"}, 400)
+        return jsonify({"error": "Invalid request: No stock returns recieved"}), 400
 
     try:
         pacf_img = garch.get_pacf(returns, float(alpha), int(n_lags))

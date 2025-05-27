@@ -1,11 +1,12 @@
+
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from arch import arch_model
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf
 import numpy as np
 import io
 
-def test():
-    print("main running")
 
 def get_pacf(returns: dict, alpha: float, n_lags: int):
 
@@ -14,7 +15,7 @@ def get_pacf(returns: dict, alpha: float, n_lags: int):
 
     buf = get_pacf_imgPlot(returns_list_np, n_lags, alpha)
 
-    return pacf_img
+    return buf
 
 def get_pacf_imgPlot(returns, nlags, alpha):
 
