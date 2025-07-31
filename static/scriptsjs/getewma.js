@@ -12,10 +12,10 @@ async function handleEwmaFormSubmit(event){
         alpha: formData.get('ewma-alpha')
     }
 
-    console.log("User has submitted ewma forum with parameters:")
-    console.log(`Alpha: ${data.alpha}`)
-    
-    if (data.alpha > 1 || 0 > data.alpha){
+    console.log("User has submitted ewma forum with parameters:");
+    console.log(`Alpha: ${data.alpha}`);
+    const alphanum = parseFloat(data.alpha);
+    if (alphanum > 1 || 0 > alphanum){
         console.warn("Alpha not between 0 and 1");
         return;
     }
