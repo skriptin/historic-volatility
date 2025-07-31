@@ -188,6 +188,18 @@
                 <button type="button" class="close-popup-button" data-target-popup="info-popup">x</button>
             </div>
 
+            <!-- PACF Plot Popup (positioned absolutely next to the View button) -->
+            <div id="pacf-modal-popup" class="popup pacf-modal" style="display:none; position:absolute; min-width:320px; max-width:90vw; z-index:9999;">
+                <div class="popup__header" style="display:flex;justify-content:space-between;align-items:center;padding:0.5em 1em;border-bottom:1px solid #ddd;">
+                    <h4 class="popup__title" style="margin:0;">PACF Plot</h4>
+                    <button type="button" class="popup__close" id="close-pacf-modal">x</button>
+                </div>
+                <div class="popup__content" style="padding:1em;">
+                    <img id="pacf-img-plot" src="" alt="PACF Plot will appear here" style="display:none;max-width:100%;max-height:300px;margin:auto;" />
+                    <div id="response-pacf" class="popup__response" style="margin-top:1em;color:#b00;font-size:1.1em;text-align:center;"></div>
+                </div>
+            </div>
+
         </main>
 
 

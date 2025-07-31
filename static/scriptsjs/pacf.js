@@ -1,26 +1,71 @@
 import { stock_returns } from './getstockreturns.js';
 
+let lastPacfPlotUrl = null;
 
-
-let pacfFormButtonInitalized = false;
-let pacfViewButtonInitalized = false;
-
-export function initalizePacfListeners(){
-
+export function initalizePacfListeners() {
     const pacfFormButton = document.getElementById('pacf-form');
     const pacfViewButton = document.getElementById('view-pacf-plot-button');
+    const pacfConfigPopup = document.getElementById('pacf-popup');
+    const pacfModal = document.getElementById('pacf-modal-popup');
+    const pacfModalClose = document.getElementById('close-pacf-modal');
+    const pacfImgPlot = document.getElementById('pacf-img-plot');
+    const responsePacf = document.getElementById('response-pacf');
 
-    if(!pacfFormButton || !pacfViewButton){
-        console.warn("failed to fetch pacf buttons");
+    if (!pacfFormButton || !pacfViewButton || !pacfConfigPopup || !pacfModal || !pacfModalClose || !pacfImgPlot) {
+        console.warn("failed to fetch pacf buttons or modal elements");
         return;
     }
-    if(!pacfFormButtonInitalized || !pacfViewButtonInitalized){
-        pacfFormButton.addEventListener('submit', handlePacfFormButton);
-        pacfViewButton.addEventListener('button', handlePacfViewButton);
-        console.log("PACF form button and view button initalized");
-        pacfFormButtonInitalized = true;
-        pacfViewButtonInitalized = true;
-    }
+
+    pacfFormButton.addEventListener('submit', handlePacfFormButton);
+    pacfViewButton.addEventListener('click', function(event) {
+        // Position the popup next to the PACF config popup
+        const configRect = pacfConfigPopup.getBoundingClientRect();
+        pacfModal.style.position = 'absolute';
+        pacfModal.style.display = 'block';
+        pacfModal.style.visibility = 'hidden';
+        let top = configRect.top + window.scrollY;
+        let left = configRect.right + window.scrollX + 4;
+        const popupWidth = pacfModal.offsetWidth;
+        const popupHeight = pacfModal.offsetHeight;
+        if (left + popupWidth > window.innerWidth - 10) {
+            left = configRect.left + window.scrollX - popupWidth - 4;
+        }
+        if (left < 10) left = 10;
+        if (top + popupHeight > window.innerHeight - 10) {
+            top = window.innerHeight - popupHeight - 10;
+        }
+        if (top < 10) top = 10;
+        pacfModal.style.top = `${top}px`;
+        pacfModal.style.left = `${left}px`;
+        pacfModal.style.visibility = '';
+        pacfModal.classList.add('active');
+        if (lastPacfPlotUrl) {
+            pacfImgPlot.src = lastPacfPlotUrl;
+            pacfImgPlot.style.display = '';
+            responsePacf.textContent = '';
+        } else {
+            pacfImgPlot.src = '';
+            pacfImgPlot.style.display = 'none';
+            responsePacf.textContent = 'No PACF plot has been fetched yet.';
+        }
+        event.stopPropagation();
+        // Close on outside click
+        window.addEventListener('click', function handler(e) {
+            if (
+                pacfModal.classList.contains('active') &&
+                !pacfModal.contains(e.target) &&
+                e.target !== pacfViewButton
+            ) {
+                pacfModal.classList.remove('active');
+                pacfModal.style.display = 'none';
+                window.removeEventListener('click', handler);
+            }
+        });
+    });
+    pacfModalClose.addEventListener('click', () => {
+        pacfModal.classList.remove('active');
+        pacfModal.style.display = 'none';
+    });
 }
 
 async function handlePacfFormButton(event) {
@@ -43,26 +88,11 @@ async function handlePacfFormButton(event) {
         });
         if (response.ok) {
             const blob = await response.blob();
-            const imageUrl = URL.createObjectURL(blob);
-            console.log('%c ', `font-size: 1px; padding: 100px 200px; background: url(${imageUrl}) no-repeat; background-size: contain;`);
-
+            lastPacfPlotUrl = URL.createObjectURL(blob);
         } else {
-            let errorMessage;
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.error || `Server error: ${response.status}`;
-            } catch(e) {
-                errorMessage = `Server error: ${response.status}. Check console.`;
-                console.error("SMA Server returned non-JSON:", await response.text());
-            }
-        console.error("Error fetching PACF plot:", response.status, errorMessage);
+            lastPacfPlotUrl = null;
         }
+    } catch (error) {
+        lastPacfPlotUrl = null;
     }
-    catch (error) {
-        console.error("Error fetching PACF", error);
-    }
-}
-
-function handlePacfViewButton(event){
-
 }
