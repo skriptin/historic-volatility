@@ -5,18 +5,33 @@ import { stock_returns } from './getstockreturns.js';
 let pacfFormButtonInitalized = false;
 let pacfViewButtonInitalized = false;
 
-export function initalizePacfListeners(){
+// Store the last fetched PACF plot image URL
+let lastPacfPlotUrl = null;
 
+export function initalizePacfListeners(){
     const pacfFormButton = document.getElementById('pacf-form');
     const pacfViewButton = document.getElementById('view-pacf-plot-button');
+    const pacfModal = document.getElementById('pacf-modal-popup');
+    const pacfModalClose = document.getElementById('close-pacf-modal');
+    const pacfImgPlot = document.getElementById('pacf-img-plot');
+    const responsePacf = document.getElementById('response-pacf');
 
-    if(!pacfFormButton || !pacfViewButton){
-        console.warn("failed to fetch pacf buttons");
+    if(!pacfFormButton || !pacfViewButton || !pacfModal || !pacfModalClose || !pacfImgPlot){
+        console.warn("failed to fetch pacf buttons or modal elements");
         return;
     }
     if(!pacfFormButtonInitalized || !pacfViewButtonInitalized){
         pacfFormButton.addEventListener('submit', handlePacfFormButton);
-        pacfViewButton.addEventListener('button', handlePacfViewButton);
+        pacfViewButton.addEventListener('click', handlePacfViewButton);
+        pacfModalClose.addEventListener('click', () => {
+            pacfModal.style.display = 'none';
+        });
+        // Optional: clicking outside modal closes it
+        window.addEventListener('click', (event) => {
+            if (event.target === pacfModal) {
+                pacfModal.style.display = 'none';
+            }
+        });
         console.log("PACF form button and view button initalized");
         pacfFormButtonInitalized = true;
         pacfViewButtonInitalized = true;
@@ -52,8 +67,9 @@ async function handlePacfFormButton(event){
         if (response.ok) {
             const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
-            console.log('%c ', `font-size: 1px; padding: 100px 200px; background: url(${imageUrl}) no-repeat; background-size: contain;`);
-
+            lastPacfPlotUrl = imageUrl;
+            // Optionally, show a toast or update UI to indicate plot is ready
+            console.log('PACF plot fetched and stored.');
         } else {
             let errorMessage;
             try {
@@ -63,14 +79,26 @@ async function handlePacfFormButton(event){
                 errorMessage = `Server error: ${response.status}. Check console.`;
                 console.error("SMA Server returned non-JSON:", await response.text());
             }
-        console.error("Error fetching PACF plot:", response.status, errorMessage);
+            lastPacfPlotUrl = null;
+            console.error("Error fetching PACF plot:", response.status, errorMessage);
         }
     }
     catch (error) {
+        lastPacfPlotUrl = null;
         console.error("Error fetching PACF", error);
     }
 }
 
 function handlePacfViewButton(event){
-
+    const pacfModal = document.getElementById('pacf-modal-popup');
+    const pacfImgPlot = document.getElementById('pacf-img-plot');
+    const responsePacf = document.getElementById('response-pacf');
+    if (lastPacfPlotUrl) {
+        pacfImgPlot.src = lastPacfPlotUrl;
+        responsePacf.textContent = '';
+    } else {
+        pacfImgPlot.src = '';
+        responsePacf.textContent = 'No PACF plot has been fetched yet.';
+    }
+    pacfModal.style.display = 'block';
 }
