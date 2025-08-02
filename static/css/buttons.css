@@ -18,6 +18,57 @@
 .pacf-modal, .popup.pacf-modal {
     background: #ffffff !important;
     border: 1px solid #ccc;
+    position: absolute;
+    min-width: 320px;
+    max-width: 90vw;
+    z-index: 9999;
+    display: none;
+}
+
+.pacf-modal.active {
+    display: block;
+}
+
+.popup__header, .pacf-modal .popup__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em;
+    border-bottom: 1px solid #ddd;
+}
+
+.popup__title {
+    margin: 0;
+}
+
+.popup__close, #close-popup-button {
+    background: none;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+    color: #888;
+    padding: 0;
+}
+.popup__close:hover, #close-popup-button:hover {
+    color: #000;
+}
+
+.popup__content, .pacf-modal .popup__content {
+    padding: 1em;
+}
+
+#pacf-img-plot {
+    display: none;
+    max-width: 100%;
+    max-height: 300px;
+    margin: auto;
+}
+
+.popup__response, #response-pacf {
+    margin-top: 1em;
+    color: #b00;
+    font-size: 1.1em;
+    text-align: center;
 }
 
 .popup-menu.active { 
@@ -250,7 +301,7 @@ ul.series-list li span {
 }
 
 #view-pacf-plot-button[type="button"]{
-    padding: 8px;
+    padding: 9px;
     background-color: #205988;
     color: white;
     font-weight: bold;
@@ -258,9 +309,8 @@ ul.series-list li span {
     border-radius: 2px;
     cursor: pointer;
     transition: background-color 0.2s ease; 
-    width: 166px;
-    justify-content: center;  
-
+    width: 150px;
+    justify-content: center;
 }
 
 #view-pacf-plot-button[type="button"]:hover {
@@ -268,6 +318,8 @@ ul.series-list li span {
 }
 
 .pacf-view-button-wrapper{
-    margin-left: 16px;
-    margin-top: -15px;
+    display: flex;
+    justify-content: center;
+    margin-left: 9;
+    margin-top: -10px;
 }

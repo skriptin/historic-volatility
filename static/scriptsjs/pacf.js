@@ -41,7 +41,7 @@ export function initalizePacfListeners() {
         pacfModal.classList.add('active');
         if (lastPacfPlotUrl) {
             pacfImgPlot.src = lastPacfPlotUrl;
-            pacfImgPlot.style.display = '';
+            pacfImgPlot.style.display = 'block';
             responsePacf.textContent = '';
         } else {
             pacfImgPlot.src = '';

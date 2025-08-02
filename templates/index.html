@@ -147,31 +147,17 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
         <!-- PACF Plot Popup (positioned absolutely next to the View button) -->
-        <div id="pacf-modal-popup" class="popup pacf-modal" style="display:none; position:absolute; min-width:320px; max-width:90vw; z-index:9999;">
-            <div class="popup__header" style="display:flex;justify-content:space-between;align-items:center;padding:0.5em 1em;border-bottom:1px solid #ddd;">
-                <h4 class="popup__title" style="margin:0;">PACF Plot</h4>
+        <div id="pacf-modal-popup" class="popup pacf-modal">
+            <div class="popup__header">
+                <h4 class="popup__title">PACF Plot</h4>
                 <button type="button" class="popup__close" id="close-pacf-modal">x</button>
             </div>
-            <div class="popup__content" style="padding:1em;">
-                <img id="pacf-img-plot" src="" alt="PACF Plot will appear here" style="display:none;max-width:100%;max-height:300px;margin:auto;" />
-                <div id="response-pacf" class="popup__response" style="margin-top:1em;color:#b00;font-size:1.1em;text-align:center;"></div>
+            <div class="popup__content">
+                <img id="pacf-img-plot" src="" alt="PACF Plot will appear here" />
+                <div id="response-pacf" class="popup__response"></div>
             </div>
         </div>
-=======
-            <!-- PACF Plot Modal Popup -->
-            <div id="pacf-modal-popup" class="modal popup-menu pacf-modal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50vw; height: 50vh; max-width: 900px; max-height: 700px; background: #fff; box-shadow: 0 4px 32px rgba(0,0,0,0.25); border-radius: 12px; z-index: 10000;">
-                <div class="modal-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5em 1em; border-bottom: 1px solid #ddd;">
-                    <h4 style="margin: 0;">PACF Plot</h4>
-                    <button type="button" class="close-popup-button" id="close-pacf-modal" style="font-size: 1.5em; background: none; border: none; cursor: pointer;">x</button>
-                </div>
-                <div class="modal-popup-content" style="height: calc(100% - 48px); display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                    <img id="pacf-img-plot" src="" alt="PACF Plot will appear here" style="width: 95%; height: 95%; object-fit: contain; display: block; background: #f8f8f8; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);" />
-                    <div id="response-pacf" class="data-output-area" style="margin-top: 1em; color: #b00; font-size: 1.1em;"></div>
-                </div>
-            </div>
->>>>>>> c1bcbe4b279c702f7de24a753c14f2928fff6289
 
 
 
@@ -188,18 +174,7 @@
                 <button type="button" class="close-popup-button" data-target-popup="info-popup">x</button>
             </div>
 
-            <!-- PACF Plot Popup (positioned absolutely next to the View button) -->
-            <div id="pacf-modal-popup" class="popup pacf-modal" style="display:none; position:absolute; min-width:320px; max-width:90vw; z-index:9999;">
-                <div class="popup__header" style="display:flex;justify-content:space-between;align-items:center;padding:0.5em 1em;border-bottom:1px solid #ddd;">
-                    <h4 class="popup__title" style="margin:0;">PACF Plot</h4>
-                    <button type="button" class="popup__close" id="close-pacf-modal">x</button>
-                </div>
-                <div class="popup__content" style="padding:1em;">
-                    <img id="pacf-img-plot" src="" alt="PACF Plot will appear here" style="display:none;max-width:100%;max-height:300px;margin:auto;" />
-                    <div id="response-pacf" class="popup__response" style="margin-top:1em;color:#b00;font-size:1.1em;text-align:center;"></div>
-                </div>
-            </div>
-
+            
         </main>
 
 
