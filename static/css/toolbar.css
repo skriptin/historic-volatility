@@ -2,7 +2,7 @@
 
 /* === Common Toolbar Styling === */
 .chart-toolbar {
-    flex: 0 0 120px; 
+    flex: 0 0 240px; 
     padding: 8px;
     box-sizing: border-box;
     background-color: #ffffff; 
@@ -17,38 +17,19 @@
     overflow-y: auto;       
 }
 
-.chart-toolbar-button-wrapper{
-    flex: 0 0 120px; 
-    padding: 8px;
-    box-sizing: border-box;
-    background-color: #ffffff; 
-    border: 1px solid #d8dde2; 
-    border-radius: 6px;      
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-    
-    display: flex;
-    flex-direction: column; 
-    align-items: center;    
-    gap: 8px;               
-    overflow-y: auto;     
-}
 
-.chart-toolbar p { 
-    font-size: 1.0em;
-    color: #666;
-    text-align: center;
-    margin: 5px 0;
-}
 
-/* === Common Styling for All Buttons Within .chart-toolbar === */
+
+
+
 .toolbar-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #a4b0b9; /* Default grey background */
-    color: #000000;            /* Default black text */
-    border: 1px solid #888484;  /* Default border */
-    border-radius: 4px;        /* Slightly rounded corners for buttons */
+    background-color: #a4b0b9; 
+    color: #000000;            
+    border: 1px solid #888484;  
+    border-radius: 4px;        
     padding: 8px 12px;
     font-size: 0.9em;
     font-weight: bold;
@@ -63,8 +44,8 @@
 }
 
 .toolbar-button:hover {
-    background-color: #8a96a0; /* Darken background on hover */
-    border-color: #707070;     /* Darken border on hover */
+    background-color: #8a96a0; 
+    border-color: #707070;     
     color: #000000;
 }
 

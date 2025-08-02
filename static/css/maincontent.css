@@ -18,13 +18,10 @@
 }
 
 
-/* === Chart Display Area (Center Column) === */
 .chart-display-area {
     flex-grow: 1; 
     box-sizing: border-box;
     display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #ffffff; 
     border: 1px solid #d8dde2; 
     border-radius: 6px;     
@@ -36,4 +33,11 @@
     display: block;
     max-width: 100%; 
     max-height: 100%; 
+}
+
+.chart-toolbar-button-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 999;
 }

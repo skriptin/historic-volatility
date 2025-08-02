@@ -42,18 +42,19 @@
             <div class="chart-and-toolbars-wrapper">
                 <!-- Left Toolbar -->
                 <aside class="chart-toolbar chart-left-toolbar">
-                    <div class="chart-toolbar buttons-wrapper">
-                        <button type="button" class="toolbar-button studies" id="open-studies-tab" title="view studies"> Studies</button>
-                        <button type="button" class="toolbar-button series" id="open-series-tab" title="view series"> Series</button>
-                        <button type="button" class="toolbar-button pacf" id="calculate-pacf" title="calculate-pacf"> PACF</button>
-                        <button type="button" class="toolbar-button model_builder" id="model-builder-view" title="build models"> Model Builder</button>
-                    </div>
+
                 </aside>
 
                 <!-- Chart Display Area -->
                 <div class="chart-display-area">
                     <canvas id="vol_chart" aria-label="Historic Volatility Chart"></canvas>
-                    <!-- Clear Chart button can be positioned absolutely within this later -->
+
+                    <div class="chart-toolbar-button-wrapper">
+                        <button type="button" class="toolbar-button studies" id="open-studies-tab" title="view studies"> Studies</button>
+                        <button type="button" class="toolbar-button series" id="open-series-tab" title="view series"> Series</button>
+                        <button type="button" class="toolbar-button pacf" id="calculate-pacf" title="calculate-pacf"> PACF</button>
+                        <button type="button" class="toolbar-button model_builder" id="model-builder-view" title="build models"> Model Builder</button>
+                    </div>
                 </div>
             </div>
 

@@ -16,14 +16,23 @@ function initializeChart() {
         options: {
             responsive: true,
             animaion: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
+                }
+            },
             scales: {
                 x: {
                     title: {
                         display: true,
                         text: 'Date',
                         font: {
-                            size: 28
+                            size: 14,
+                            weight: 'bold',
                         }
                     }
                 },
@@ -32,8 +41,8 @@ function initializeChart() {
                         display: true,
                         text: 'Volatility', // Label for y-axis
                         font: {
-                            size: 28
-                        }
+                            size: 14,
+                            weight: 'bold',                        }
                     },
                     beginAtZero: true, // Start y-axis from 0
                     min: 0,
@@ -78,8 +87,6 @@ function initializeChart() {
                         }
                     }
                 }
-    // --- END ZOOM PLUGIN CONFIGURATION ---
-
             },
             
 
