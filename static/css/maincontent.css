@@ -37,7 +37,9 @@
 
 .chart-toolbar-button-wrapper {
     position: absolute;
+    display: grid;
     top: 16px;
     right: 16px;
     z-index: 999;
+    gap: 3px;
 }
