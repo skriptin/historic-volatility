@@ -8,12 +8,10 @@ import { initalizePacfListeners } from './pacf.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Getting buttons and their popup mappings and inititalization functions
     const buttonPopupMappings = [
-        { buttonId: 'toggle-consol-window', popupId: 'consol-popup' , initFunctions: [] },
         { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunctions: [initializeSmaForm, initalizeEwmaForm] }, 
         { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunctions: [initalizeSeriesList, initializeVolatilityIndicesSubmenu] },
         { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    , initFunctions: [initalizePacfListeners] }, 
-        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [] },
-        { buttonId: 'right-toolbox-info-tab', popupId: 'info-popup' , initFunctions: [] }
+        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [] }
     ];
 
     function closeAllActivePopups(exceptionPopupId = null) {
