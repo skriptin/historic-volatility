@@ -27,7 +27,7 @@ def ewma_vol(alpha: float, daily_rets: dict) -> dict:
 
     for key in ewma_volatility:
         value = ewma_volatility[key]
-        value = ((value * 252 ) ** 0.5) * 100
+        value = (value * (252  ** 0.5) * 100)
         ewma_volatility[key] = value
 
 
