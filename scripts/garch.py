@@ -8,6 +8,7 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf
 import pandas as pd
 import numpy as np
 import io
+import matplotlib.dates as mdates
 
 
 def get_pacf(returns: dict, alpha: float, n_lags: int):
@@ -43,12 +44,12 @@ def garch_testing():
     prices = rawdata_df['Close'].to_numpy()
     log_returns = np.diff(np.log(prices)) * np.sqrt(252) * 100
 
-    # fig, ax = plt.subplots()
-    # plot_pacf(log_returns**2, ax=ax, lags=40, alpha=0.05)
-    # plt.show()
+    fig, ax = plt.subplots()
+    plot_pacf(log_returns**2, ax=ax, lags=1500, alpha=0.05)
+    plt.show()
 
  
-
+    returns_dict = dict(zip(dates[1:], log_returns))
     garch_fit(returns_dict, p=2, q=2, alpha=0.05)
 
 def garch_fit(returns: dict, p: int, q: int, alpha: float):
@@ -70,18 +71,36 @@ def garch_fit(returns: dict, p: int, q: int, alpha: float):
     garch_vol = garch_model.conditional_volatility
 
     plt.figure(figsize=(12, 6))
-    plt.plot(returns_keys, np.abs(returns_values), label='Annualized-log Returns')
+    plt.plot(returns_keys, returns_values, label='Annualized-log Returns')
     plt.plot(returns_keys, garch_vol, label='GARCH Conditional Volatility')
     plt.xlabel('Date')
     plt.ylabel('Value')
     plt.title('Stock Returns vs GARCH Model Volatility')
     plt.legend()
-    plt.xticks(rotation=45)
+
+    ax = plt.gca()
+    locator = mdates.AutoDateLocator()
+    formatter = mdates.AutoDateFormatter(locator)
+    ax.xaxis.set_major_locator(locator)
+    ax.xaxis.set_major_formatter(formatter)
+
     plt.tight_layout()
     plt.show()
 
- 
-
+def predict():
+    """
+    Predict future volatility using the fitted GARCH model.
+    :return: Predicted volatility.
+    """
+    pass
+def verify_rolling_forecast():
+    """
+    Verify the rolling forecast of the GARCH model.
+    :return: None
+    """
+    pass
+def return_garch_volatility():
+    pass
 
 
 if __name__ == "__main__":
