@@ -4,11 +4,16 @@ import matplotlib
 import matplotlib.pyplot as plt
 import yfinance as yf
 from arch import arch_model
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf, acf
+from statsmodels.stats.diagnostic import acorr_ljungbox
 import pandas as pd
 import numpy as np
 import io
 import matplotlib.dates as mdates
+
+
+ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
+ANUALIZATION_FACTOR_SQ = 15.87
 
 
 def get_pacf(returns: dict, alpha: float, n_lags: int):
@@ -36,56 +41,78 @@ def get_pacf_imgPlot(returns, nlags, alpha):
 
 def garch_testing():
 
+
     rawdata_df = pd.read_csv('rawdata.csv')
     rawdata_df = rawdata_df[['Date', 'Close']]
     rawdata_df['Close'] = pd.to_numeric(rawdata_df['Close'], errors='coerce')
     rawdata_df = rawdata_df.dropna(subset=['Close'])
     dates = rawdata_df['Date'].to_numpy()
     prices = rawdata_df['Close'].to_numpy()
-    log_returns = np.diff(np.log(prices)) * np.sqrt(252) * 100
+    log_returns = (np.diff(np.log(prices)))
+    print(log_returns.mean(), np.median(log_returns), log_returns.std())
 
-    fig, ax = plt.subplots()
-    plot_pacf(log_returns**2, ax=ax, lags=1500, alpha=0.05)
-    plt.show()
+    # plt.figure(figsize=(10, 6))
+    # plt.hist(log_returns, bins=1000, edgecolor='black')
+    # plt.title('Histogram of Log Returns')
+    # plt.xlabel('Log Return')
+    # plt.ylabel('Frequency')
+    # plt.grid(True)
+    # plt.tight_layout()
+    # plt.show()
 
- 
+
+    # ljung_box_results = acorr_ljungbox(log_returns, lags=[2,4,6,8,10,12,14,1000], return_df=True)
+    # print(ljung_box_results)
+    # acf_values = acf(log_returns, nlags=30)
+    # for lag, val in enumerate(acf_values):
+    #     print(f"Lag {lag}: {val}")
+
+    # fig, ax = plt.subplots()
+    # plot_pacf(log_returns**2, ax=ax, lags=30, alpha=0.05)
+    # plt.show()
     returns_dict = dict(zip(dates[1:], log_returns))
-    garch_fit(returns_dict, p=2, q=2, alpha=0.05)
+    garch_fit(returns_dict, p=1, q=1, alpha=0.05, dist='skewt', lags=1)
 
-def garch_fit(returns: dict, p: int, q: int, alpha: float):
+def garch_fit(returns: dict, p: int, q: int, mean: str = 'Constant',
+              model: str = 'GARCH', lags: int = 0, o: int = 0,
+              distribution: str = 'skewt') -> object:
     """
-    Fit a GARCH model to the returns data.
+    Fit a GARCH-family model to the returns data.
+    
     :param returns: Dictionary of returns with dates as keys.
-    :param p: Order of the GARCH model.
-    :param q: Order of the ARCH model.
-    :param alpha: Significance level for the confidence intervals.
-    :return: Fitted GARCH model.
+    :param p: Order of the GARCH component (volatility lags).
+    :param q: Order of the ARCH component (shock lags).
+    :param mean: Mean model ('Zero', 'Constant', 'AR', etc.).
+    :param model: Volatility model ('GARCH', 'ARCH', 'EGARCH', 'FIGARCH', etc.).
+    :param lags: Number of lags for the AR mean model.
+    :param o: Asymmetric term order (used in EGARCH/GJR-GARCH).
+    :param distribution: Error distribution ('normal', 't', 'skewt', etc.).
+    :return: Fitted GARCH model result object.
     """
-    returns_values = np.array(list(returns.values()))
+    returns_values = np.array(list(returns.values()))*100
     returns_keys = np.array(list(returns.keys()))
 
-    # Fit the GARCH model
-    model = arch_model(returns_values, vol='Garch', p=p, q=q)
-    garch_model = model.fit()
+    am = arch_model(
+        returns_values,
+        vol=model,
+        p=p,
+        o=o,
+        q=q,
+        mean=mean,
+        lags=lags,
+        dist=distribution
+    )
+    
+    result = am.fit(disp='off')
+    return result
+
+
+
+    am = model.fit(disp='off')
     print(garch_model.summary())
     garch_vol = garch_model.conditional_volatility
 
-    plt.figure(figsize=(12, 6))
-    plt.plot(returns_keys, returns_values, label='Annualized-log Returns')
-    plt.plot(returns_keys, garch_vol, label='GARCH Conditional Volatility')
-    plt.xlabel('Date')
-    plt.ylabel('Value')
-    plt.title('Stock Returns vs GARCH Model Volatility')
-    plt.legend()
 
-    ax = plt.gca()
-    locator = mdates.AutoDateLocator()
-    formatter = mdates.AutoDateFormatter(locator)
-    ax.xaxis.set_major_locator(locator)
-    ax.xaxis.set_major_formatter(formatter)
-
-    plt.tight_layout()
-    plt.show()
 
 def predict():
     """

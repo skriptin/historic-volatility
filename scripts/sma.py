@@ -29,7 +29,8 @@ def sma_vol(window_length: int, daily_rets) -> dict:
 
     for key in windowed_volatility:
         value = windowed_volatility[key]
-        value = ((value/window_length * 252 ** 0.5)) * 100
+        value = math.sqrt(value/window_length)
+        value = value * (252 ** 0.5) * 100  # annualize 
         windowed_volatility[key] = value
                 
     return windowed_volatility

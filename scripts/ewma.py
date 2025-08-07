@@ -24,10 +24,12 @@ def ewma_vol(alpha: float, daily_rets: dict) -> dict:
     for index in range (1,len(dates)):
         ewma_volatility[dates[index]] = ((1 - alpha) * last_var) + (alpha *  (returns[index] ** 2))
         last_var = ewma_volatility[dates[index]]
+        print("EWMA Volatility: ", ewma_volatility[dates[index]])
 
     for key in ewma_volatility:
         value = ewma_volatility[key]
-        value = (value * (252  ** 0.5) * 100)
+        value = math.sqrt(value)  # get standard deviation
+        value = value * (252 ** 0.5) * 100  # annualize 
         ewma_volatility[key] = value
 
 
