@@ -71,11 +71,12 @@ def garch_testing():
     # plot_pacf(log_returns**2, ax=ax, lags=30, alpha=0.05)
     # plt.show()
     returns_dict = dict(zip(dates[1:], log_returns))
-    garch_fit(returns_dict, p=1, q=1, alpha=0.05, dist='skewt', lags=1)
+    garch_fit(returns_dict, p=1, q=1, dist='skewt', model="GARCH")
 
 def garch_fit(returns: dict, p: int, q: int, mean: str = 'Constant',
               model: str = 'GARCH', lags: int = 0, o: int = 0,
-              distribution: str = 'skewt') -> object:
+              dist: str = 'skewt',
+              model_name: str = "my_garch_model") -> object:
     """
     Fit a GARCH-family model to the returns data.
     
@@ -100,17 +101,12 @@ def garch_fit(returns: dict, p: int, q: int, mean: str = 'Constant',
         q=q,
         mean=mean,
         lags=lags,
-        dist=distribution
+        dist=dist
     )
     
-    result = am.fit(disp='off')
-    return result
-
-
-
-    am = model.fit(disp='off')
-    print(garch_model.summary())
-    garch_vol = garch_model.conditional_volatility
+    am.fit(disp='off')
+    print(am.summary())
+ 
 
 
 
