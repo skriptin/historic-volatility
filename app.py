@@ -1,5 +1,12 @@
 from flask import Flask, render_template, request, jsonify, send_file
 from scripts import fetch, sma, ewma, garch
+import numpy as np
+import threading
+
+model_store = {}
+model_store_lock = threading.Lock()
+
+
 
 app = Flask(__name__)
 
@@ -110,6 +117,49 @@ def get_index():
         return jsonify({"error": response["error"]}), 400
 
     return jsonify(response), 200
+
+@app.route("/fit_garch", methods=["POST"])
+def fit_garch():
+    print("Routing to script /fit_garch")
+    request_data = request.get_json()
+
+    if not request_data:
+        print("No JSON recieved for garch")
+        return jsonify({"error": "Invalid request: No JSON recieved"}), 400
+
+    try:
+        returns = dict(request_data.get('stock_returns'))  
+        p = int(request_data.get('p', 1))
+        q = int(request_data.get('q', 1))
+        mean = str(request_data.get('mean', 'Constant'))
+        model = str(request_data.get('model', 'GARCH'))
+        lags = int(request_data.get('lags', 0))
+        o = int(request_data.get('o', 0))
+        distribution = request_data.get('distribution', 'normal')
+        model_name = request_data.get('model_name', 'my_garch_model')
+    except (ValueError, TypeError) as e:
+        print(f"Error parsing request data: {e}")
+        return jsonify({"error": "Invalid request data"}), 400
+
+    if not returns:
+        return jsonify({"error": "Missing or invalid 'stock_returns' in request"}), 400
+
+    result = garch_fit(
+        returns=returns,
+        p=p,
+        q=q,
+        mean=mean,
+        model=model,
+        lags=lags,
+        o=o,
+        distribution=distribution
+        model_name=model_name
+    )
+    with model_store_lock:
+        model_store[model_name] = result
+
+    return jsonify({"message": "GARCH model fitted successfully", "model_summary": result.summary()}), 200
+    
 
 
 if __name__ == '__main__':
