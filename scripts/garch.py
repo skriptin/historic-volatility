@@ -51,25 +51,7 @@ def garch_testing():
     log_returns = (np.diff(np.log(prices)))
     print(log_returns.mean(), np.median(log_returns), log_returns.std())
 
-    # plt.figure(figsize=(10, 6))
-    # plt.hist(log_returns, bins=1000, edgecolor='black')
-    # plt.title('Histogram of Log Returns')
-    # plt.xlabel('Log Return')
-    # plt.ylabel('Frequency')
-    # plt.grid(True)
-    # plt.tight_layout()
-    # plt.show()
 
-
-    # ljung_box_results = acorr_ljungbox(log_returns, lags=[2,4,6,8,10,12,14,1000], return_df=True)
-    # print(ljung_box_results)
-    # acf_values = acf(log_returns, nlags=30)
-    # for lag, val in enumerate(acf_values):
-    #     print(f"Lag {lag}: {val}")
-
-    # fig, ax = plt.subplots()
-    # plot_pacf(log_returns**2, ax=ax, lags=30, alpha=0.05)
-    # plt.show()
     returns_dict = dict(zip(dates[1:], log_returns))
     garch_fit(returns_dict, p=1, q=1, dist='skewt', model="GARCH")
 
@@ -104,8 +86,10 @@ def garch_fit(returns: dict, p: int, q: int, mean: str = 'Constant',
         dist=dist
     )
     
-    am.fit(disp='off')
-    print(am.summary())
+    result = am.fit(disp='off')  
+    print(result.summary())
+    print(result.conditional_volatility)      
+    return result
  
 
 
