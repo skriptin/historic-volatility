@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/maincontent.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/buttons.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/modelbuilder.css') }}">
     </head>
 
     <body>
@@ -153,13 +154,26 @@
 
         <div id="model-builder-popup" class="popup-menu model-builder">
 
-            <div id="model-builder-forum-wrapper" class="popup-content model-builder">
-                <forum> 
-                    <h2>Model Builder Forum</h2>
-                    
-                </forum>
+ <div id="model-builder-forum-wrapper" class="popup-content model-builder">
+        <forum>
+            <h2 id="model-header">Select Model</h2>
 
-            </div>  
+            <!-- Dropdown -->
+            <div class="dropdown">
+                <button id="dropdown-btn">Select Model ▼</button>
+                <div id="dropdown-list" class="dropdown-content">
+                    <div class="dropdown-item" data-model="GARCH">GARCH</div>
+                </div>
+            </div>
+
+            <!-- GARCH form (hidden by default) -->
+            <div id="garch-form" style="display: none; margin-top: 20px;">
+                <h3>GARCH Model Settings</h3>
+                <p>Form for GARCH model goes here...</p>
+            </div>
+        </forum>
+
+    </div>            
 
         </div>
 
@@ -181,6 +195,8 @@
         <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/ui_interactions.js')}}"></script>
         <script type="module" src="{{ url_for('static', filename='scriptsjs/series.js')}}"></script>
+        <script type="module" src="{{ url_for('static', filename='scriptsjs/modelbuilder.js')}}"></script>
+
 
     </body>
 </html>

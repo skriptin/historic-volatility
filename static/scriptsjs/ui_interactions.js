@@ -3,6 +3,7 @@ import { initializeSmaForm } from './getsma.js';
 import { initalizeEwmaForm } from './getewma.js';
 import { initalizeSeriesList, initializeVolatilityIndicesSubmenu } from './series.js';
 import { initalizePacfListeners } from './pacf.js';
+import { initializeModelBuilder } from './modelbuilder.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {

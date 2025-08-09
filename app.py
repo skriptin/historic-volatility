@@ -152,7 +152,7 @@ def fit_garch():
         model=model,
         lags=lags,
         o=o,
-        distribution=distribution
+        distribution=distribution,
         model_name=model_name
     )
     with model_store_lock:

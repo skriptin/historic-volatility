@@ -53,7 +53,7 @@ def garch_testing():
 
 
     returns_dict = dict(zip(dates[1:], log_returns))
-    garch_fit(returns_dict, p=1, q=1, dist='skewt', model="GARCH")
+    garch_fit(returns_dict, p=1, q=1, dist='skewt', model="HARCH", mean="HARX", lags=[5])
 
 def garch_fit(returns: dict, p: int, q: int, mean: str = 'Constant',
               model: str = 'GARCH', lags: int = 0, o: int = 0,
