@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { buttonId: 'open-studies-tab',     popupId: 'studies-popup',  initFunctions: [initializeSmaForm, initalizeEwmaForm] }, 
         { buttonId: 'open-series-tab',      popupId: 'series-popup'  , initFunctions: [initalizeSeriesList, initializeVolatilityIndicesSubmenu] },
         { buttonId: 'calculate-pacf',       popupId: 'pacf-popup'    , initFunctions: [initalizePacfListeners] }, 
-        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [] }
+        { buttonId: 'model-builder-view',   popupId: 'model-builder-popup' , initFunctions: [initializeModelBuilder] }
     ];
 
     function closeAllActivePopups(exceptionPopupId = null) {

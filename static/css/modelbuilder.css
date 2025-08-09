@@ -1,0 +1,59 @@
+#model-builder-popup{
+  width: 400px !important;
+  height: 600px !important;
+  overflow-x : hidden !important;
+
+}
+
+
+#model-builder-popup-wrapper {
+  position: relative; 
+}
+
+.model-builder-header {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 3px solid #0a0404;
+}
+
+/* Dropdown button styling */
+.dropdown-btn {
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 4px 8px;
+}
+
+/* The dropdown list itself as a self-contained box */
+#dropdown-list {
+  position: absolute;
+  top: 100%;             
+  left: 50%;             
+  transform: translateX(-50%);
+  display: none;        
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  min-width: 160px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+#dropdown-list .dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#dropdown-list .dropdown-item:hover {
+  background-color: #f0f0f0;
+}

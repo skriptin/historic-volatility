@@ -1,40 +1,54 @@
-
-
-export function initializeModelBuilder() { 
+// modelbuilder.js
+// Initializes the Model Builder dropdown and form toggling
+export function initializeModelBuilder() {
     const dropdownBtn = document.getElementById('dropdown-btn');
     const dropdownList = document.getElementById('dropdown-list');
     const modelHeader = document.getElementById('model-header');
-    const garchForm = document.getElementById('garch-form');
-    console.log("Initializing Model Builder");
-    if (!dropdownBtn || !dropdownList || !modelHeader || !garchForm) {
-        console.warn("Failed to fetch model builder elements");
+    if (!dropdownBtn || !dropdownList || !modelHeader) {
+        console.warn('Model Builder: required elements not found');
         return;
     }
 
-    dropdownBtn.addEventListener('click', () => {
+    // Define available models
+    const models = ['GARCH', 'EGARCH', 'TARCH'];
+
+    // Populate dropdown list
+    dropdownList.innerHTML = '';
+    models.forEach(name => {
+        const li = document.createElement('li');
+        li.classList.add('dropdown-item');
+        li.textContent = name;
+        li.dataset.model = name;
+        dropdownList.appendChild(li);
+    });
+
+    // Toggle dropdown visibility
+    dropdownBtn.addEventListener('click', event => {
+        event.stopPropagation();
         dropdownList.style.display =
             dropdownList.style.display === 'block' ? 'none' : 'block';
     });
 
-    document.querySelectorAll('.dropdown-item').forEach(item => {
+    // Handle selection
+    dropdownList.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', () => {
-            const modelName = item.getAttribute('data-model');
-            modelHeader.textContent = modelName + " Model";
-            dropdownBtn.textContent = modelName + " ▼";
+            const selected = item.dataset.model;
+            modelHeader.textContent = `${selected} Model`;
+            dropdownBtn.textContent = `${selected} ▼`;
             dropdownList.style.display = 'none';
 
-            // Show GARCH form if GARCH is selected
-            if (modelName === "GARCH") {
-                garchForm.style.display = 'block';
-            } else {
-                garchForm.style.display = 'none';
-            }
+            // Show/hide corresponding form
+            models.forEach(m => {
+            const form = document.getElementById(`${m.toLowerCase()}-form`);
+            if (form) form.style.display = (m === selected) ? 'block' : 'none';
+            });
         });
     });
 
-    // Close dropdown if clicked outside
-    window.addEventListener('click', (e) => {
-        if (!e.target.matches('#dropdown-btn')) {
+    // Close dropdown if clicking outside
+    document.addEventListener('click', event => {
+        if (!dropdownBtn.contains(event.target) && 
+            !dropdownList.contains(event.target)) {
             dropdownList.style.display = 'none';
         }
     });

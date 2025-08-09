@@ -153,49 +153,68 @@
 
 
         <div id="model-builder-popup" class="popup-menu model-builder">
-
- <div id="model-builder-forum-wrapper" class="popup-content model-builder">
-        <forum>
-            <h2 id="model-header">Select Model</h2>
-
-            <!-- Dropdown -->
-            <div class="dropdown">
-                <button id="dropdown-btn">Select Model ▼</button>
-                <div id="dropdown-list" class="dropdown-content">
-                    <div class="dropdown-item" data-model="GARCH">GARCH</div>
+            <div id="model-builder-popup-wrapper">
+                <div id="model-builder-header" class="model-builder-header">
+                    <h2 id="model-header">Model Builder</h2>
+                    <button id="dropdown-btn" class="dropdown-btn">▼</button>
                 </div>
-            </div>
+                    <ul id="dropdown-list" class="dropdown-list"></ul>
+                <!-- All model‐forms start hidden -->
+                <div id="garch-form" class="model-form" style="display: none;">
+                <h2>GARCH Model</h2>
+                <form>
+                    <!-- shared fields -->
+                    <label for="p">p:</label>
+                    <input type="number" id="p" name="p" value="1" required>
+                    <label for="q">q:</label>
+                    <input type="number" id="q" name="q" value="1" required>
+                    <!-- any GARCH-specific inputs here -->
+                    <button type="submit">Fit GARCH</button>
+                </form>
+                </div>
 
-            <!-- GARCH form (hidden by default) -->
-            <div id="garch-form" style="display: none; margin-top: 20px;">
-                <h3>GARCH Model Settings</h3>
-                <p>Form for GARCH model goes here...</p>
-            </div>
-        </forum>
+                <div id="egarch-form" class="model-form" style="display: none;">
+                <h2>EGARCH Model</h2>
+                <form>
+                    <!-- you can re-use the same p/q inputs -->
+                    <label for="p">p:</label>
+                    <input type="number" id="p" name="p" value="1" required>
+                    <label for="q">q:</label>
+                    <input type="number" id="q" name="q" value="1" required>
+                    <!-- EGARCH-only fields -->
+                    <button type="submit">Fit EGARCH</button>
+                </form>
+                </div>
 
-    </div>            
+                <div id="tarch-form" class="model-form" style="display: none;">
+                <h2>TARCH Model</h2>
+                <form>
+                    <!-- shared or unique inputs -->
+                    <button type="submit">Fit TARCH</button>
+                </form>
+                </div>
 
         </div>
 
 
             
-        </main>
+    </main>
 
 
-        <!--Script area, all javascrips imported here for neatness-->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-colors@0.2.0"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+    <!--Script area, all javascrips imported here for neatness-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-colors@0.2.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
 
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/vol_chart.js') }}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/ui_interactions.js')}}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/series.js')}}"></script>
-        <script type="module" src="{{ url_for('static', filename='scriptsjs/modelbuilder.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/vol_chart.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getstockreturns.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getsma.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/getewma.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/pacf.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/ui_interactions.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/series.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/modelbuilder.js')}}"></script>
 
 
     </body>
