@@ -8,6 +8,12 @@
 
 #model-builder-popup-wrapper {
   position: relative; 
+  overflow: visible !important; /* allow dropdown to escape */
+}
+
+/* ensure the outer popup also allows overflow */
+#model-builder-popup, .popup-menu.model-builder {
+  overflow: visible !important;
 }
 
 .model-builder-header {
@@ -31,17 +37,13 @@
 /* The dropdown list itself as a self-contained box */
 #dropdown-list {
   position: absolute;
-  top: 100%;             
-  left: 50%;             
-  transform: translateX(-50%);
-  display: none;        
+  display: none;         
   background: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
   border-radius: 4px;
   list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
+  padding: 4px 0;
   min-width: 160px;
   max-height: 240px;
   overflow-y: auto;
@@ -56,4 +58,18 @@
 
 #dropdown-list .dropdown-item:hover {
   background-color: #f0f0f0;
+}
+
+.model-form {
+  display: none;            
+  margin: 16px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.model-form input {
+  margin-bottom: 8px;
 }

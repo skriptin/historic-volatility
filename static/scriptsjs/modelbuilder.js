@@ -25,6 +25,13 @@ export function initializeModelBuilder() {
     // Toggle dropdown visibility
     dropdownBtn.addEventListener('click', event => {
         event.stopPropagation();
+        // position dropdown relative to button
+        const rect = dropdownBtn.getBoundingClientRect();
+        dropdownList.style.position = 'fixed';
+        dropdownList.style.top = `${rect.bottom + window.scrollY}px`;
+        dropdownList.style.left = `${rect.left + window.scrollX}px`;
+        dropdownList.style.zIndex = '1000';
+        // toggle visibility
         dropdownList.style.display =
             dropdownList.style.display === 'block' ? 'none' : 'block';
     });
