@@ -25,7 +25,6 @@
   border-bottom: 3px solid #0a0404;
 }
 
-/* Dropdown button styling */
 .dropdown-btn {
   cursor: pointer;
   background: #fff;
@@ -34,7 +33,6 @@
   padding: 4px 8px;
 }
 
-/* The dropdown list itself as a self-contained box */
 #dropdown-list {
   position: absolute;
   display: none;         
@@ -61,7 +59,8 @@
 }
 
 .model-form {
-  display: none;            
+  display: flex;
+  flex-direction: column;            
   margin: 16px;
   padding: 12px;
   border: 1px solid #ccc;
@@ -71,5 +70,50 @@
 }
 
 .model-form input {
-  margin-bottom: 8px;
+  margin-bottom: 0;
+}
+
+.scroll-box {
+  width: 100%;
+  max-height: 80px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+}
+/*For some reason there was a large gap between elements on the same line, I stopped trying to fix rather I hard coded sizes*/
+.modal-form{
+  gap: 5px;
+}
+
+.model-form .first-row{
+  display: flex;
+
+}
+.model-form .second-row {
+  display: inline;
+}
+#lags{
+  max-width: 80px;
+  width: 80px;
+}
+.model-form .third-row{
+  display: inline;
+}
+.model-form .fifth-row{
+  display: inline;
+}
+#p, #q, #q, #lags_vol{
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
+}
+
+/* Sixth row: submit button on new line */
+.model-form .sixth-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 8px;
 }

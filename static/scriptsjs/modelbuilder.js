@@ -12,7 +12,7 @@ export function initializeModelBuilder() {
     }
 
     // Define available models
-    const models = ['GARCH', 'EGARCH', 'TARCH'];
+    const models = ['GARCH', 'EGARCH', 'HARCH'];
 
     // Populate dropdown list
     dropdownList.innerHTML = '';
