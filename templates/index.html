@@ -161,14 +161,38 @@
                     <ul id="dropdown-list" class="dropdown-list"></ul>
                 <!-- All model‐forms start hidden -->
                 <div id="garch-form" class="model-form" style="display: none;">
-                <h2>GARCH Model</h2>
                 <form>
+
+                    <div class="scroll-box" id="dateListContainer" style="max-height: 80px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                    </div>
+                    <label for="date-list">Select Dates:</label>
+                    <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD">
+                    <button type="button" id="add-date-range-button">Add Date Range</button>
+                    <input type="hidden" name="dateRanges" id="dateRangesInput">
+
                     <!-- shared fields -->
                     <label for="p">p:</label>
                     <input type="number" id="p" name="p" value="1" required>
                     <label for="q">q:</label>
                     <input type="number" id="q" name="q" value="1" required>
-                    <!-- any GARCH-specific inputs here -->
+                    <label for="mean-model">Mean:</label>
+                    <select id="mean-model" name="mean-model">
+                        <option value="constant">Constant</option>
+                        <option value="zero">Zero</option>
+                        <option value="AR">AR</option>
+                        <option value="ARX">ARX</option>
+                        <option value="HARX">ARMA</option>
+                    </select>
+                    <label for="lags">Lags:</label>
+                    <input type="number" id="lags" name="lags" value="1" required>
+                    <select id ="distribution" name="distribution">
+                        <option value="normal">Normal</option>
+                        <option value="skewt">Skewt</option>
+                    </select>
+                    <label for="model-name" class="model-name-label">Model Name:</label>
+                    <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+
+
                     <button type="submit">Fit GARCH</button>
                 </form>
                 </div>
