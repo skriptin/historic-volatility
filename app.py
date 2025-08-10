@@ -131,10 +131,11 @@ def fit_garch():
         returns = dict(request_data.get('stock_returns'))  
         p = int(request_data.get('p', 1))
         q = int(request_data.get('q', 1))
+        o = int(request_data.get('o', 0))
+        vol_lags = list(request_data.get('vol_lags', []))
         mean = str(request_data.get('mean', 'Constant'))
         model = str(request_data.get('model', 'GARCH'))
-        lags = int(request_data.get('lags', 0))
-        o = int(request_data.get('o', 0))
+        lags = list(request_data.get('lags', []))
         distribution = request_data.get('distribution', 'normal')
         model_name = request_data.get('model_name', 'my_garch_model')
     except (ValueError, TypeError) as e:
@@ -148,10 +149,11 @@ def fit_garch():
         returns=returns,
         p=p,
         q=q,
+        o=o,
+        vol_lags=vol_lags,
         mean=mean,
         model=model,
         lags=lags,
-        o=o,
         distribution=distribution,
         model_name=model_name
     )
