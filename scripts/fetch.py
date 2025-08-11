@@ -1,9 +1,37 @@
 import yfinance as yf
 import math
 import pandas as pd 
+from datetime import datetime
 
 
 # Lots to be done here mainly with acessing a databas
+
+def query_dates(dates: list, ticker: str):
+    for i in range(len(dates)):
+        dates[i] = (
+            datetime.strptime(dates[i][0], "%Y-%m-%d"),
+            datetime.strptime(dates[i][1], "%Y-%m-%d")
+        )
+    
+    # Find min and max dates
+    all_dates = [d for tup in dates for d in tup]
+    date_min = min(all_dates)
+    date_max = max(all_dates)
+
+    # check DB if dates for ticker are in here
+
+    # if not fetch returns
+    returns = fetch_returns(ticker, date_max, date_min)
+    queried_returns = dict()
+
+    for start_date, end_date in dates:
+        for date, value in returns.items():
+            if start_date <= date <= end_date:
+                queried_returns[date] = value  
+
+
+
+    return dict(sorted(queried_returns.items()))
 
 """
 Calculates daily log returns from a dictionary of date-price pairs.

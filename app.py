@@ -139,11 +139,12 @@ def fit_garch():
         lags = request_data.get('lags', [])
         distribution = request_data.get('distribution', 'normal')
         model_name = request_data.get('model_name', 'my_garch_model')
+        ticker = request_data.get('ticker', 'SPY')
     except (ValueError, TypeError) as e:
         print(f"Error parsing request data: {e}")
         return jsonify({"error": "Invalid request data"}), 400
 
-    print(dates)
+    returns = fetch.query_dates(dates, ticker)
 
     result = garch_fit(
         returns=returns,

@@ -1,5 +1,4 @@
-// modelbuilder.js
-// Initializes the Model Builder dropdown and form toggling
+import { stock_returns } from './getstockreturns.js'
 var dateList = [];
 
 // ---- Validation functions ----
@@ -156,7 +155,8 @@ function initModelForm(formId) {
             dist: formData.get("distribution"),
             name: formData.get("model-name"),
             model: "",
-            lags_vol: []
+            lags_vol: [],
+            ticker: stock_returns.ticker
         };
         if (formId == "garch"){
             requestData.model = "garch";
