@@ -11,19 +11,36 @@ function validateLags(lagsStr) {
   return true;
 }
 
-function validateDateRanges(ranges) {
-  const earliest = new Date('1900-01-01'); earliest.setHours(0,0,0,0);
-  const today = new Date(); today.setHours(0,0,0,0);
-  for (const [start, end] of ranges) {
-    const s = new Date(start), e = new Date(end);
-    if (isNaN(s) || isNaN(e) || s < earliest || e > today || s > e) {
-      alert('Each date range must be between 1900-01-01 and today, and start ≤ end.');
-      return false;
+function validateDateRange(start, end) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(start) || !dateRegex.test(end)) {
+        alert("Dates must be in YYYY-MM-DD format.");
+        return false;
     }
-  }
-  return true;
-}
+    const startDate = new Date(start);
+    const endDate = new Date(end);
 
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        alert("One or both dates are invalid.");
+        return false;
+    }
+    const minDate = new Date("1900-01-01");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    if (startDate < minDate) {
+        alert("Start date cannot be earlier than 1900-01-01.");
+        return false;
+    }
+    if (endDate > today) {
+        alert("End date cannot be later than today.");
+        return false;
+    }
+    if (startDate >= endDate) {
+        alert("Start date must be earlier than end date.");
+        return false;
+    }
+    return true;
+}
 
 export function initializeModelBuilder() {
     const dropdownBtn = document.getElementById('dropdown-btn');
@@ -122,11 +139,12 @@ function initModelForm(formId) {
         }
 
         const [start, end] = parts;
-        // if (!isValidDate(start) || !isValidDate(end)) {
-        //     alert("Invalid date format. Use YYYY-MM-DD.");
-        //     return;
-        // }
 
+        if (!validateDateRange(start, end)) {
+            alert("Invalid date range. Please check your input.");
+            console.warn("Invalid date range:", start, end);
+            return;
+        }
         dateList.push([start, end]);
 
         const item = document.createElement('div');
