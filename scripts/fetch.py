@@ -3,6 +3,7 @@ import math
 import pandas as pd 
 
 
+# Lots to be done here mainly with acessing a databas
 
 """
 Calculates daily log returns from a dictionary of date-price pairs.
@@ -85,25 +86,39 @@ def fetch_returns(ticker, start_date, end_date):
 
     return daily_rets
 
+
+"""
+    Fetches index data from y-finance
+
+Args:
+ticker (str): Stock ticker symbol.
+start_date (str): Start date in 'YYYY-MM-DD' format.
+end_date (str): End date in 'YYYY-MM-DD' format.
+
+Returns:
+dict: A dictionary where keys are date strings and values are
+        the daily log returns, or a dictionary with an 'error' key
+        if fetching or processing fails.
+"""
 def get_index(ticker, start_date, end_date):
-    
+
     print(f"Fetching {ticker} data from Yahoo Finance")
     try:
         df = yf.download(ticker, start=start_date, end=end_date, progress=False)
         print(df)
     except Exception as e: # Catch general Exception including YFRateLimitError
-         print(f"Error fetching data for {ticker}: {e}")
-         return {"error": f"Error fetching data for {ticker}: {e}"}
+            print(f"Error fetching data for {ticker}: {e}")
+            return {"error": f"Error fetching data for {ticker}: {e}"}
 
     if df.empty:
-         print(f"No data fetched for {ticker}")
-         return {"error": f"No data found for {ticker} in the specified date range."}
+            print(f"No data fetched for {ticker}")
+            return {"error": f"No data found for {ticker} in the specified date range."}
 
     # --- Convert DataFrame to Dictionary ---
     index_dict = dict()
     df.reset_index(inplace=True)
     list_df = df.values.tolist()
-    
+
     for row in list_df:
         date = row[0]
         close_price = row[1]

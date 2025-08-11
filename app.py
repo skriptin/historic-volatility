@@ -118,32 +118,32 @@ def get_index():
 
     return jsonify(response), 200
 
-@app.route("/fit_garch", methods=["POST"])
+@app.route("/fit_model", methods=["POST"])
 def fit_garch():
-    print("Routing to script /fit_garch")
+    print("Routing to script /fit_model")
     request_data = request.get_json()
 
     if not request_data:
-        print("No JSON recieved for garch")
+        print("No JSON recieved for model")
         return jsonify({"error": "Invalid request: No JSON recieved"}), 400
 
     try:
-        returns = dict(request_data.get('stock_returns'))  
+        # Extract dates array from JSON payload
+        dates = request_data.get('dates', [])  
         p = int(request_data.get('p', 1))
         q = int(request_data.get('q', 1))
         o = int(request_data.get('o', 0))
-        vol_lags = list(request_data.get('vol_lags', []))
+        vol_lags = request_data.get('vol_lags', [])
         mean = str(request_data.get('mean', 'Constant'))
         model = str(request_data.get('model', 'GARCH'))
-        lags = list(request_data.get('lags', []))
+        lags = request_data.get('lags', [])
         distribution = request_data.get('distribution', 'normal')
         model_name = request_data.get('model_name', 'my_garch_model')
     except (ValueError, TypeError) as e:
         print(f"Error parsing request data: {e}")
         return jsonify({"error": "Invalid request data"}), 400
 
-    if not returns:
-        return jsonify({"error": "Missing or invalid 'stock_returns' in request"}), 400
+    print(dates)
 
     result = garch_fit(
         returns=returns,

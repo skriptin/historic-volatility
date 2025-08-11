@@ -55,8 +55,8 @@ def garch_testing():
     returns_dict = dict(zip(dates[1:], log_returns))
     garch_fit(returns_dict, p=1, q=1, dist='skewt', model="HARCH", mean="HARX", lags=[5])
 
-def garch_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [] mean: str = 'Constant',
-              model: str = 'GARCH', lags: list = [], o: int = 0,
+def garch_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: str = 'Constant',
+              model: str = 'GARCH', lags: list = [],
               dist: str = 'skewt',
               model_name: str = "my_garch_model") -> object:
     """

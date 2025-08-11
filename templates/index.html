@@ -160,8 +160,8 @@
                 </div>
                     <ul id="dropdown-list" class="dropdown-list"></ul>
                 <!-- All model‐forms start hidden -->
-                <div id="garch-form" class="model-form" style="display: none;">
-                    <form>
+                <div id="garch-div" class="model-form" style="display: none;">
+                    <form id="garch-form">
 
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
@@ -204,13 +204,13 @@
                         </div>
                         
                         <div class="sixth-row">
-                        <button type="submit">Fit GARCH</button>
+                        <button type="submit" id="model_builder_submit" >Fit GARCH</button>
                         </div>
                     </form>
                 </div>
 
-                <div id="egarch-form" class="model-form" style="display: none;">
-                    <form>
+                <div id="egarch-div" class="model-form" style="display: none;">
+                    <form id ="egarch-form">
 
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
@@ -254,13 +254,13 @@
                             <input type="'number" id="p" name="o" value="1" required>
                         </div>
                         <div class="sixth-row">
-                            <button type="submit">Fit GARCH</button>
+                            <button type="submit" id="model_builder_submit" >Fit GARCH</button>
                         </div>
                     </form>
                 </div>
 
-                <div id="harch-form" class="model-form" style="display: none;">
-                    <form>
+                <div id="harch-div" class="model-form" style="display: none;">
+                    <form id="harch-form">
 
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
@@ -304,7 +304,7 @@
                             <input type="text" id="lags_vol" name="lags_vol" required>
                         </div>
                         <div class="sixth-row">
-                            <button type="submit">Fit GARCH</button>
+                            <button type="submit" id="model_builder_submit">Fit GARCH</button>
                         </div>
                     </form>
                 </div>

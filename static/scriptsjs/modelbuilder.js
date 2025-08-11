@@ -1,5 +1,29 @@
 // modelbuilder.js
 // Initializes the Model Builder dropdown and form toggling
+var dateList = [];
+
+// ---- Validation functions ----
+function validateLags(lagsStr) {
+  const regex = /^ *\d+ *(?:, *\d+ *)*$/;
+  if (!regex.test(lagsStr)) {
+    alert('Lags must be a single integer or comma-separated list of integers.');
+    return false;
+  }
+  return true;
+}
+
+function validateDateRanges(ranges) {
+  const earliest = new Date('1900-01-01'); earliest.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (const [start, end] of ranges) {
+    const s = new Date(start), e = new Date(end);
+    if (isNaN(s) || isNaN(e) || s < earliest || e > today || s > e) {
+      alert('Each date range must be between 1900-01-01 and today, and start ≤ end.');
+      return false;
+    }
+  }
+  return true;
+}
 
 
 export function initializeModelBuilder() {
@@ -48,10 +72,15 @@ export function initializeModelBuilder() {
 
             // Show/hide corresponding form
             models.forEach(m => {
-                const form = document.getElementById(`${m.toLowerCase()}-form`);
-                if (form) {
-                    form.style.display = (m === selected) ? 'block' : 'none';
-                    if (m == selected) initModelForm(m.toLowerCase());
+                const form_div = document.getElementById(`${m.toLowerCase()}-div`);
+                if (form_div) {
+                    form_div.style.display = (m === selected) ? 'block' : 'none';
+                    if (m == selected){
+                        const scrollBox = form_div.querySelector('#dateListContainer');
+                        if (scrollBox) scrollBox.innerHTML = "";
+                        dateList = [];
+                        initModelForm(m.toLowerCase());
+                    }
                 }
             });
         });
@@ -65,28 +94,28 @@ export function initializeModelBuilder() {
         }
     });
 }
-
 function initModelForm(formId) {
+    const form_div = document.getElementById(`${formId}-div`);
+    if (!form_div) return console.warn(`Form ${formId}-form not found`);
+
+    if (form_div.dataset.initialized === 'true') return;
+    form_div.dataset.initialized = 'true'; 
     console.log(`Initializing form for ${formId}`);
-    const form = document.getElementById(`${formId}-form`);
-    if (!form) return console.warn(`Form ${formId}-form not found`);
 
-    if (form.dataset.initialized === 'true') return;
-    form.dataset.initialized = 'true'; 
+    const form = form_div.querySelector(`form`);
+    if (!form) console.warn("Form not found");
+    const dateInput = form_div.querySelector('#date-list');
+    const scrollBox = form_div.querySelector('#dateListContainer');
+    const hiddenInput = form_div.querySelector('#dateRangesInput');
+    const addButton = form_div.querySelector('#add-date-range-button');
 
-    const dateList = []; 
-    const dateInput = form.querySelector('#date-list');
-    const scrollBox = form.querySelector('#dateListContainer');
-    const hiddenInput = form.querySelector('#dateRangesInput');
-    const addButton = form.querySelector('#add-date-range-button');
-
-    if (!dateInput || !scrollBox || !hiddenInput || !addButton) {
+    if (!dateInput || !scrollBox || !hiddenInput || !addButton || !form) {
         console.warn(`Missing elements in form ${formId}`);
         return;
     }
     // Handle adding date ranges to the list
     addButton.addEventListener('click', () => {
-         const input = dateInput.value.trim();
+        const input = dateInput.value.trim();
         const parts = input.split(/\s+/);
         if (parts.length !== 2) {
             alert("Please enter a start and end date separated by a space.");
@@ -94,12 +123,12 @@ function initModelForm(formId) {
         }
 
         const [start, end] = parts;
-        if (!isValidDate(start) || !isValidDate(end)) {
-            alert("Invalid date format. Use YYYY-MM-DD.");
-            return;
-        }
+        // if (!isValidDate(start) || !isValidDate(end)) {
+        //     alert("Invalid date format. Use YYYY-MM-DD.");
+        //     return;
+        // }
 
-        dateList.push({ start, end });
+        dateList.push([start, end]);
 
         const item = document.createElement('div');
         item.textContent = `${start} - ${end}`;
@@ -109,10 +138,59 @@ function initModelForm(formId) {
         dateInput.value = '';
     });
 
+    form.addEventListener('submit', (event) =>  {
+        event.preventDefault();
+        console.log(`${formId} submitted`);
+        console.log(form);
+
+
+        // Request data formmating based on model case
+        const formData = new FormData(form);
+        const requestData = {
+            dates: dateList,
+            p: parseInt(formData.get("p")),
+            q: parseInt(formData.get("q")),
+            o: 0,
+            mean: formData.get("mean-model"),
+            lags: formData.get("lags"),
+            dist: formData.get("distribution"),
+            name: formData.get("model-name"),
+            model: "",
+            lags_vol: []
+        };
+        if (formId == "garch"){
+            requestData.model = "garch";
+        }
+        else if (formId == "egarch"){
+            requestData.model = "egarch";
+            requestData.o = parseInt(formData.get("o"));
+        }else {
+            requestData.model = "harch";
+            requestData.lags_vol = formData.get("lags_vol");
+        }
+        console.log(JSON.stringify(requestData));
+        // Submit model fit request and handle response
+        fetch('/fit_model', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error(`Server responded with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Model fit successful:', data);
+            // TODO: update UI based on response data
+        })
+        .catch(error => {
+            console.error('Error fitting model:', error);
+        });
+
+    });
 
 
 }
 
-function isValidDate(str) {
-    return /^\d{4}-\d{2}-\d{2}$/.test(str);
-}
