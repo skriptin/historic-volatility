@@ -55,7 +55,7 @@ def garch_testing():
     returns_dict = dict(zip(dates[1:], log_returns))
     garch_fit(returns_dict, p=1, q=1, dist='skewt', model="HARCH", mean="HARX", lags=[5])
 
-def garch_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: str = 'Constant',
+def model_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: str = 'Constant',
               model: str = 'GARCH', lags: list = [],
               dist: str = 'skewt',
               model_name: str = "my_garch_model") -> object:
@@ -75,18 +75,30 @@ def garch_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: 
     returns_values = np.array(list(returns.values()))*100
     returns_keys = np.array(list(returns.keys()))
 
-    am = arch_model(
+    if model == "harch":
+        am = arch_model(
+            returns_values,
+            vol=model,
+            vol_lags=vol_lags,
+            p=p,
+            o=o,
+            q=q,
+            mean=mean,
+            lags=lags,
+            dist=dist
+        )
+    else:
+        am = arch_model(
         returns_values,
         vol=model,
-        vol_lags=vol_lags,
         p=p,
         o=o,
         q=q,
         mean=mean,
         lags=lags,
         dist=dist
-    )
-    
+        )
+
     result = am.fit(disp='off')  
     print(result.summary())
     print(result.conditional_volatility)      

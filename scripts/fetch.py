@@ -7,6 +7,10 @@ from datetime import datetime
 # Lots to be done here mainly with acessing a databas
 
 def query_dates(dates: list, ticker: str):
+    print(dates)
+    if (dates is None or ticker is None):
+        raise ValueError("Dates or ticker is empty")
+
     for i in range(len(dates)):
         dates[i] = (
             datetime.strptime(dates[i][0], "%Y-%m-%d"),
@@ -21,11 +25,12 @@ def query_dates(dates: list, ticker: str):
     # check DB if dates for ticker are in here
 
     # if not fetch returns
-    returns = fetch_returns(ticker, date_max, date_min)
+    returns = fetch_returns(ticker, date_min, date_max)
     queried_returns = dict()
 
     for start_date, end_date in dates:
         for date, value in returns.items():
+            date = datetime.strptime(date, "%Y-%m-%d")
             if start_date <= date <= end_date:
                 queried_returns[date] = value  
 

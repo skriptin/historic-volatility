@@ -146,7 +146,7 @@ def fit_garch():
 
     returns = fetch.query_dates(dates, ticker)
 
-    result = garch_fit(
+    result = garch.model_fit(
         returns=returns,
         p=p,
         q=q,
@@ -155,7 +155,7 @@ def fit_garch():
         mean=mean,
         model=model,
         lags=lags,
-        distribution=distribution,
+        dist=distribution,
         model_name=model_name
     )
     with model_store_lock:
