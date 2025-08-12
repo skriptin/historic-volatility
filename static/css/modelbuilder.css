@@ -1,14 +1,10 @@
 #model-builder-popup{
   width: 400px !important;
-  height: 600px !important;
+  height: 700px !important;
   overflow-x : hidden !important;
+  margin: auto;
+  font-family: Arial, sans-serif;
 
-}
-
-
-#model-builder-popup-wrapper {
-  position: relative; 
-  overflow: visible !important; /* allow dropdown to escape */
 }
 
 /* ensure the outer popup also allows overflow */
@@ -59,18 +55,12 @@
 }
 
 .model-form {
-  display: flex;
-  flex-direction: column;            
-  margin: 16px;
-  padding: 12px;
+  margin: auto;
+  font-family: Arial, sans-serif;
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #fafafa;
-  box-sizing: border-box;
-}
-
-.model-form input {
-  margin-bottom: 0;
+  max-height: 550px;
 }
 
 .scroll-box {
@@ -82,38 +72,55 @@
   margin-bottom: 4px;
   box-sizing: border-box;
 }
-/*For some reason there was a large gap between elements on the same line, I stopped trying to fix rather I hard coded sizes*/
-.modal-form{
-  gap: 5px;
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
 }
 
-.model-form .first-row{
-  display: flex;
-
-}
-.model-form .second-row {
-  display: inline;
-}
-#lags{
-  max-width: 80px;
-  width: 80px;
-}
-.model-form .third-row{
-  display: inline;
-}
-.model-form .fifth-row{
-  display: inline;
-}
-#p, #q, #q, #lags_vol{
-  width: 50px;
-  max-width: 50px;
-  min-width: 50px;
+legend {
+    font-weight: bold;
+    padding: 0 5px;
 }
 
-/* Sixth row: submit button on new line */
-.model-form .sixth-row {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  margin-top: 8px;
+#add-date-range-button{
+    padding: 4px 6px;
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+#add-date-range-button:hover {
+    background-color: #005a9e;
+}
+
+#model-builder-submit{
+    padding: 4px 6px;
+    background-color: #28a745; 
+    border: 1px solid #1e7e34;
+      color: white;
+    border-radius: 2px;
+    cursor: pointer;
+}
+#model-builder-submit:hover{
+    background-color: #0fcf6f;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 10px 15px;
+    align-items: center;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
 }

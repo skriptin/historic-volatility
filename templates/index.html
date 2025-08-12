@@ -153,26 +153,25 @@
 
 
         <div id="model-builder-popup" class="popup-menu model-builder">
-            <div id="model-builder-popup-wrapper">
-                <div id="model-builder-header" class="model-builder-header">
-                    <h2 id="model-header">Model Builder</h2>
-                    <button id="dropdown-btn" class="dropdown-btn">▼</button>
-                </div>
-                    <ul id="dropdown-list" class="dropdown-list"></ul>
-                <!-- All model‐forms start hidden -->
-                <div id="garch-div" class="model-form" style="display: none;">
-                    <form id="garch-form">
-
+            <div id="model-builder-header" class="model-builder-header">
+                <h2 id="model-header">Model Builder</h2>
+                <button id="dropdown-btn" class="dropdown-btn">▼</button>
+            </div>
+                <ul id="dropdown-list" class="dropdown-list"></ul>
+            <!-- All model‐forms start hidden -->
+            <div id="garch-div" class="model-form" style="display: none;">
+                <form id="garch-form">
+                    <fieldset>
+                        <h2>Date Ranges</h2>
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
                         <input type="hidden" name="dateRanges" id="dateRangesInput">
+                        <button type="button" id="add-date-range-button">Add</button>
+                    </fieldset>
 
-
-                        <div class="first-row">
-                            <button type="button" id="add-date-range-button">Add</button>
-                        </div>
-
-                        <div class="second-row">
+                    <fieldset>
+                        <legend>Mean Model</legend>
+                        <div class="form-grid">
                             <label for="mean-model">Mean:</label>
                             <select id="mean-model" name="mean-model">
                                 <option value="constant">Constant</option>
@@ -181,47 +180,56 @@
                                 <option value="ARX">ARX</option>
                                 <option value="HARX">ARMA</option>
                             </select>
+
                             <label for="lags">Lags:</label>
-                            <input type="string" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
+                            <input type="text" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
                         </div>
-                        
-                        <div class="third-row">
-                            <label for="distribution">Dist:</label>
-                            <select id ="distribution" name="distribution">
-                                <option value="normal">Normal</option>
-                                <option value="skewt">Skewt</option>
-                            </select>
-                        </div>
-                        <div class="fourth-row">
-                            <label for="model-name" class="model-name-label">Model Name:</label>
-                            <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
-                        </div>
-                        <div class="fifth-row">
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Distribution</legend>
+                        <select id="distribution" name="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="skewt">Skewt</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Model Name</legend>
+                        <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parameters</legend>
+                        <div class="form-grid">
                             <label for="p">p:</label>
                             <input type="number" id="p" name="p" value="1" required>
+
                             <label for="q">q:</label>
                             <input type="number" id="q" name="q" value="1" required>
                         </div>
-                        
-                        <div class="sixth-row">
-                        <button type="submit" id="model_builder_submit" >Fit GARCH</button>
-                        </div>
-                    </form>
-                </div>
+                    </fieldset>
 
-                <div id="egarch-div" class="model-form" style="display: none;">
-                    <form id ="egarch-form">
+                    <div class="form-actions">
+                        <button type="submit" id="model-builder-submit">Train Model</button>
+                    </div>
 
+                </form>
+            </div>
+
+            <div id="egarch-div" class="model-form" style="display: none;">
+                <form id="egarch-form">
+                    <fieldset>
+                        <h2>Date Ranges</h2>
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
                         <input type="hidden" name="dateRanges" id="dateRangesInput">
+                        <button type="button" id="add-date-range-button">Add</button>
+                    </fieldset>
 
-
-                        <div class="first-row">
-                            <button type="button" id="add-date-range-button">Add</button>
-                        </div>
-
-                        <div class="second-row">
+                    <fieldset>
+                        <legend>Mean Model</legend>
+                        <div class="form-grid">
                             <label for="mean-model">Mean:</label>
                             <select id="mean-model" name="mean-model">
                                 <option value="constant">Constant</option>
@@ -230,48 +238,58 @@
                                 <option value="ARX">ARX</option>
                                 <option value="HARX">ARMA</option>
                             </select>
+
                             <label for="lags">Lags:</label>
-                            <input type="string" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
+                            <input type="text" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
                         </div>
-                        
-                        <div class="third-row">
-                            <label for="distribution">Dist:</label>
-                            <select id ="distribution" name="distribution">
-                                <option value="normal">Normal</option>
-                                <option value="skewt">Skewt</option>
-                            </select>
-                        </div>
-                        <div class="fourth-row">
-                            <label for="model-name" class="model-name-label">Model Name:</label>
-                            <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
-                        </div>
-                        <div class="fifth-row">
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Distribution</legend>
+                        <select id="distribution" name="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="skewt">Skewt</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Model Name</legend>
+                        <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parameters</legend>
+                        <div class="form-grid">
                             <label for="p">p:</label>
                             <input type="number" id="p" name="p" value="1" required>
+
                             <label for="q">q:</label>
                             <input type="number" id="q" name="q" value="1" required>
+
                             <label for="'o">o:</label>
-                            <input type="'number" id="o" name="o" value="1" required>
+                            <input type="'number" id="o" name="o" value="1" required>      
                         </div>
-                        <div class="sixth-row">
-                            <button type="submit" id="model_builder_submit" >Fit GARCH</button>
-                        </div>
-                    </form>
-                </div>
+                    </fieldset>
 
-                <div id="harch-div" class="model-form" style="display: none;">
-                    <form id="harch-form">
+                    <div class="form-actions">
+                        <button type="submit" id="model-builder-submit">Train Model</button>
+                    </div>
+                </form>
+            </div>
 
+            <div id="harch-div" class="model-form" style="display: none;">
+                <form id="harch-form">
+                    <fieldset>
+                        <h2>Date Ranges</h2>
                         <div class="scroll-box" id="dateListContainer"></div>
                         <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
                         <input type="hidden" name="dateRanges" id="dateRangesInput">
+                        <button type="button" id="add-date-range-button">Add</button>
+                    </fieldset>
 
-
-                        <div class="first-row">
-                            <button type="button" id="add-date-range-button">Add</button>
-                        </div>
-
-                        <div class="second-row">
+                    <fieldset>
+                        <legend>Mean Model</legend>
+                        <div class="form-grid">
                             <label for="mean-model">Mean:</label>
                             <select id="mean-model" name="mean-model">
                                 <option value="constant">Constant</option>
@@ -280,38 +298,47 @@
                                 <option value="ARX">ARX</option>
                                 <option value="HARX">ARMA</option>
                             </select>
+
                             <label for="lags">Lags:</label>
-                            <input type="string" id="lags" name="lags" title="e.g, 1 or 1, 2, ... n">
+                            <input type="text" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
                         </div>
-                        
-                        <div class="third-row">
-                            <label for="distribution">Dist:</label>
-                            <select id ="distribution" name="distribution">
-                                <option value="normal">Normal</option>
-                                <option value="skewt">Skewt</option>
-                            </select>
-                        </div>
-                        <div class="fourth-row">
-                            <label for="model-name" class="model-name-label">Model Name:</label>
-                            <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
-                        </div>
-                        <div class="fifth-row">
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Distribution</legend>
+                        <select id="distribution" name="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="skewt">Skewt</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Model Name</legend>
+                        <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parameters</legend>
+                        <div class="form-grid">
                             <label for="p">p:</label>
                             <input type="number" id="p" name="p" value="1" required>
+
                             <label for="q">q:</label>
                             <input type="number" id="q" name="q" value="1" required>
-                            <label for="lags_vol">Vol_lags:</label>
+
+                            <label for="lags_vol">Vol lags:</label>
                             <input type="text" id="lags_vol" name="lags_vol" title="e.g, 1 or 1, 2, ... n">
                         </div>
-                        <div class="sixth-row">
-                            <button type="submit" id="model_builder_submit">Fit GARCH</button>
-                        </div>
-                    </form>
-                </div>
+                    </fieldset>
 
+                    <div class="form-actions">
+                        <button type="submit" id="model-builder-submit">Train Model</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-
+        
             
     </main>
 
