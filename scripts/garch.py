@@ -81,7 +81,6 @@ def model_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: 
             vol=model,
             vol_lags=vol_lags,
             p=p,
-            o=o,
             q=q,
             mean=mean,
             lags=lags,

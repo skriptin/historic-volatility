@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_file
-from scripts import fetch, sma, ewma, garch
+from scripts import fetch, sma, ewma, garch, util
 import numpy as np
 import threading
 
@@ -133,16 +133,37 @@ def fit_garch():
         p = int(request_data.get('p', 1))
         q = int(request_data.get('q', 1))
         o = int(request_data.get('o', 0))
-        vol_lags = request_data.get('vol_lags', [])
+        vol_lags = str(request_data.get('vol_lags', ""))
         mean = str(request_data.get('mean', 'Constant'))
         model = str(request_data.get('model', 'GARCH'))
-        lags = request_data.get('lags', [])
-        distribution = request_data.get('distribution', 'normal')
-        model_name = request_data.get('model_name', 'my_garch_model')
-        ticker = request_data.get('ticker', 'SPY')
+        lags = str(request_data.get('lags', ""))
+        distribution = str(request_data.get('distribution', 'normal'))
+        model_name = str(request_data.get('model_name', 'my_garch_model'))
+        ticker = str(request_data.get('ticker', 'SPY'))
+
+        vol_lags = util.convertStrToList(vol_lags)
+        lags = util.convertStrToList(lags)
+
     except (ValueError, TypeError) as e:
         print(f"Error parsing request data: {e}")
         return jsonify({"error": "Invalid request data"}), 400
+
+    variables = {
+        "dates": dates,
+        "p": p,
+        "q": q,
+        "o": o,
+        "vol_lags": vol_lags,
+        "mean": mean,
+        "model": model,
+        "lags": lags,
+        "distribution": distribution,
+        "model_name": model_name,
+        "ticker": ticker,
+    }
+
+    for name, value in variables.items():
+        print(f"{name}: type={type(value).__name__}, value={value}")
 
     returns = fetch.query_dates(dates, ticker)
 
