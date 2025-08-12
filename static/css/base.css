@@ -77,3 +77,14 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* get rid of ugly scrollbar*/
+.element {
+    overflow-y: scroll; /* still scrollable */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.element::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

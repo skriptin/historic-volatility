@@ -43,3 +43,34 @@
     z-index: 999;
     gap: 3px;
 }
+
+.toolbar-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2983c7; 
+    border: none;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+    max-width: 180px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    padding-top: 5px;
+
+}
+
+.toolbar-button:hover {
+    background-color: #8a96a0; 
+    border-color: #707070;     
+    color: #000000;
+}
+
+.toolbar-button:active {
+    background-color: #757F88; 
+    border-color: #606060;
+    transform: translateY(1px); 
+}
