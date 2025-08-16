@@ -35,6 +35,7 @@ body {
     background: #ebedf0;
     color: #222;
     min-height: 100vh;
+    --ct-width: 100px;
 }
 
 img {
@@ -79,12 +80,12 @@ a:hover {
 }
 
 /* get rid of ugly scrollbar*/
-.element {
+.no-icon {
     overflow-y: scroll; /* still scrollable */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
 }
 
-.element::-webkit-scrollbar {
+.no-icon::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }

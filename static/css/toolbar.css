@@ -2,19 +2,18 @@
 
 /* === Common Toolbar Styling === */
 .chart-toolbar {
-    flex: 0 0 700px; 
-    padding: 8px;
+    width: 100px;
+    padding: 2px;
     box-sizing: border-box;
     background-color: #ffffff; 
-    border: 1px solid #d8dde2; 
-    border-radius: 6px;      
+    border: 10px solid #000000; 
     box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
     
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
     
     max-height: 850px;
     overflow-y: scroll;       
 }
 
+.expanded{
+    width: 750px;
+}
