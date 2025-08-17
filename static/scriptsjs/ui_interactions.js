@@ -118,15 +118,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-const resizeBtn = document.getElementById('resize-btn');
-const chartToolbar = document.querySelector('.chart-toolbar'); 
+    const resizeBtn = document.getElementById('resize-btn');
+    const chartToolbar = document.querySelector('.chart-toolbar');
+    const itemlist = document.querySelector('.model-list'); 
 
-resizeBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    chartToolbar.classList.toggle('expanded');
-    console.log("Expand button clicked"); 
-});
+    if(!resizeBtn || !chartToolbar || !itemlist){
+        console.warn("Toolbar element not found");
+    }
+    else{
+        resizeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            chartToolbar.classList.toggle('expanded');
+            itemlist.classList.toggle('active');
 
+            console.log("Expand button clicked"); 
+        });
+    }
 
 
 
