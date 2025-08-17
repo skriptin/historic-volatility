@@ -17,3 +17,10 @@
 .expanded{
     width: 750px;
 }
+
+#resize-btn{
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
