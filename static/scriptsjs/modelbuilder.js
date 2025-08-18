@@ -52,7 +52,7 @@ export function initializeModelBuilder() {
     }
 
     // Define available models
-    const models = ['GARCH', 'EGARCH', 'HARCH'];
+    const models = ['GARCH', 'EGARCH', 'HARCH', 'APGARCH', 'FIGARCH'];
 
     // Populate dropdown list
     dropdownList.innerHTML = '';
@@ -165,26 +165,47 @@ function initModelForm(formId) {
         const formData = new FormData(form);
         const requestData = {
             dates: dateList,
-            p: parseInt(formData.get("p")),
-            q: parseInt(formData.get("q")),
+            q: 0,
             o: 0,
+            p: 0,
             mean: formData.get("mean-model"),
             lags: formData.get("lags"),
             dist: formData.get("distribution"),
             name: formData.get("model-name"),
-            model: "",
+            model: `${formId}`,
             lags_vol: [],
-            ticker: stock_returns.ticker
+            ticker: stock_returns.ticker,
+            power: 2.0
         };
         if (formId == "garch"){
             requestData.model = "garch";
+            requestData.p = parseInt(formData.get("p"));
+            requestData.q = parseInt(formData.get("q"));
         }
         else if (formId == "egarch"){
             requestData.model = "egarch";
             requestData.o = parseInt(formData.get("o"));
-        }else {
+            requestData.p = parseInt(formData.get("p"));
+            requestData.q = parseInt(formData.get("q"));
+
+
+        }else if (formId == "harch"){
             requestData.model = "harch";
             requestData.lags_vol = formData.get("lags_vol");
+
+        }
+        else if (formId == "figarch"){
+            requestData.model = "figarch";
+            requestData.p = parseInt(formData.get("p"));
+            requestData.q = parseInt(formData.get("q"));
+        }
+        else{
+            requestData.model ="apgarch";
+            requestData.o = formData.get("o");
+            requestData.p = parseInt(formData.get("p"));
+            requestData.power = formData.get("power");
+            requestData.q = parseInt(formData.get("q"));
+
         }
         console.log(JSON.stringify(requestData));
         // Submit model fit request and handle response

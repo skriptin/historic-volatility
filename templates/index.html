@@ -378,8 +378,8 @@
                 </form>
             </div>
 
-            <div id="harch-div" class="model-form" style="display: none;">
-                <form id="harch-form">
+            <div id="apgarch-div" class="model-form" style="display: none;">
+                <form id="apgarch-form">
                     <fieldset>
                         <h2>Date Ranges</h2>
                         <div class="scroll-box" id="dateListContainer"></div>
@@ -427,6 +427,63 @@
                             <label for="q">q:</label>
                             <input type="number" id="q" name="q" value="1" required>
 
+                            <label for="o">o:</label>
+                            <input type="number" id="o" name="'o" value="1" required>
+
+                            <label for="power">Power:</label>
+                            <input type="number" id="power" name="power" value="2.0" required>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <button type="submit" id="model-builder-submit">Train Model</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="harch-div" class="model-form" style="display: none;">
+                <form id="harch-form">
+                    <fieldset>
+                        <h2>Date Ranges</h2>
+                        <div class="scroll-box" id="dateListContainer"></div>
+                        <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
+                        <input type="hidden" name="dateRanges" id="dateRangesInput">
+                        <button type="button" id="add-date-range-button">Add</button>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Mean Model</legend>
+                        <div class="form-grid">
+                            <label for="mean-model">Mean:</label>
+                            <select id="mean-model" name="mean-model">
+                                <option value="constant">Constant</option>
+                                <option value="zero">Zero</option>
+                                <option value="AR">AR</option>
+                                <option value="ARX">ARX</option>
+                                <option value="HARX">ARMA</option>
+                            </select>
+
+                            <label for="lags">Lags:</label>
+                            <input type="text" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Distribution</legend>
+                        <select id="distribution" name="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="skewt">Skewt</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Model Name</legend>
+                        <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parameters</legend>
+                        <div class="form-grid">
                             <label for="lags_vol">Vol lags:</label>
                             <input type="text" id="lags_vol" name="lags_vol" title="e.g, 1 or 1, 2, ... n">
                         </div>
@@ -437,6 +494,65 @@
                     </div>
                 </form>
             </div>
+
+            <div id="figarch-div" class="model-form" style="display: none;">
+                <form id="figarch-form">
+                    <fieldset>
+                        <h2>Date Ranges</h2>
+                        <div class="scroll-box" id="dateListContainer"></div>
+                        <input type="text" id="date-list" placeholder="YYYY-MM-DD YYYY-MM-DD" style="width: 100%;">
+                        <input type="hidden" name="dateRanges" id="dateRangesInput">
+                        <button type="button" id="add-date-range-button">Add</button>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Mean Model</legend>
+                        <div class="form-grid">
+                            <label for="mean-model">Mean:</label>
+                            <select id="mean-model" name="mean-model">
+                                <option value="constant">Constant</option>
+                                <option value="zero">Zero</option>
+                                <option value="AR">AR</option>
+                                <option value="ARX">ARX</option>
+                                <option value="HARX">ARMA</option>
+                            </select>
+
+                            <label for="lags">Lags:</label>
+                            <input type="text" id="lags" name="lags" value="1" title="e.g, 1 or 1, 2, ... n">
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Distribution</legend>
+                        <select id="distribution" name="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="skewt">Skewt</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Model Name</legend>
+                        <input type="text" id="model-name" name="model-name" placeholder="Enter model name" required>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Parameters</legend>
+                        <div class="form-grid">
+                            <label for="p">p:</label>
+                            <input type="number" id="p" name="p" value="1" required>
+
+                            <label for="q">q:</label>
+                            <input type="number" id="q" name="q" value="1" required>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <button type="submit" id="model-builder-submit">Train Model</button>
+                    </div>
+                </form>
+            </div>
+
+            
         </div>
 
         

@@ -129,19 +129,28 @@ def fit_garch():
 
     try:
         # Extract dates array from JSON payload
+
+        print("Raw p:", request_data.get('p'))
+        print("Raw q:", request_data.get('q'))
+        print("Raw o:", request_data.get('o'))
+
+
+
         dates = request_data.get('dates', [])  
         p = int(request_data.get('p', 1))
         q = int(request_data.get('q', 1))
         o = int(request_data.get('o', 0))
-        vol_lags = str(request_data.get('vol_lags', ""))
+        lags_vol = str(request_data.get('lags_vol'))
         mean = str(request_data.get('mean', 'Constant'))
         model = str(request_data.get('model', 'GARCH'))
-        lags = str(request_data.get('lags', ""))
-        distribution = str(request_data.get('distribution', 'normal'))
-        model_name = str(request_data.get('model_name', 'my_garch_model'))
+        lags = str(request_data.get('lags'))
+        distribution = str(request_data.get('dist', 'normal'))
+        model_name = str(request_data.get('name', 'my_garch_model'))
         ticker = str(request_data.get('ticker', 'SPY'))
-
-        vol_lags = util.convertStrToList(vol_lags)
+        power = float(request_data.get("power", 2.0))
+        print(f"Raw lags_vol: {lags_vol} ({type(lags_vol)})")
+        print(f"Raw lags: {lags} ({type(lags)})")        
+        lags_vol = util.convertStrToList(lags_vol)
         lags = util.convertStrToList(lags)
 
     except (ValueError, TypeError) as e:
@@ -153,7 +162,7 @@ def fit_garch():
         "p": p,
         "q": q,
         "o": o,
-        "vol_lags": vol_lags,
+        "lags_vol": lags_vol,
         "mean": mean,
         "model": model,
         "lags": lags,
@@ -172,17 +181,18 @@ def fit_garch():
         p=p,
         q=q,
         o=o,
-        vol_lags=vol_lags,
+        vol_lags=lags_vol,
         mean=mean,
         model=model,
         lags=lags,
         dist=distribution,
-        model_name=model_name
+        model_name=model_name,
+        power = power
     )
     with model_store_lock:
         model_store[model_name] = result
 
-    return jsonify({"message": "GARCH model fitted successfully", "model_summary": result.summary()}), 200
+    return jsonify({"message": "GARCH model fitted successfully", "model_summary": "good"}), 200
     
 
 

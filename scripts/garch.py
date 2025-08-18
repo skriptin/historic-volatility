@@ -53,12 +53,21 @@ def garch_testing():
 
 
     returns_dict = dict(zip(dates[1:], log_returns))
-    garch_fit(returns_dict, p=1, q=1, dist='skewt', model="HARCH", mean="HARX", lags=[5])
+    model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="HARX", lags=[1,5], vol_lags = [1,2,5], power = 2.0)
 
-def model_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: str = 'Constant',
-              model: str = 'GARCH', lags: list = [],
-              dist: str = 'skewt',
-              model_name: str = "my_garch_model") -> object:
+def model_fit(
+    returns: dict, 
+    p: int, 
+    q: int, 
+    o: int, 
+    vol_lags: list = [], 
+    mean: str = 'Constant',
+    model: str = 'GARCH', 
+    lags: list = [],
+    dist: str = 'skewt',
+    model_name: str = "my_garch_model",
+    power: float = 2.0
+) -> object:
     """
     Fit a GARCH-family model to the returns data.
     
@@ -74,31 +83,36 @@ def model_fit(returns: dict, p: int, q: int, o: int, vol_lags: list = [], mean: 
     """
     returns_values = np.array(list(returns.values()))*100
     returns_keys = np.array(list(returns.keys()))
-
+    print(f'PYTHON PRITING MODEL TYPE IN GARCH SCRIPT: {model}')
     if model == "harch":
         am = arch_model(
             returns_values,
             vol=model,
-            vol_lags=vol_lags,
-            p=p,
+            p=vol_lags,
             q=q,
             mean=mean,
             lags=lags,
-            dist=dist
+            dist=dist,
+            power = power
         )
     else:
         am = arch_model(
-        returns_values,
-        vol=model,
-        p=p,
-        o=o,
-        q=q,
-        mean=mean,
-        lags=lags,
-        dist=dist
+            returns_values,
+            vol=model,
+            p=p,
+            o=o,
+            q=q,
+            mean=mean,
+            lags=lags,
+            dist=dist,
+            power=power
         )
 
-    result = am.fit(disp='off')  
+    result = am.fit(disp='off')
+
+    # parameters = am.parameters
+    # volatility = am.historic_volatility
+
     print(result.summary())
     print(result.conditional_volatility)      
     return result
