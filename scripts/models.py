@@ -4,6 +4,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import yfinance as yf
 from arch import arch_model
+from arch.univariate.base import ARCHModelResult
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf, acf
 from statsmodels.stats.diagnostic import acorr_ljungbox
 import pandas as pd
@@ -118,69 +119,51 @@ def model_fit(
     print(result.conditional_volatility)      
     return result
  
-def serealize_modelInfo(res: object):
-
+def serealize_modelInfo(res: ARCHModelResult):
+    model = res.model
+    model_summary = {
+        "Mean Model": model.name,
+        "Vol Model": model.volatility.name,
+        "Distribution": model.distribution.name,
+        "Creation Date": res._datetime.strftime("%a, %b %d %Y"),
+        "R-squared": f"{res.rsquared:#8.3f}",
+        "Log-Likelihood": f"{res.loglikelihood:#10.6g}",
+        "AIC": f"{res.aic:#10.6g}",
+        "BIC": f"{res.bic:#10.6g}",
+        "No. Observations": f"{res._nobs}"
+    }
+    print(model_summary)
     print(res.params)
+    print(res.std_err)
+    print(res.pvalues)
 
     params = res.params
-    # std_err = res.bse
-    # conf_int = res.conf_int()
-    # pvalues = res.pvalues
+    std_err = res.std_err
+    p_values = res.pvalues
 
-    Model_Results = []
-    Mean_Model = []
-    Volatility_Model = []
-    Distribution = []
-    for param in params.index:
+    mean_params = {}
+    vol_params = {}
 
-        if param[0] == "y" or param == "Const":
-            Mean_Model.append({
-                "param": param,
-                "coef": params[param],
-                "std_err": std_err[param],
-                "t_stat": params[param] / std_err[param],
-                "p_value": pvalues[param],
-            })
-        elif param == "eta" or param == "lambda":
-            Distribution.append({
-                "param": param,
-                "coef": params[param],
-                "std_err": std_err[param],
-                "t_stat": params[param] / std_err[param],
-                "p_value": pvalues[param],
-            })
+    for i in range(len(params)):
+        param_indo = {
+            "Value": float(params[i]),
+            "Std Error": float(std_err[i]),
+            "P value": float(p_values[i])
+        }
+        if i < res.model.volatility.num.params:
+            mean_params[params[i].key()] = param_info
+        elif i < res.model.num_params - res.model.distribution.num_params:
+            mean_params[params[i].key()]
         else:
-            Volatility_Model.append({
-                "param": param,
-                "coef": params[param],
-                "std_err": std_err[param],
-                "t_stat": params[param] / std_err[param],
-                "p_value": pvalues[param],
-            })
+            pass
 
-        mean_params.append({
-            "param": param,
-            "coef": params[param],
-            "std_err": std_err[param],
-            "t_stat": params[param] / std_err[param],
-            "p_value": pvalues[param],
-            "conf_int": list(conf_int.loc[param])
-        })
-
-    # model_summary = {
-    #     "model_type": "AR-GARCH",
-    #     "dependent_variable": "y",
-    #     "n_observations": res.nobs,
-    #     "r_squared": res.rsquared if hasattr(res, 'rsquared') else None,
-    #     "adj_r_squared": res.rsquared_adj if hasattr(res, 'rsquared_adj') else None,
-    #     "log_likelihood": res.loglikelihood,
-    #     "aic": res.aic,
-    #     "bic": res.bic,
-    #     "mean_model": mean_params,
-    #     # Add volatility parameters similarly if available
-    # }
-
-    return json.dumps(model_summary)
+    model_info = {
+        "Model Summary": model_summary,
+        "Mean Model": mean_params,
+        "Volatility Model": vol_params
+    }
+    print(model_info)
+    return json.dumps(model_info)
 
 
 
