@@ -54,7 +54,7 @@ def garch_testing():
 
 
     returns_dict = dict(zip(dates[1:], log_returns))
-    result = model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="HARX", lags=[1,5], vol_lags = [1,2,5], power = 2.0)
+    result = model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="AR", lags=[1], vol_lags = [1,2,5], power = 2.0)
     model_info_json = serealize_modelInfo(result)
     print(result)
 
@@ -118,8 +118,70 @@ def model_fit(
     print(result.conditional_volatility)      
     return result
  
-def serealize_modelInfo(model: Object):
-    pass
+def serealize_modelInfo(res: object):
+
+    print(res.params)
+
+    params = res.params
+    # std_err = res.bse
+    # conf_int = res.conf_int()
+    # pvalues = res.pvalues
+
+    Model_Results = []
+    Mean_Model = []
+    Volatility_Model = []
+    Distribution = []
+    for param in params.index:
+
+        if param[0] == "y" or param == "Const":
+            Mean_Model.append({
+                "param": param,
+                "coef": params[param],
+                "std_err": std_err[param],
+                "t_stat": params[param] / std_err[param],
+                "p_value": pvalues[param],
+            })
+        elif param == "eta" or param == "lambda":
+            Distribution.append({
+                "param": param,
+                "coef": params[param],
+                "std_err": std_err[param],
+                "t_stat": params[param] / std_err[param],
+                "p_value": pvalues[param],
+            })
+        else:
+            Volatility_Model.append({
+                "param": param,
+                "coef": params[param],
+                "std_err": std_err[param],
+                "t_stat": params[param] / std_err[param],
+                "p_value": pvalues[param],
+            })
+
+        mean_params.append({
+            "param": param,
+            "coef": params[param],
+            "std_err": std_err[param],
+            "t_stat": params[param] / std_err[param],
+            "p_value": pvalues[param],
+            "conf_int": list(conf_int.loc[param])
+        })
+
+    # model_summary = {
+    #     "model_type": "AR-GARCH",
+    #     "dependent_variable": "y",
+    #     "n_observations": res.nobs,
+    #     "r_squared": res.rsquared if hasattr(res, 'rsquared') else None,
+    #     "adj_r_squared": res.rsquared_adj if hasattr(res, 'rsquared_adj') else None,
+    #     "log_likelihood": res.loglikelihood,
+    #     "aic": res.aic,
+    #     "bic": res.bic,
+    #     "mean_model": mean_params,
+    #     # Add volatility parameters similarly if available
+    # }
+
+    return json.dumps(model_summary)
+
 
 
 def predict():
