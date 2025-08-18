@@ -1,6 +1,6 @@
 
 import matplotlib
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import yfinance as yf
 from arch import arch_model
@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import io
 import matplotlib.dates as mdates
+import json 
 
 
 ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
@@ -53,7 +54,9 @@ def garch_testing():
 
 
     returns_dict = dict(zip(dates[1:], log_returns))
-    model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="HARX", lags=[1,5], vol_lags = [1,2,5], power = 2.0)
+    result = model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="HARX", lags=[1,5], vol_lags = [1,2,5], power = 2.0)
+    model_info_json = serealize_modelInfo(result)
+    print(result)
 
 def model_fit(
     returns: dict, 
@@ -110,14 +113,13 @@ def model_fit(
 
     result = am.fit(disp='off')
 
-    # parameters = am.parameters
-    # volatility = am.historic_volatility
 
     print(result.summary())
     print(result.conditional_volatility)      
     return result
  
-
+def serealize_modelInfo(model: Object):
+    pass
 
 
 def predict():

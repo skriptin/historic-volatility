@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_file
-from scripts import fetch, sma, ewma, garch, util
+from scripts import fetch, sma, ewma, models, util
 import numpy as np
 import threading
 
@@ -176,7 +176,7 @@ def fit_garch():
 
     returns = fetch.query_dates(dates, ticker)
 
-    result = garch.model_fit(
+    result = models.model_fit(
         returns=returns,
         p=p,
         q=q,
@@ -191,6 +191,10 @@ def fit_garch():
     )
     with model_store_lock:
         model_store[model_name] = result
+    
+    
+    model_summary = models.serealize_modelInfo(result)
+
 
     return jsonify({"message": "GARCH model fitted successfully", "model_summary": "good"}), 200
     
