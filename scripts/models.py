@@ -11,7 +11,6 @@ import pandas as pd
 import numpy as np
 import io
 import matplotlib.dates as mdates
-import json 
 
 
 ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
@@ -87,7 +86,6 @@ def model_fit(
     """
     returns_values = np.array(list(returns.values()))*100
     returns_keys = np.array(list(returns.keys()))
-    print(f'PYTHON PRITING MODEL TYPE IN GARCH SCRIPT: {model}')
     if model == "harch":
         am = arch_model(
             returns_values,
@@ -118,42 +116,57 @@ def model_fit(
     print(result.summary())
     print(result.conditional_volatility)      
     return result
- 
-def serealize_modelInfo(res: ARCHModelResult):
+
+def serealize_modelInfo(res: ARCHModelResult) -> dict:
+    """
+    Extracts model information from the parent class
+    ARCHModelResult and serliazies it into a dict for\
+    jsonifying to the front-end.
+
+    Parameters
+    ----------
+    res: ARCHModelResult
+        Model to be serliazed
+
+    Returns
+    -------
+    model_summary: dict
+                Model infomraiton
+
+    """
     model = res.model
     model_summary = {
         "Mean Model": model.name,
         "Vol Model": model.volatility.name,
         "Distribution": model.distribution.name,
         "Creation Date": res._datetime.strftime("%a, %b %d %Y"),
-        "R-squared": f"{res.rsquared:#8.3f}",
-        "Log-Likelihood": f"{res.loglikelihood:#10.6g}",
-        "AIC": f"{res.aic:#10.6g}",
-        "BIC": f"{res.bic:#10.6g}",
+        "R-squared": float(f"{res.rsquared:#8.3f}"),
+        "Log-Likelihood": float(f"{res.loglikelihood:#10.6g}"),
+        "AIC": float(f"{res.aic:#10.6g}"),
+        "BIC": float(f"{res.bic:#10.6g}"),
         "No. Observations": f"{res._nobs}"
     }
-    print(model_summary)
-    print(res.params)
-    print(res.std_err)
-    print(res.pvalues)
 
     params = res.params
     std_err = res.std_err
     p_values = res.pvalues
-
+    names = res._names
     mean_params = {}
     vol_params = {}
 
+    mc = res.model.num_params
+    vc = res.model.volatility.num_params
+
     for i in range(len(params)):
-        param_indo = {
-            "Value": float(params[i]),
-            "Std Error": float(std_err[i]),
-            "P value": float(p_values[i])
+        param_info = {
+            "Value": float(format(params.iloc[i], ".5g")),
+            "Std Error": float(format(std_err.iloc[i],".5g")),
+            "P value": float(format(p_values.iloc[i],".5g"))
         }
-        if i < res.model.volatility.num.params:
-            mean_params[params[i].key()] = param_info
-        elif i < res.model.num_params - res.model.distribution.num_params:
-            mean_params[params[i].key()]
+        if i < mc:
+            mean_params[names[i]] = param_info
+        elif i < mc + vc:
+            vol_params[names[i]] = param_info
         else:
             pass
 
@@ -163,7 +176,7 @@ def serealize_modelInfo(res: ARCHModelResult):
         "Volatility Model": vol_params
     }
     print(model_info)
-    return json.dumps(model_info)
+    return model_info
 
 
 

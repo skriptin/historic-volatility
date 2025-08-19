@@ -196,7 +196,7 @@ def fit_garch():
     model_summary = models.serealize_modelInfo(result)
 
 
-    return jsonify({"message": "GARCH model fitted successfully", "model_summary": "good"}), 200
+    return jsonify(model_summary), 200
     
 
 
