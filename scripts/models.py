@@ -175,7 +175,7 @@ def serealize_modelInfo(res: ARCHModelResult) -> dict:
         "Mean Model": mean_params,
         "Volatility Model": vol_params
     }
-    print(model_info)
+    #print(model_info)
     return model_info
 
 

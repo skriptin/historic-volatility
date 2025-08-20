@@ -49,101 +49,95 @@
                     <ul class="model-list">
 
                         <!--Prototype model-->
-                        <li class="item-card">
-                            <h3 class="item-name">Portfolio Name</h3>
-                            <p><strong>Beta:</strong> 1.2</p>
-                            <p><strong>Alpha:</strong> 0.8</p>
-                            <p><strong>Date Range:</strong> Jan 2020 - Dec 2024</p>
-                            <p class="item-description">Short description goes here...</p>
-                            <div class="item-actions">
-                                <button class="forecast-btn">Forecast</button>
-                                <button class="save-btn">Save</button>
-                            </div>
-                            </li>
+                        <li class="model-info">
+                            <div class="model-box">
+                            <h3 class="item-name">Model Name: GARCH_Model_1</h3>
 
+                            <!-- Model Summary -->
+                            <div class="model-summary">
+                                <p><strong>Date:</strong> Aug 19 2025</p>
+                                <p><strong>Mean Model:</strong> AR</p>
+                                <p><strong>Volatility Model:</strong> GARCH</p>
+                                <p><strong>Distribution:</strong> Skew t</p>
+                                <p><strong>Observations:</strong> 1256</p>
+                                <p><strong>Log-Likelihood:</strong> -1562.61</p>
+                                <p><strong>AIC:</strong> 3139.21</p>
+                                <p><strong>BIC:</strong> 3175.16</p>
+                                <p><strong>R-squared:</strong> 0.002</p>
+                            </div>
+
+                            <!-- Volatility Parameters -->
+                            <div class="group-title">Volatility Parameters</div>
+                            <table class="parameter-table">
+                                <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th class="numeric">Value</th>
+                                    <th class="numeric">Std Err</th>
+                                    <th class="numeric">p-value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>alpha[1]</td>
+                                    <td class="numeric">0.14476</td>
+                                    <td class="numeric">0.02734</td>
+                                    <td class="numeric">1.2e-7</td>
+                                </tr>
+                                <tr>
+                                    <td>beta[1]</td>
+                                    <td class="numeric">0.82963</td>
+                                    <td class="numeric">0.02610</td>
+                                    <td class="numeric">1.17e-221</td>
+                                </tr>
+                                <tr>
+                                    <td>omega</td>
+                                    <td class="numeric">0.03114</td>
+                                    <td class="numeric">0.00872</td>
+                                    <td class="numeric">0.00035</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Mean Parameters -->
+                            <div class="group-title">Mean Parameters</div>
+                            <table class="parameter-table">
+                                <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th class="numeric">Value</th>
+                                    <th class="numeric">Std Err</th>
+                                    <th class="numeric">p-value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Const</td>
+                                    <td class="numeric">0.08896</td>
+                                    <td class="numeric">0.02190</td>
+                                    <td class="numeric">4.86e-5</td>
+                                </tr>
+                                <tr>
+                                    <td>y[1]</td>
+                                    <td class="numeric">-0.05705</td>
+                                    <td class="numeric">0.02783</td>
+                                    <td class="numeric">0.04038</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Action Buttons -->
+                            <div class="item-actions">
+                                <label for="forecast-days-GARCH_Model_1">Days to forecast:</label>
+                                <input type="number" id="forecast-days-GARCH_Model_1" name="forecast_days" min="1" placeholder="e.g. 30">
+                                <button class="forecast-btn" data-model="GARCH_Model_1">Forecast</button>
+                                <button class="plot-btn" data-model="GARCH_Model_1">Plot</button>
+                                <button class="save-btn" data-model="GARCH_Model_1">Save</button>
+                            </div>
+                            </div>
+                        </li>
                     </ul>
                 <!--Volatility models will be displayed here there should also be a load button the user can click-->
-                    <h2>Sidebar Test</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <p>Aliquam tincidunt mauris eu risus.</p>
-                        <p>Vestibulum auctor dapibus neque.</p>
-                        <p>Nunc dignissim risus id metus.</p>
-                        <p>Cras ornare tristique elit.</p>
-                        <p>Vivamus vestibulum nulla nec ante.</p>
-                        <p>Praesent placerat risus quis eros.</p>
-                        <p>Fusce pellentesque suscipit nibh.</p>
-                        <p>Integer vitae libero ac risus egestas placerat.</p>
-                        <p>Vestibulum commodo felis quis tortor.</p>
-                        <p>Ut aliquam sollicitudin leo.</p>
-                        <p>Cras iaculis ultricies nulla.</p>
-                        <p>Donec quis dui at dolor tempor interdum.</p>
-                        <p>Vivamus molestie gravida turpis.</p>
-                        <p>Fusce lobortis lorem at ipsum semper sagittis.</p>
-                        <p>Nam convallis pellentesque nisl.</p>
-                        <p>Integer malesuada commodo nulla.</p>
-                        <p>Vestibulum a velit eu ante scelerisque vulputate.</p>
-                        <p>Sed vel lectus. Donec odio tempus molestie.</p>
-                        <p>Curabitur sagittis hendrerit ante.</p>
-                        <p>Nam sed tellus id magna elementum tincidunt.</p>
-                        <p>Ut enim ad minima veniam.</p>
-                        <p>Quis autem vel eum iure reprehenderit.</p>
-                        <p>At vero eos et accusamus et iusto odio dignissimos.</p>
-                        <p>Et harum quidem rerum facilis est et expedita distinctio.</p>
-                        <p>Temporibus autem quibusdam et aut officiis debitis.</p>
-                    <h2>Sidebar Test</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <p>Aliquam tincidunt mauris eu risus.</p>
-                        <p>Vestibulum auctor dapibus neque.</p>
-                        <p>Nunc dignissim risus id metus.</p>
-                        <p>Cras ornare tristique elit.</p>
-                        <p>Vivamus vestibulum nulla nec ante.</p>
-                        <p>Praesent placerat risus quis eros.</p>
-                        <p>Fusce pellentesque suscipit nibh.</p>
-                        <p>Integer vitae libero ac risus egestas placerat.</p>
-                        <p>Vestibulum commodo felis quis tortor.</p>
-                        <p>Ut aliquam sollicitudin leo.</p>
-                        <p>Cras iaculis ultricies nulla.</p>
-                        <p>Donec quis dui at dolor tempor interdum.</p>
-                        <p>Vivamus molestie gravida turpis.</p>
-                        <p>Fusce lobortis lorem at ipsum semper sagittis.</p>
-                        <p>Nam convallis pellentesque nisl.</p>
-                        <p>Integer malesuada commodo nulla.</p>
-                        <p>Vestibulum a velit eu ante scelerisque vulputate.</p>
-                        <p>Sed vel lectus. Donec odio tempus molestie.</p>
-                        <p>Curabitur sagittis hendrerit ante.</p>
-                        <p>Nam sed tellus id magna elementum tincidunt.</p>
-                        <p>Ut enim ad minima veniam.</p>
-                        <p>Quis autem vel eum iure reprehenderit.</p>
-                        <p>At vero eos et accusamus et iusto odio dignissimos.</p>
-                        <p>Et harum quidem rerum facilis est et expedita distinctio.</p>
-                        <p>Temporibus autem quibusdam et aut officiis debitis.</p>
-                    <h2>Sidebar Test</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <p>Aliquam tincidunt mauris eu risus.</p>
-                        <p>Vestibulum auctor dapibus neque.</p>
-                        <p>Nunc dignissim risus id metus.</p>
-                        <p>Cras ornare tristique elit.</p>
-                        <p>Vivamus vestibulum nulla nec ante.</p>
-                        <p>Praesent placerat risus quis eros.</p>
-                        <p>Fusce pellentesque suscipit nibh.</p>
-                        <p>Integer vitae libero ac risus egestas placerat.</p>
-                        <p>Vestibulum commodo felis quis tortor.</p>
-                        <p>Ut aliquam sollicitudin leo.</p>
-                        <p>Cras iaculis ultricies nulla.</p>
-                        <p>Donec quis dui at dolor tempor interdum.</p>
-                        <p>Vivamus molestie gravida turpis.</p>
-                        <p>Fusce lobortis lorem at ipsum semper sagittis.</p>
-                        <p>Nam convallis pellentesque nisl.</p>
-                        <p>Integer malesuada commodo nulla.</p>
-                        <p>Vestibulum a velit eu ante scelerisque vulputate.</p>
-                        <p>Sed vel lectus. Donec odio tempus molestie.</p>
-                        <p>Curabitur sagittis hendrerit ante.</p>
-                        <p>Nam sed tellus id magna elementum tincidunt.</p>
-                        <p>Ut enim ad minima veniam.</p>
-                        <p>Quis autem vel eum iure reprehenderit.</p>
-                        <p>At vero eos et accusamus et iusto odio dignissimos.</p>
-                        <p>Et harum quidem rerum facilis est et expedita distinctio.</p>
-                        <p>Temporibus autem quibusdam et aut officiis debitis.</p>
 
                 </aside>
 

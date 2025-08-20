@@ -222,7 +222,9 @@ function initModelForm(formId) {
         })
         .then(data => {
             console.log('Model fit successful:', data);
-            // TODO: update UI based on response data
+            //This is where the model list elements are implemented
+            generateModelInfoHTML(data);
+            
         })
         .catch(error => {
             console.error('Error fitting model:', error);
@@ -231,5 +233,9 @@ function initModelForm(formId) {
     });
 
 
+}
+
+function generateModelInfoHTML(data){
+    if (!data) return console.warn("Model Data not Recieved from backend");
 }
 

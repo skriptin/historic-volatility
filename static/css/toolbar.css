@@ -35,3 +35,106 @@
     background: white;
     z-index: 10;
 }
+
+/** Model info css rules **/
+
+.model-info {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+}
+
+.model-box {
+  background: #f7f7f7;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-family: sans-serif;
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+}
+
+.model-box h3 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
+.model-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  margin-bottom: 8px;
+}
+
+.model-summary p {
+  flex: 0 0 50%;
+  margin: 2px 0;
+  font-size: 13px;
+  padding-right: 10px;
+}
+
+.group-title {
+  font-weight: bold;
+  margin: 6px 0 2px 0;
+  font-size: 13px;
+}
+
+.parameter-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 8px;
+  table-layout: fixed;
+}
+
+.parameter-table th,
+.parameter-table td {
+  border: 1px solid #999;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.parameter-table th {
+  background-color: #f0f0f0;
+  text-align: left;
+}
+
+.parameter-table td:first-child {
+  text-align: left;
+  font-family: sans-serif;
+}
+
+.numeric {
+  font-family: monospace;
+  text-align: right;
+  min-width: 90px;
+}
+
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.item-actions label {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.item-actions input[type="number"] {
+  padding: 4px;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.item-actions button {
+  font-size: 13px;
+  padding: 6px;
+  cursor: pointer;
+  width: 100%;
+}
