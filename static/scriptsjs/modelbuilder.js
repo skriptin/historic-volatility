@@ -223,8 +223,12 @@ function initModelForm(formId) {
         .then(data => {
             console.log('Model fit successful:', data);
             //This is where the model list elements are implemented
-            generateModelInfoHTML(data);
-            
+            try{
+                generateModelInfoHTML(data);
+            }
+            catch (error){
+                console.error("Error generating model div", error);
+            }
         })
         .catch(error => {
             console.error('Error fitting model:', error);
@@ -237,5 +241,137 @@ function initModelForm(formId) {
 
 function generateModelInfoHTML(data){
     if (!data) return console.warn("Model Data not Recieved from backend");
+    const model_name = data["Model Summary"]["Model Name"];
+    const modelList = document.querySelector('.model-list');
+    const newListElement = document.createElement('li');
+    if (!model_name || !modelList || !newListElement) return console.error(
+        "Error Creating and fetching list attributes");
+
+    newListElement.className = "model-info";
+    newListElement.id = `${model_name}`;
+    const model_box_div = document.createElement("div");
+    model_box_div.className="model-box";
+
+    generateModelSummary(data["Model Summary"], model_box_div);
+
+    generateModelTable(
+        data["Volatility Model"], 
+        `${data["Model Summary"]["Vol Model"]} Parameters`,
+        model_box_div
+    );
+
+    generateModelTable(
+        data["Mean Model"],
+        `${data["Model Summary"]["Mean Model"]} Parameters`,
+        model_box_div
+    );
+
+    newListElement.appendChild(model_box_div);
+    modelList.appendChild(model_box_div);
 }
 
+function generateModelTable(tableData, groupTitle, parentDiv) {
+    if (!tableData || typeof tableData !== "object") return console.error("Invalid table data");
+
+    // Create group title
+    const titleElement = generateSimpleElement("div", "group-title", groupTitle);
+    parentDiv.appendChild(titleElement);
+
+    // Create table and append headers
+    const table = document.createElement("table");
+    table.className = "parameter-table";
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+
+    ["Parameter", "Value", "Std Err", "p-value"].forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        if (text !== "Parameter") th.className = "numeric";
+        headRow.appendChild(th);
+    });
+
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    // Create tbody
+    const tbody = document.createElement("tbody");
+
+    for (const param in tableData) {
+        if (!tableData[param]) continue;
+
+        const row = document.createElement("tr");
+
+        // Extract values
+        const val = tableData[param]["Value"] ?? "";
+        const err = tableData[param]["Std Error"] ?? "";
+        const pval = tableData[param]["P value"] ?? "";
+
+        // First cell: param name
+        const tdName = document.createElement("td");
+        tdName.textContent = param;
+        row.appendChild(tdName);
+
+        // Numeric cells
+        [val, err, pval].forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            td.className = "numeric";
+            row.appendChild(td);
+        });
+
+        tbody.appendChild(row);
+    }
+
+    table.appendChild(tbody);
+    parentDiv.appendChild(table);
+}
+
+function generateModelSummary(data, model_box_div){
+    //Generate model summary
+    const model_header = generateSimpleElement("h3", "item-name", data["Model Name"]);
+    model_box_div.appendChild(model_header);
+
+    const model_summary_div = generateSimpleElement("div", "model-summary", "");
+    model_box_div.appendChild(model_summary_div);
+
+    const fields = [
+        ["Creation Date", "Date"],
+        ["Security", "Trained On"],
+        ["No. Observations", "Samples"],
+        ["Distribution", "Distribution"],
+        ["Vol Model", "Volatility Model"],
+        ["Mean Model", "Mean Model"],
+        ["AIC", "AIC"],
+        ["BIC", "BIC"],
+        ["R-squared", "R-squared"],
+        ["Log-Likelihood", "Log-Likelihood"]
+    ];
+    // Append each field as a <p> element with "Label: value"
+    fields.forEach(([key, label]) => {
+        if (data[key] !== undefined) {
+            generateSimpleElementWAppend(
+                "p",
+                "",
+                `${label}: ${data[key]}`,
+                model_summary_div
+            );
+        }
+    });
+}
+
+function generateSimpleElement(element_type, className, text){
+    const newElement = document.createElement(element_type);
+    if (!newElement) return console.error("Error Creating newElement");
+    newElement.className = className;
+    newElement.textContent = text;
+    return newElement;
+}
+
+function generateSimpleElementWAppend(element_type, className, text, parent){
+    const newElement = document.createElement(element_type);
+    if (!newElement) return console.error("Error Creating newElement");
+    newElement.className = className;
+    newElement.textContent = text;
+    parent.appendChild(newElement);
+}

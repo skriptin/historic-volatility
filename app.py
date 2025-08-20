@@ -171,8 +171,8 @@ def fit_garch():
         "ticker": ticker,
     }
 
-    for name, value in variables.items():
-        print(f"{name}: type={type(value).__name__}, value={value}")
+    # for name, value in variables.items():
+    #     print(f"{name}: type={type(value).__name__}, value={value}")
 
     returns = fetch.query_dates(dates, ticker)
 
@@ -194,7 +194,8 @@ def fit_garch():
     
     
     model_summary = models.serealize_modelInfo(result)
-
+    model_summary["Model Summary"]["Model Name"] = model_name
+    model_summary["Model Summary"]["Security"] = ticker
 
     return jsonify(model_summary), 200
     
