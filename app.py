@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_file
-from scripts import fetch, sma, ewma, models, util
+from scripts import fetch, sma, ewma, models, util, model_cache 
 import numpy as np
-import threading
 
-model_store = {}
-model_store_lock = threading.Lock()
 
 
 
@@ -189,10 +186,10 @@ def fit_garch():
         model_name=model_name,
         power = power
     )
-    with model_store_lock:
-        model_store[model_name] = result
-    
-    
+
+    model_obj = model_cache.Model(model_name, result, returns.keys(), ticker)
+    model_cache.add_model(model_obj)
+
     model_summary = models.serealize_modelInfo(result)
     model_summary["Model Summary"]["Model Name"] = model_name
     model_summary["Model Summary"]["Security"] = ticker
