@@ -116,7 +116,7 @@ def get_index():
     return jsonify(response), 200
 
 @app.route("/fit_model", methods=["POST"])
-def fit_garch():
+def fit_model():
     print("Routing to script /fit_model")
     request_data = request.get_json()
 
@@ -190,9 +190,6 @@ def fit_garch():
     model_obj = model_cache.Model(model_name, result, returns.keys(), ticker)
     model_cache.add_model(model_obj)
 
-    models_list = model_cache.list_models()
-    for model in models_list:
-        print(model.to_dict())
 
     model_summary = models.serealize_modelInfo(result)
     model_summary["Model Summary"]["Model Name"] = model_name
@@ -200,6 +197,22 @@ def fit_garch():
 
     return jsonify(model_summary), 200
     
+@app.route("/forecast", methods=["POST"])
+def forecast():
+    print("Routing script to forecast")
+    request_data = request.get_json()
+    model_name = str(request_data.get("Model Name"))
+    horizon = int(request_data.get("Horizon"))
+
+
+
+    model_to_forecast = model.cache.get_model(model_name)
+    forecast = models.forecast(model_to_forecast, horizon)
+
+    plotting_info = {"Data": forecast,
+                    "Model Name": model_to_forecast.model_name}
+
+    return jsonify(plotting_info), 200
 
 
 if __name__ == '__main__':

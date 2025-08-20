@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 import io
 import matplotlib.dates as mdates
-
+from scripts import model_cache
 
 ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
 ANUALIZATION_FACTOR_SQ = 15.87
@@ -180,12 +180,27 @@ def serealize_modelInfo(res: ARCHModelResult) -> dict:
 
 
 
-def predict():
+def predict(model: Model, horizon: int) -> dict:
     """
-    Predict future volatility using the fitted GARCH model.
-    :return: Predicted volatility.
+    Predict future volatility using the fitted models model.
+    :return: Predicted volatility Scaled and Annualized.
     """
-    pass
+    
+    forecast = model.model_object.forecast(horizon=horizon)
+    last_date = pd.to_datetime(model.dates[-1])
+    forecast_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=horizon, freq='B')
+    
+    variance = forecast.variance.values[-1]          
+    daily_vol = variance ** 0.5                       
+    annualized_vol = daily_vol * ANUALIZATION_FACTOR_SQ       
+    
+    return {date.isoformat(): vol for date, vol in zip(forecast_dates, annualized_vol)}
+
+
+
+
+
+
 def verify_rolling_forecast():
     """
     Verify the rolling forecast of the GARCH model.
