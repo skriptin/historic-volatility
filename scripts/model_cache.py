@@ -40,7 +40,7 @@ def remove_model(model_name):
 
 def list_models():
     with _model_store_lock:
-        return [m.to_dict() for m in _model_store.values()]
+        return [m for m in _model_store.values()]
 
 def clear_cache():
     with _model_store_lock:

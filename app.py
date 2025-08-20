@@ -190,6 +190,10 @@ def fit_garch():
     model_obj = model_cache.Model(model_name, result, returns.keys(), ticker)
     model_cache.add_model(model_obj)
 
+    models_list = model_cache.list_models()
+    for model in models_list:
+        print(model.to_dict())
+
     model_summary = models.serealize_modelInfo(result)
     model_summary["Model Summary"]["Model Name"] = model_name
     model_summary["Model Summary"]["Security"] = ticker
