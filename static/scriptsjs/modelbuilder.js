@@ -266,6 +266,8 @@ function generateModelInfoHTML(data){
         model_box_div
     );
 
+    generateButtons(model_name, model_box_div);
+
     newListElement.appendChild(model_box_div);
     modelList.appendChild(model_box_div);
 }
@@ -358,6 +360,49 @@ function generateModelSummary(data, model_box_div){
             );
         }
     });
+}
+
+function generateButtons(model_name, parent_div){
+
+    const item_actions = generateSimpleElement("div","item-actions", "");
+    parent_div.appendChild(item_actions);
+
+    const forecast_label = document.createElement("label");
+    forecast_label.setAttribute("for", `forecast-days-${model_name}`);
+    forecast_label.textContent = "Days to Forecast:";
+    item_actions.appendChild(forecast_label);
+
+    const forecast_input = document.createElement("input");
+    forecast_input.type = "number";
+    forecast_input.id = `forecast-days-${model_name}`;
+    forecast_input.name = "forecast-days";
+    forecast_input.min = 1;
+    item_actions.appendChild(forecast_input);
+
+    const forecast_button = document.createElement("button");
+    forecast_button.className = "forecast-btn";
+    forecast_button.setAttribute("data-model", model_name);
+    forecast_button.textContent = "Forecast";
+    item_actions.appendChild(forecast_button);
+
+    const plot_btn = document.createElement("button");
+    plot_btn.className = "plot-btn";
+    plot_btn.setAttribute("data-model", model_name);
+    plot_btn.textContent = "Plot";
+    item_actions.appendChild(plot_btn);
+
+    const save_btn = document.createElement("button");
+    save_btn.className = "save-btn";
+    save_btn.setAttribute("data-model", model_name);
+    save_btn.textContent = "Save";
+    item_actions.appendChild(save_btn);
+
+    const delete_btn = document.createElement("button");
+    delete_btn.className = "delete_btn";
+    delete_btn.setAttribute("data-model", model_name);
+    delete_btn.textContent = "Delete";
+    item_actions.appendChild(delete_btn);
+
 }
 
 function generateSimpleElement(element_type, className, text){
