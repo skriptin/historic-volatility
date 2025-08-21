@@ -196,7 +196,14 @@ def forecast(model: model_cache.Model, horizon: int) -> dict:
     
     return {date.date().isoformat(): vol for date, vol in zip(forecast_dates, annualized_vol)}
 
+def model_historic_predictions(model: model_cache.Model) -> dict:
+    """
+    Predict future volatility using the fitted models model.
+    :return: Predicted volatility Scaled and Annualized.
+    """
 
+    vol_model = model.model_object
+    vol_predictions = model.dates
 
 
 
@@ -206,8 +213,6 @@ def verify_rolling_forecast():
     Verify the rolling forecast of the GARCH model.
     :return: None
     """
-    pass
-def return_garch_volatility():
     pass
 
 
