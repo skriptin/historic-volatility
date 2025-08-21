@@ -180,7 +180,7 @@ def serealize_modelInfo(res: ARCHModelResult) -> dict:
 
 
 
-def predict(model: Model, horizon: int) -> dict:
+def forecast(model: model_cache.Model, horizon: int) -> dict:
     """
     Predict future volatility using the fitted models model.
     :return: Predicted volatility Scaled and Annualized.

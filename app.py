@@ -189,7 +189,7 @@ def fit_model():
 
     model_obj = model_cache.Model(model_name, result, returns.keys(), ticker)
     model_cache.add_model(model_obj)
-
+    #print(type(model_obj.model_object))
 
     model_summary = models.serealize_modelInfo(result)
     model_summary["Model Summary"]["Model Name"] = model_name
@@ -200,17 +200,25 @@ def fit_model():
 @app.route("/forecast", methods=["POST"])
 def forecast():
     print("Routing script to forecast")
+    
     request_data = request.get_json()
-    model_name = str(request_data.get("Model Name"))
-    horizon = int(request_data.get("Horizon"))
 
+    model_name = request_data.get("Model Name")
+    if not model_name or not isinstance(model_name, str) or model_name.strip() == "":
+        return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
 
+    horizon_raw = request_data.get("Horizon")
+    try:
+        horizon = int(horizon_raw)
+        if horizon <= 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid 'Horizon'. Must be a positive integer."}), 400
 
-    model_to_forecast = model.cache.get_model(model_name)
+    model_to_forecast = model_cache.get_model(model_name)
     forecast = models.forecast(model_to_forecast, horizon)
 
-    plotting_info = {"Data": forecast,
-                    "Model Name": model_to_forecast.model_name}
+    plotting_info = {"Volatility": forecast}
 
     return jsonify(plotting_info), 200
 

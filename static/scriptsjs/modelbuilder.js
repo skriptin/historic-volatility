@@ -1,4 +1,5 @@
 import { stock_returns } from './getstockreturns.js'
+import { update_chart } from './vol_chart.js';  
 var dateList = [];
 
 // ---- Validation functions ----
@@ -377,6 +378,7 @@ function generateButtons(model_name, parent_div){
     forecast_input.id = `forecast-days-${model_name}`;
     forecast_input.name = "forecast-days";
     forecast_input.min = 1;
+    forecast_input.required = true;
     item_actions.appendChild(forecast_input);
 
     const forecast_button = document.createElement("button");
@@ -384,6 +386,10 @@ function generateButtons(model_name, parent_div){
     forecast_button.setAttribute("data-model", model_name);
     forecast_button.textContent = "Forecast";
     item_actions.appendChild(forecast_button);
+    forecast_button.addEventListener("click", function(event) {
+        createForecastLister(event, forecast_input, model_name);
+    });
+
 
     const plot_btn = document.createElement("button");
     plot_btn.className = "plot-btn";
@@ -404,6 +410,53 @@ function generateButtons(model_name, parent_div){
     item_actions.appendChild(delete_btn);
 
 }
+
+function createForecastLister(event, forecast_input, model_name){
+    event.stopPropagation();
+    const horizon = ParseInt(forecast_input.value);
+
+    if (horizon <= 0 || !model_name){
+        console.warn("Invalid forecast / Model name");
+        return;
+    }
+
+
+    const requestData = {
+        Horizon: horizon,
+        ModelName: model_name
+    };
+    console.log(requestData);
+
+
+
+    fetch('/forecast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error(`Server responded with status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Model fit successful:', data);
+        //Send the forecast to the chart
+        update_chart(data, model_name);
+        console.log("Chart updateed sucesffuly");
+
+    })
+    .catch(error => {
+        console.error('Error Forecasting', error);
+    });
+
+
+}
+
+
+
+
 
 function generateSimpleElement(element_type, className, text){
     const newElement = document.createElement(element_type);
