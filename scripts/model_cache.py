@@ -45,3 +45,9 @@ def list_models():
 def clear_cache():
     with _model_store_lock:
         _model_store.clear()
+
+def print_model_names():
+    with _model_store_lock:
+        print("Models currently in cache:")
+        for model_name in _model_store:
+            print(f"- {model_name}")

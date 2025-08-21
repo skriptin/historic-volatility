@@ -194,7 +194,7 @@ def forecast(model: model_cache.Model, horizon: int) -> dict:
     daily_vol = variance ** 0.5                       
     annualized_vol = daily_vol * ANUALIZATION_FACTOR_SQ       
     
-    return {date.isoformat(): vol for date, vol in zip(forecast_dates, annualized_vol)}
+    return {date.date().isoformat(): vol for date, vol in zip(forecast_dates, annualized_vol)}
 
 
 

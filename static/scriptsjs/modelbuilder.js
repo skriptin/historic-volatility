@@ -1,5 +1,7 @@
 import { stock_returns } from './getstockreturns.js'
 import { update_chart } from './vol_chart.js';  
+import { addSeriesToListUI } from './series.js';
+
 var dateList = [];
 
 // ---- Validation functions ----
@@ -413,7 +415,7 @@ function generateButtons(model_name, parent_div){
 
 function createForecastLister(event, forecast_input, model_name){
     event.stopPropagation();
-    const horizon = ParseInt(forecast_input.value);
+    const horizon = parseInt(forecast_input.value);
 
     if (horizon <= 0 || !model_name){
         console.warn("Invalid forecast / Model name");
@@ -444,6 +446,7 @@ function createForecastLister(event, forecast_input, model_name){
         console.log('Model fit successful:', data);
         //Send the forecast to the chart
         update_chart(data, model_name);
+        addSeriesToListUI(model_name);
         console.log("Chart updateed sucesffuly");
 
     })

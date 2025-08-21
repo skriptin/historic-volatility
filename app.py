@@ -187,9 +187,10 @@ def fit_model():
         power = power
     )
 
-    model_obj = model_cache.Model(model_name, result, returns.keys(), ticker)
+    model_obj = model_cache.Model(model_name, result, list(returns.keys()), ticker)
     model_cache.add_model(model_obj)
-    #print(type(model_obj.model_object))
+    model_cache.print_model_names()
+
 
     model_summary = models.serealize_modelInfo(result)
     model_summary["Model Summary"]["Model Name"] = model_name
@@ -203,7 +204,7 @@ def forecast():
     
     request_data = request.get_json()
 
-    model_name = request_data.get("Model Name")
+    model_name = request_data.get("ModelName")
     if not model_name or not isinstance(model_name, str) or model_name.strip() == "":
         return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
 
@@ -216,11 +217,16 @@ def forecast():
         return jsonify({"error": "Invalid 'Horizon'. Must be a positive integer."}), 400
 
     model_to_forecast = model_cache.get_model(model_name)
+    model_cache.print_model_names()
+
+    if model_to_forecast is None:
+        return jsonify({"error": f"Model '{model_name}' not found in cache."}), 404
+
+    print(type(model_to_forecast))
     forecast = models.forecast(model_to_forecast, horizon)
 
-    plotting_info = {"Volatility": forecast}
 
-    return jsonify(plotting_info), 200
+    return jsonify(forecast), 200
 
 
 if __name__ == '__main__':
