@@ -398,6 +398,9 @@ function generateButtons(model_name, parent_div){
     plot_btn.setAttribute("data-model", model_name);
     plot_btn.textContent = "Plot";
     item_actions.appendChild(plot_btn);
+    plot_btn.addEventListener("click", function(event) {
+        createPlotBtn(event, model_name);
+    });
 
     const save_btn = document.createElement("button");
     save_btn.className = "save-btn";
@@ -421,15 +424,11 @@ function createForecastLister(event, forecast_input, model_name){
         console.warn("Invalid forecast / Model name");
         return;
     }
-
-
     const requestData = {
         Horizon: horizon,
         ModelName: model_name
     };
     console.log(requestData);
-
-
 
     fetch('/forecast', {
         method: 'POST',
@@ -443,7 +442,7 @@ function createForecastLister(event, forecast_input, model_name){
         return response.json();
     })
     .then(data => {
-        console.log('Model fit successful:', data);
+        console.log('Forecast sucessful:', data);
         //Send the forecast to the chart
         update_chart(data, model_name);
         addSeriesToListUI(model_name);
@@ -453,8 +452,38 @@ function createForecastLister(event, forecast_input, model_name){
     .catch(error => {
         console.error('Error Forecasting', error);
     });
+}
 
+function createPlotBtn(event, model_name){
+    event.stopPropagation()
+    if (!model_name) return console.error("Invalid model name");
 
+    const requestData = {
+        "ModelName": model_name
+    }
+
+    fetch('/backpredictions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error(`Server responded with status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Fetched backprdicitons:', data);
+        //Send the forecast to the chart
+        update_chart(data, model_name);
+        addSeriesToListUI(model_name);
+        console.log("Chart updateed sucesffuly");
+
+    })
+    .catch(error => {
+        console.error('Error Forecasting', error);
+    });
 }
 
 

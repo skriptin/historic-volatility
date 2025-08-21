@@ -228,6 +228,23 @@ def forecast():
 
     return jsonify(forecast), 200
 
+@app.route("/backpredictions", methods=["POST"])
+def backpredictions():
+
+    request_data = request.get_json()
+    model_name = request_data.get("ModelName")
+
+    if not model_name or not isinstance(model_name, str) or model_name.strip() == "":
+        return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
+    
+    model = model_cache.get_model(model_name)
+    model_cache.print_model_names()
+
+
+    preds = models.back_predictions(model)
+    
+    return jsonify(preds), 200
+
 
 if __name__ == '__main__':
     print("Starting Flask app")

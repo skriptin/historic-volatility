@@ -13,6 +13,7 @@ import io
 import matplotlib.dates as mdates
 from scripts import model_cache
 
+
 ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
 ANUALIZATION_FACTOR_SQ = 15.87
 
@@ -56,7 +57,9 @@ def garch_testing():
     returns_dict = dict(zip(dates[1:], log_returns))
     result = model_fit(returns_dict, p=1, q=1, o=1, dist='skewt', model="HARCH", mean="AR", lags=[1], vol_lags = [1,2,5], power = 2.0)
     model_info_json = serealize_modelInfo(result)
-    print(result)
+    Model = model_cache.Model("Tester model", result, list(returns_dict.keys()), "SPY")
+    back_preds = back_predictions(Model)
+    #print(result)
 
 def model_fit(
     returns: dict, 
@@ -112,9 +115,6 @@ def model_fit(
 
     result = am.fit(disp='off')
 
-
-    print(result.summary())
-    print(result.conditional_volatility)      
     return result
 
 def serealize_modelInfo(res: ARCHModelResult) -> dict:
@@ -175,7 +175,6 @@ def serealize_modelInfo(res: ARCHModelResult) -> dict:
         "Mean Model": mean_params,
         "Volatility Model": vol_params
     }
-    #print(model_info)
     return model_info
 
 
@@ -196,14 +195,46 @@ def forecast(model: model_cache.Model, horizon: int) -> dict:
     
     return {date.date().isoformat(): vol for date, vol in zip(forecast_dates, annualized_vol)}
 
-def model_historic_predictions(model: model_cache.Model) -> dict:
+def back_predictions(model: model_cache.Model) -> dict:
     """
-    Predict future volatility using the fitted models model.
-    :return: Predicted volatility Scaled and Annualized.
+    Predict future volatility using the fitted model.
+    Returns a dictionary mapping dates to annualized volatility values.
+    
+    - NaN values are replaced with 0.
+    - Dates are assumed to be pre-sorted.
     """
+    try:
+        vol_model = model.model_object
+        vol_dates = model.dates
 
-    vol_model = model.model_object
-    vol_predictions = model.dates
+        # Ensure required attribute exists
+        if not hasattr(vol_model, "conditional_volatility"):
+            raise AttributeError("The model object does not have 'conditional_volatility'.")
+
+        # Compute annualized volatility
+        back_preds = vol_model.conditional_volatility * ANUALIZATION_FACTOR_SQ
+
+        # Replace NaNs with zero
+        back_preds = np.nan_to_num(back_preds)
+
+        # Ensure dates and predictions match in length
+        if len(vol_dates) != len(back_preds):
+            raise ValueError("The number of dates does not match the number of volatility predictions.")
+
+        # Zip into dictionary (no sorting needed)
+        result = {pd.to_datetime(date).date().isoformat(): vol for date, vol in zip(vol_dates, back_preds)}
+
+        return result
+
+    except AttributeError as e:
+        print(f"[AttributeError] {e}")
+    except ValueError as e:
+        print(f"[ValueError] {e}")
+    except Exception as e:
+        print(f"[Unhandled Exception] {e}")
+
+    # Return empty dict on failure
+    return {}
 
 
 
