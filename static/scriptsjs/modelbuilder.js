@@ -444,7 +444,7 @@ function createForecastLister(event, forecast_input, model_name){
     .then(data => {
         console.log('Forecast sucessful:', data);
         //Send the forecast to the chart
-        update_chart(data, model_name);
+        update_chart(data, `${model_name}-fcst${horizon}`);
         addSeriesToListUI(model_name);
         console.log("Chart updateed sucesffuly");
 
