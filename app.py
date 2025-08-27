@@ -1,11 +1,18 @@
 from flask import Flask, render_template, request, jsonify, send_file
 from scripts import fetch, sma, ewma, models, util, model_cache 
 import numpy as np
-
+import firebase_admin
+from firebse_admin import credentials, auth
 
 
 
 app = Flask(__name__)
+
+cred = credentials.Certificate("static/serviceAccountKey.json")
+firebase_admin.initalize_app(cred)
+
+
+
 
 @app.route("/")
 def home():

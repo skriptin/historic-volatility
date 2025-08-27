@@ -13,6 +13,7 @@ measurementId: "G-5Y3P1JY245"
 
 
 
-const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
