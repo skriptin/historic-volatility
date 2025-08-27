@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
   
 const firebaseConfig = {
 apiKey: "AIzaSyAdIFpfDS5gFbxMgZJ2cKNWh1QTXrZae2U",
@@ -24,7 +24,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
 
   signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => userCredential.user.getIdToken())
-    .then(idToken => 
+    .then(idToken =>
       fetch("/protected", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
