@@ -11,8 +11,7 @@ import pandas as pd
 import numpy as np
 import io
 import matplotlib.dates as mdates
-from scripts import model_cache
-
+import model_cache, util
 
 ANUALIZATION_FACTOR = 1587.45 # sqrt.(252) * 100
 ANUALIZATION_FACTOR_SQ = 15.87
@@ -59,7 +58,10 @@ def garch_testing():
     model_info_json = serealize_modelInfo(result)
     Model = model_cache.Model("Tester model", result, list(returns_dict.keys()), "SPY")
     back_preds = back_predictions(Model)
-    #print(result)
+    size = util.get_total_size(Model)
+    print(f"Total size of the model: {size}bytes")
+
+
 
 def model_fit(
     returns: dict, 

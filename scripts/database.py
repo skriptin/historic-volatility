@@ -1,11 +1,11 @@
 from firebase_admin import firestore
+from scripts import model_cache
 db = firestore.client()
 
 
-def store_model(decoded_token, model_name, model):
-    email = decoded_token.get("email")
+def store_model(uid, model_name, model):
 
-    user_models_ref = db.collection("users").document(email).collection("models")
+    user_models_ref = db.collection("users").document(uid).collection("models")
     
     existing_models = user_models_ref.stream()
     model_count = sum(1 for _ in existing_models)
@@ -15,7 +15,7 @@ def store_model(decoded_token, model_name, model):
 
     model_data = {
         "model_name": model_name,
-        "model": str(model)  # You should serialize this properly in production
+        "model": str(model) 
     }
 
     # Create a new model document

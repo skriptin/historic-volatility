@@ -19,6 +19,10 @@ class Model:
             "ticker": self.ticker,
         }
 
+    def serialize(self):
+        pass
+
+
 def add_model(model: Model):
     with _model_store_lock:
         if model.model_name in _model_store:
