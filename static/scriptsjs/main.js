@@ -1,4 +1,6 @@
-  
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
   
 const firebaseConfig = {
 apiKey: "AIzaSyAdIFpfDS5gFbxMgZJ2cKNWh1QTXrZae2U",
@@ -10,17 +12,17 @@ appId: "1:190771080240:web:0295317bcdd7a20475d1f5",
 measurementId: "G-5Y3P1JY245"
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth = firebase.auth();
-const db = firebase.firestore();
-
+// Login form submit
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  auth.signInWithEmailAndPassword(email, password)
+  signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => userCredential.user.getIdToken())
     .then(idToken => 
       fetch("/protected", {

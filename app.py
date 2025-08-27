@@ -2,17 +2,14 @@ from flask import Flask, render_template, request, jsonify, send_file
 from scripts import fetch, sma, ewma, models, util, model_cache 
 import numpy as np
 import firebase_admin
-from firebse_admin import credentials, auth
+from firebase_admin import credentials, auth
 
 
 
 app = Flask(__name__)
 
 cred = credentials.Certificate("static/serviceAccountKey.json")
-firebase_admin.initalize_app(cred)
-
-
-
+firebase_admin.initialize_app(cred)
 
 @app.route("/")
 def home():
@@ -29,8 +26,6 @@ def protected():
         return jsonify({"message": f"Authenticated user {uid}"})
     except Exception as e:
         return jsonify({"error": str(e)}), 401
-
-
 
 @app.route("/index")
 def index():
