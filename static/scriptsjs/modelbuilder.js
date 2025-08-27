@@ -1,6 +1,7 @@
 import { stock_returns } from './getstockreturns.js'
 import { update_chart } from './vol_chart.js';  
 import { addSeriesToListUI } from './series.js';
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
 
 var dateList = [];
 
@@ -407,6 +408,10 @@ function generateButtons(model_name, parent_div){
     save_btn.setAttribute("data-model", model_name);
     save_btn.textContent = "Save";
     item_actions.appendChild(save_btn);
+    save_btn.addEventListener('click', function(event){
+        createSaveBtn(event, model_name);
+    });
+
 
     const delete_btn = document.createElement("button");
     delete_btn.className = "delete_btn";
@@ -486,7 +491,43 @@ function createPlotBtn(event, model_name){
     });
 }
 
+function createSaveBtn(event, model_name){
+    event.stopPropagation();
+    if (!model_name) return console.error("Invalid model name");
+    const auth = getAuth();
+    if (!auth || !auth.currentUser) {
+        return console.error("User not authenticated");
+    }
 
+    auth.currentUser.getIdToken(true)
+        .then((idToken) => {
+            const requestData = {
+                "ModelName": model_name,
+                "token": idToken   
+            };
+
+            return fetch('/save_model', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || "Unknown error");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Saved to db:", data);
+        })
+        .catch(error => {
+            alert("Could not save model: " + error.message);
+            console.error("Save error:", error);
+        });
+}
 
 
 

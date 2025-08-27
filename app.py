@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_file
-from scripts import fetch, sma, ewma, models, util, model_cache 
+from scripts import fetch, sma, ewma, models, util, model_cache, database 
 import numpy as np
 import firebase_admin
 from firebase_admin import credentials, auth
@@ -268,6 +268,32 @@ def backpredictions():
     preds = models.back_predictions(model)
     
     return jsonify(preds), 200
+
+@app.route("/save_model", methods=["POST"])
+def save_model():
+    try:
+        request_data = request.get_json()
+        model_name = str(request_data.get("ModelName"))
+        id_token = str(request_data.get("token"))
+
+        # Verify token and get user email
+        decoded_token = auth.verify_id_token(id_token)
+
+        model = model_cache.get_model(model_name)
+        if not model:
+            return jsonify({"error": "Model not found in memory cache"}), 404
+
+        # Store in Firestore
+        database.store_model(decoded_token, model_name, model)
+        return jsonify({"success": True}), 200
+
+    except ValueError as ve:
+        # Expected errors (like full storage)
+        return jsonify({"error": str(ve)}), 400
+
+    except Exception as e:
+        print("Error saving model:", e)
+        return jsonify({"error": "Internal server error"}), 500
 
 
 if __name__ == '__main__':
