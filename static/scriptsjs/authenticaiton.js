@@ -10,10 +10,32 @@ appId: "1:190771080240:web:0295317bcdd7a20475d1f5",
 measurementId: "G-5Y3P1JY245"
 };
 
-
-
-
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+document.getElementById("login-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(userCredential => userCredential.user.getIdToken())
+    .then(idToken => 
+      fetch("/protected", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: idToken })
+      })
+    )
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = "/index"; 
+      } else {
+        alert("Login failed");
+      }
+    })
+    .catch(console.error);
+});

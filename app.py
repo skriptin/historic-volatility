@@ -16,7 +16,25 @@ firebase_admin.initalize_app(cred)
 
 @app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template('login.html')
+
+@app.route("/protected", methods=["POST"])
+def protected():
+    data = request.get_json()
+    id_token = data.get("token")
+
+    try:
+        decoded_token = auth.verify_id_token(id_token)
+        uid = decoded_token["uid"]
+        return jsonify({"message": f"Authenticated user {uid}"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 401
+
+
+
+@app.route("/index")
+def index():
+    return render_template("index.html") 
 
 @app.route("/get_data", methods=["POST"])
 def get_data():
