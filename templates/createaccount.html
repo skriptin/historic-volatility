@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Create Account</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     * {
@@ -97,21 +97,21 @@
 </head>
 <body>
     <div class="login-container">
-    <h2>Sign in</h2>
-    <form id="login-form">
-        <input type="email" id="email" placeholder="Email or phone" required />
-        <input type="password" id="password" placeholder="Enter your password" required />
-        <button type="submit" class="login-button">Login</button>
+    <h2>Create Account</h2>
+    <form id="create-account-form">
+        <input type="email" id="signup-email" placeholder="Email or phone" required />
+        <input type="password" id="signup-password" placeholder="Create a password" required />
+        <button type="submit" class="login-button">Next</button>
     </form>
     <div class="links">
-        <a href="#">Forgot password?</a>
-    <a href="/createaccount">Create account</a>
+        <a href="/">Back to login</a>
     </div>
     <div class="footer">
         English (United States)
     </div>
     </div>
 
-    <script type="module" src="{{ url_for('static', filename='scriptsjs/login.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='scriptsjs/createaccount.js') }}"></script>
+
 </body>
 </html>

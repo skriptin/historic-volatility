@@ -15,6 +15,10 @@ firebase_admin.initialize_app(cred)
 def home():
     return render_template('login.html')
 
+@app.route("/createaccount")
+def createaccount():
+    return render_template("createaccount.html")
+
 @app.route("/protected", methods=["POST"])
 def protected():
     data = request.get_json()
