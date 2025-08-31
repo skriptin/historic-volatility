@@ -1,15 +1,18 @@
+import firebase_admin
+from firebase_admin import credentials, auth
+cred = credentials.Certificate("static/serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+
 from flask import Flask, render_template, request, jsonify, send_file
 from scripts import fetch, sma, ewma, models, util, model_cache, database 
 import numpy as np
-import firebase_admin
-from firebase_admin import credentials, auth
+
+
 
 
 
 app = Flask(__name__)
 
-cred = credentials.Certificate("static/serviceAccountKey.json")
-firebase_admin.initialize_app(cred)
 
 @app.route("/")
 def home():
@@ -275,26 +278,46 @@ def save_model():
         request_data = request.get_json()
         model_name = str(request_data.get("ModelName"))
         id_token = str(request_data.get("token"))
+        
+        if not model_name:
+            return jsonify({"error": "ModelName is required"}), 400
+        if not id_token:
+            return jsonify({"error": "Token is required"}), 400
+
 
         # Verify token and get user email
         decoded_token = auth.verify_id_token(id_token)
+        uid = decoded_token["uid"]
 
         model = model_cache.get_model(model_name)
         if not model:
             return jsonify({"error": "Model not found in memory cache"}), 404
 
-        # Store in Firestore
-        database.store_model(decoded_token, model_name, model)
+        database.store_model(uid, model_name, model)
         return jsonify({"success": True}), 200
 
     except ValueError as ve:
-        # Expected errors (like full storage)
         return jsonify({"error": str(ve)}), 400
 
     except Exception as e:
         print("Error saving model:", e)
         return jsonify({"error": "Internal server error"}), 500
 
+@app.route("/remove_model", methods=["POST"])
+def remove_model():
+    request_data = request.get_json()
+    model_name = str(request_data.get("ModelName"))
+    if model_name is None:
+        return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
+
+    model = model_cache.get_model(model_name)
+    if not model:
+        return jsonify({"error": "Model not found in memory cache"}), 404
+    model_cache.remove_model(model_name)
+
+    # Implement removal from db
+
+    return jsonify({"success": f"Removed {model_name}"}), 200
 
 if __name__ == '__main__':
     print("Starting Flask app")

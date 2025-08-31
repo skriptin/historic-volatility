@@ -273,7 +273,7 @@ function generateModelInfoHTML(data){
     generateButtons(model_name, model_box_div);
 
     newListElement.appendChild(model_box_div);
-    modelList.appendChild(model_box_div);
+    modelList.appendChild(newListElement);
 }
 
 function generateModelTable(tableData, groupTitle, parentDiv) {
@@ -418,6 +418,9 @@ function generateButtons(model_name, parent_div){
     delete_btn.setAttribute("data-model", model_name);
     delete_btn.textContent = "Delete";
     item_actions.appendChild(delete_btn);
+    delete_btn.addEventListener('click', function(event){
+        removeModel(event, model_name);
+    })
 
 }
 
@@ -529,7 +532,48 @@ function createSaveBtn(event, model_name){
         });
 }
 
+function removeModel(event, model_name){
+    event.stopPropagation();
+    const modelElement = document.querySelector(`#${model_name}.model-info`)
+    if (!modelElement) return console.error(`Can't find ${model_name} for removal`);
+    modelElement.remove();
 
+    const auth = getAuth();
+    if (!auth || !auth.currentUser) {
+        return console.error("User not authenticated");
+    }
+
+    auth.currentUser.getIdToken(true)
+        .then((idToken) => {
+            const requestData = {
+                "ModelName": model_name,
+                "token": idToken   
+            };
+
+            return fetch('/remove_model', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || "Unknown error");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Removed Model");
+        })
+        .catch(error => {
+            alert("Could not save model: " + error.message);
+            console.error("Save error:", error);
+        });
+
+
+}
 
 function generateSimpleElement(element_type, className, text){
     const newElement = document.createElement(element_type);
