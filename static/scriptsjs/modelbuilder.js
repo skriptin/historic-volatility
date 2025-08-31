@@ -532,9 +532,15 @@ function createSaveBtn(event, model_name){
         });
 }
 
+function cssEscape(str) {
+  return str.replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+}
+
+
 function removeModel(event, model_name){
     event.stopPropagation();
-    const modelElement = document.querySelector(`#${model_name}.model-info`)
+    css_name = cssEscape(model_name)
+    const modelElement = document.querySelector(`#${css_name}.model-info`)
     if (!modelElement) return console.error(`Can't find ${model_name} for removal`);
     modelElement.remove();
 
@@ -571,8 +577,6 @@ function removeModel(event, model_name){
             alert("Could not save model: " + error.message);
             console.error("Save error:", error);
         });
-
-
 }
 
 function generateSimpleElement(element_type, className, text){

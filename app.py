@@ -305,19 +305,37 @@ def save_model():
 
 @app.route("/remove_model", methods=["POST"])
 def remove_model():
-    request_data = request.get_json()
-    model_name = str(request_data.get("ModelName"))
-    if model_name is None:
-        return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
+    try:
+        request_data = request.get_json()
+        id_token = str(request_data.get("token"))
+        model_name = str(request_data.get("ModelName"))
 
-    model = model_cache.get_model(model_name)
-    if not model:
-        return jsonify({"error": "Model not found in memory cache"}), 404
-    model_cache.remove_model(model_name)
+        if not model_name:
+            return jsonify({"error": "Invalid or missing 'Model Name'."}), 400
+        if not id_token:
+            return jsonify({"error": "Token is required"}), 400
 
-    # Implement removal from db
+        try:
+            decoded_token = auth.verify_id_token(id_token)
+            uid = decoded_token["uid"]
+        except Exception as e:
+            return jsonify({"error": f"Token verification failed: {str(e)}"}), 401
 
-    return jsonify({"success": f"Removed {model_name}"}), 200
+        model = model_cache.get_model(model_name)
+        if not model:
+            return jsonify({"error": f"Model '{model_name}' not found in memory cache."}), 404
+
+        model_cache.remove_model(model_name)
+
+        try:
+            database.remove_model(uid, model_name)
+        except Exception as e:
+            return jsonify({"error": f"Failed to remove model from the database: {str(e)}"}), 500
+
+        return jsonify({"success": f"Removed {model_name}"}), 200
+
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 if __name__ == '__main__':
     print("Starting Flask app")
